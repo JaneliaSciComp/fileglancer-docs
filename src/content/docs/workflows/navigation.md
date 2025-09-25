@@ -116,22 +116,31 @@ Efficiently move through directory hierarchies:
 
 ### Multi-System Navigation
 
-Access different file systems seamlessly:
+Janelia Research Campus provides multiple storage systems optimized for different data lifecycle stages:
 
 1. **PRFS (Primary Research File System)**
-   - Primary storage for active research data
-   - Usually fastest access times
-   - Search for your lab's primary zones
+   - **Purpose**: High-performance storage for active research data and analysis
+   - **Performance**: Fastest access times, optimized for frequent read/write operations
+   - **Capacity**: Limited storage quota per lab/project
+   - **Best for**: Current experiments, active analysis, frequently accessed datasets
+   - **Access patterns**: Search for your lab's primary zones (e.g., `/groups/labname/`)
+   - **Typical paths**: `/groups/`, `/nrs/` (high-performance tier)
 
-2. **NRS (Nearline Research Storage)**
-   - Long-term storage for archived data
-   - May have slightly slower access
-   - Search using NRS-specific path prefixes
+2. **NRS (Non-Recoverable Storage)**
+   - **Purpose**: Cost-effective storage for large datasets that don't require backup
+   - **Performance**: Good throughput for large file operations, moderate latency
+   - **Capacity**: Larger storage quotas compared to PRFS
+   - **Best for**: Raw microscopy data, intermediate processing results, reproducible datasets
+   - **Access patterns**: Search using `/nrs/` path prefixes
+   - **Data policy**: No backup - suitable for reproducible or intermediate data
 
-3. **Nearline Systems**
-   - Extended storage for less frequent access
-   - Access through specific nearline search terms
-   - Suitable for long-term archived datasets
+3. **Nearline Storage Systems**
+   - **Purpose**: Long-term archival storage with retrieval capabilities
+   - **Performance**: Slower access times, optimized for infrequent access
+   - **Capacity**: Very large storage capacity at lower cost
+   - **Best for**: Completed project archives, reference datasets, compliance storage
+   - **Access patterns**: May require pre-staging for optimal performance
+   - **Retrieval**: Some data may need time to come online before access
 
 ## Navigation Best Practices
 
@@ -180,9 +189,11 @@ Access different file systems seamlessly:
 - Check if the file share is currently mounted
 
 ### Slow Loading
-- PRFS typically loads faster than NRS/Nearline systems
-- Large directories may take time to populate
-- Consider using more specific navigation paths
+- **PRFS**: Fastest loading times, optimal for frequent access
+- **NRS**: Moderate loading times, good for large file operations
+- **Nearline**: Slower access, some files may need staging time
+- Large directories (>1000 files) may take time to populate regardless of storage system
+- Consider using more specific navigation paths to reduce directory listing overhead
 
 ### Favorites Not Saving
 - Ensure you have write permissions to your profile

@@ -17,7 +17,7 @@ This page provides immediate solutions for the most common issues users encounte
 1. **Check network**: Ensure you're connected to Janelia internal network or VPN
 2. **Try different browser**: Test with Chrome, Firefox, or Safari
 3. **Clear browser cache**: Clear cookies and cache for the site
-4. **Check URL**: Verify you're using `fileglancer-dev.int.janelia.org`
+4. **Check URL**: Verify you're using `fileglancer.int.janelia.org`
 
 **When to get help**: If none of these work, contact IT support
 

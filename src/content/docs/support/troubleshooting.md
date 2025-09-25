@@ -264,6 +264,56 @@ description: Solutions for common issues encountered when using Fileglancer with
    - Consider compressed formats for archival data
    - Request optimized formats for specific use cases
 
+## Data Viewer Integration Issues
+
+### External Viewer Problems
+
+**Symptoms**: Data viewers (Neuroglancer, Vol-E, Avivator) won't open or display data incorrectly
+
+**Possible Causes & Solutions**:
+
+1. **Data format compatibility**
+   - **Issue**: Dataset format not supported by selected viewer
+   - **Solution**: Try a different viewer or request data conversion
+   - **Check**: Use OME-ZARR Validator to verify dataset compliance
+
+2. **Data link accessibility**
+   - **Issue**: Viewer can't access data through Fileglancer data link
+   - **Solution**: Verify data link is active and accessible
+   - **Test**: Try accessing the data link URL directly in browser
+
+3. **Viewer loading failures**
+   - **Issue**: External viewer opens but shows blank screen or errors
+   - **Solution**: Check browser console for error messages
+   - **Alternative**: Try opening dataset with a different viewer
+   - **Browser**: Clear browser cache or try incognito mode
+
+4. **Metadata or scaling issues**
+   - **Issue**: Data loads but appears incorrectly scaled or oriented
+   - **Solution**: Verify OME metadata is complete and correct
+   - **Request**: Contact technical staff for metadata validation
+   - **Workaround**: Use viewer controls to adjust display settings
+
+### Viewer-Specific Issues
+
+1. **Neuroglancer performance**
+   - **Issue**: Slow loading or navigation in Neuroglancer
+   - **Solution**: Check dataset chunk sizes and multi-resolution levels
+   - **Network**: Verify network connection stability
+   - **Memory**: Close other browser tabs to free memory
+
+2. **Vol-E rendering problems**
+   - **Issue**: Volume rendering doesn't work or appears corrupted
+   - **Solution**: Try different rendering modes within Vol-E
+   - **Browser**: Ensure browser supports WebGL for 3D rendering
+   - **Data**: Verify dataset has appropriate bit depth and value ranges
+
+3. **Avivator display issues**
+   - **Issue**: Channels don't display correctly or controls are unresponsive
+   - **Solution**: Check that dataset has proper channel metadata
+   - **Refresh**: Reload the Avivator page
+   - **Format**: Ensure dataset follows OME-Zarr specification
+
 ## Getting Additional Help
 
 ### When to Contact Technical Support

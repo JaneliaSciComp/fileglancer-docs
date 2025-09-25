@@ -1,11 +1,98 @@
 ---
-title: Neuroglancer Integration
-description: Learn how to use Fileglancer's seamless integration with Neuroglancer for visualizing and sharing scientific imaging data.
+title: Data Viewers Integration
+description: Learn how to use Fileglancer's seamless integration with multiple data viewers including Neuroglancer, Vol-E, Avivator, and OME-ZARR Validator for visualizing and sharing scientific imaging data.
 ---
 
 ## Overview
 
-Fileglancer provides seamless integration with Neuroglancer, a powerful web-based viewer for large-scale volumetric data. This integration allows you to open compatible datasets directly from Fileglancer into Neuroglancer for visualization, analysis, and sharing.
+Fileglancer provides seamless integration with multiple data viewers, allowing you to open compatible datasets directly for visualization, analysis, and sharing. When viewing OME-Zarr or compatible scientific imaging data, Fileglancer automatically displays "Open with" options for appropriate viewers.
+
+## Available Data Viewers
+
+### Neuroglancer
+A powerful web-based viewer for large-scale volumetric data, particularly suited for:
+- **Large-scale imaging datasets**: Terabyte-scale brain imaging data
+- **Multi-resolution data**: Pyramidal data structures for efficient viewing
+- **Multi-modal datasets**: Combine different types of imaging data
+- **Collaborative visualization**: Share interactive views with colleagues
+
+### Vol-E (Volume Explorer)
+Allen Cell Institute's volume viewer designed for cellular and subcellular imaging:
+- **Cell biology focus**: Optimized for cellular imaging workflows
+- **Interactive 3D rendering**: Real-time volume rendering capabilities
+- **Multiple rendering modes**: Surface rendering, volume rendering, and cross-sections
+- **Cellular structure visualization**: Specialized for organelles and cellular components
+
+### Avivator
+A lightweight, web-based image viewer for OME-Zarr data:
+- **Multi-channel support**: View and blend multiple imaging channels
+- **Interactive visualization**: Pan, zoom, and navigate through datasets
+- **Channel controls**: Adjust brightness, contrast, and visibility per channel
+- **Responsive design**: Works well on different screen sizes and devices
+
+### OME-ZARR Validator
+A diagnostic tool for verifying OME-Zarr dataset compliance:
+- **Format validation**: Verify OME-Zarr specification compliance
+- **Metadata checking**: Ensure proper OME metadata structure
+- **Error reporting**: Identify and report format issues
+- **Quality assurance**: Validate datasets before sharing or publication
+
+## Choosing the Right Viewer
+
+### Data Type Considerations
+- **Large-scale brain/tissue imaging**: Use Neuroglancer for its performance with massive datasets
+- **Cell biology and microscopy**: Vol-E provides specialized tools for cellular imaging
+- **General OME-Zarr viewing**: Avivator offers a lightweight, accessible option
+- **Dataset validation**: Use OME-ZARR Validator to ensure data integrity
+
+### Use Case Recommendations
+- **Research collaboration**: Neuroglancer for advanced features and annotations
+- **Quick data review**: Avivator for fast, lightweight viewing
+- **Educational purposes**: Vol-E for its intuitive interface
+- **Data publishing**: OME-ZARR Validator to ensure dataset quality
+
+## Accessing Data Viewers from Fileglancer
+
+### Locating Viewer Options
+
+When you navigate to a compatible dataset (OME-Zarr or Zarr format):
+
+1. **View the file/directory in Fileglancer**
+   - Navigate to your OME-Zarr dataset directory
+   - The dataset will be recognized automatically
+
+2. **Find the "Open with" section**
+   - Located in the file preview area
+   - Shows thumbnail preview of the dataset
+   - Lists all compatible viewers with their respective logos
+
+3. **Available viewer buttons**
+   - **Neuroglancer logo**: Brain icon for Neuroglancer
+   - **Vol-E logo**: Volume Explorer icon
+   - **Avivator logo**: Multi-channel viewer icon
+   - **OME-ZARR Validator logo**: Validation tool icon
+   - **Copy URL icon**: Copy direct data link
+
+### Launching Viewers
+
+1. **Click the desired viewer button**
+   - Each viewer opens in a new browser tab
+   - Data is automatically loaded with appropriate settings
+   - Spatial calibration and metadata are preserved
+
+2. **Share viewer URLs**
+   - Copy the URL from the opened viewer tab
+   - Share with collaborators who have data access
+   - URLs remain valid as long as data links are active
+
+### Viewer-Specific Features
+
+Each viewer provides different capabilities once opened:
+
+- **Neuroglancer**: Full 3D/4D navigation, annotations, measurements
+- **Vol-E**: Volume rendering, surface rendering, cellular visualization
+- **Avivator**: Channel blending, brightness/contrast controls, multi-dimensional navigation
+- **OME-ZARR Validator**: Compliance reports, error identification, metadata verification
 
 ## What is Neuroglancer?
 

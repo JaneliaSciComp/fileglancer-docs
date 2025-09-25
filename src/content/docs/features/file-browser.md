@@ -21,14 +21,34 @@ The central area displays your directory contents with:
 
 ### Toolbar
 
-Located above the file list:
+Located above the file list, the toolbar provides essential navigation and management controls:
 
-- **Home button**: Quick access to your home directory
-- **Navigation path widget**: Direct path entry and current location display
-- **Favorites star**: Save current directory as a favorite
-- **View options**: Toggle between different display modes
-- **Refresh button**: Update directory contents
-- **Properties panel toggle**: Show/hide the Properties Panel
+#### Navigation Controls
+- **Home button** (house icon): Quick access to your home directory on the file system
+- **Back/Forward buttons**: Navigate through your browsing history
+- **Up directory button**: Move to the parent directory of your current location
+- **Navigation path widget**: Direct path entry field and breadcrumb display of current location
+
+#### Directory Management
+- **Favorites star**: Save current directory as a favorite for quick access later
+- **Refresh button** (circular arrow): Update directory contents to reflect any changes
+- **Create folder button**: Create new directories (when permissions allow)
+
+#### View and Display
+- **View options toggle**: Switch between list, grid, and compact display modes
+- **Sort controls**: Change how files are sorted (name, date, size, type)
+- **Properties panel toggle**: Show/hide the right-side Properties Panel
+
+#### File Operations
+- **Download button**: Download selected files (when applicable)
+- **Share button**: Quick access to data link creation for the current directory
+- **Settings/preferences button** (gear icon): Access user preferences and configuration options
+
+#### Context-Sensitive Buttons
+Additional buttons appear based on the current directory contents and your permissions:
+- **Data link creation**: When viewing shareable scientific data
+- **Format conversion**: When viewing files that can be converted to other formats
+- **External viewer launch**: When viewing data compatible with tools like Neuroglancer
 
 ### Properties Panel
 

@@ -6,7 +6,7 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 ## Access Fileglancer
 
 1. **Connect to Janelia network**: Ensure you're on the Janelia internal network
-2. **Open your browser**: Navigate to [fileglancer-dev.int.janelia.org](https://fileglancer-dev.int.janelia.org)
+2. **Open your browser**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org)
 3. **Authenticate**: Log in with your Janelia credentials when prompted
 
 ## Your First Navigation

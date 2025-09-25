@@ -57,42 +57,51 @@ Fileglancer is designed to work with the diverse range of file formats commonly 
 
 **Extensions**: `.tiff`, `.tif`
 **Type**: Tagged Image File Format
+**Status**: Limited Support
 
-**Fileglancer Features**:
-- Multi-page TIFF support
-- Basic metadata display
-- Thumbnail generation
-- Conversion to modern formats
+**Current Fileglancer Features**:
+- File browsing and navigation
+- Basic file properties display
+- Data link creation for sharing
+- File conversion requests to supported formats
 
-**Best Use Cases**:
-- Legacy data compatibility
-- Single-image files
-- Standard imaging workflows
+**Current Limitations**:
+- No direct viewing in browser
+- No thumbnail generation
+- No metadata extraction or display
+- Cannot open with integrated viewers (Neuroglancer, Vol-E, etc.)
 
-**Limitations**:
-- Limited metadata capabilities
-- Can become very large for multi-dimensional data
-- Not optimized for web-based access
+**Recommended Approach**:
+- Convert TIFF files to OME-Zarr format for full Fileglancer functionality
+- Use data links to share TIFF files with collaborators
+- Contact technical staff for batch conversion of TIFF collections
 
 ### OME-TIFF
 
 **Extensions**: `.ome.tiff`, `.ome.tif`
 **Type**: TIFF with OME metadata
+**Status**: Limited Support
 
-**Fileglancer Features**:
-- OME metadata extraction and display
-- Multi-dimensional data organization
-- Channel and series information
-- Conversion to OME-Zarr format
+**Current Fileglancer Features**:
+- File browsing and navigation
+- Basic file properties display
+- Data link creation for sharing
+- File conversion requests to OME-Zarr format
+
+**Current Limitations**:
+- No OME metadata extraction or display
+- No direct viewing in browser
+- No thumbnail generation
+- Cannot open with integrated viewers
 
 **Best Use Cases**:
-- Microscopy data with rich metadata
-- Data interchange between different systems
-- Legacy OME-compliant workflows
+- Source data for conversion to OME-Zarr
+- Data interchange with OME-compliant systems
+- Legacy workflow compatibility
 
-**Limitations**:
-- Large file sizes for complex datasets
-- Single-file structure limits parallel access
+**Recommended Approach**:
+- Convert OME-TIFF to OME-Zarr to preserve metadata and enable full functionality
+- Use conversion requests to maintain OME compliance during format transformation
 
 ## Proprietary Imaging Formats
 

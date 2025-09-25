@@ -5,7 +5,30 @@ description: Understanding TIFF and OME-TIFF formats in Fileglancer, including t
 
 ## Overview
 
-TIFF (Tagged Image File Format) and OME-TIFF are widely used formats in scientific imaging. While TIFF provides reliable image storage, OME-TIFF adds rich metadata capabilities essential for biological imaging. Fileglancer provides comprehensive support for both formats while offering conversion pathways to more modern alternatives.
+TIFF (Tagged Image File Format) and OME-TIFF are widely used formats in scientific imaging. While TIFF provides reliable image storage, OME-TIFF adds rich metadata capabilities essential for biological imaging.
+
+## Current TIFF Support Status
+
+### Current Limitations
+**Important**: Fileglancer's TIFF support is currently limited:
+- **No direct viewing**: TIFF files cannot be opened directly in Fileglancer's web interface
+- **No thumbnail generation**: TIFF files appear as generic file icons without previews
+- **Limited metadata display**: Only basic file information is shown in the Properties Panel
+- **No data viewer integration**: TIFF files cannot be opened with Neuroglancer, Vol-E, or other integrated viewers
+
+### Available Operations
+While direct viewing is not supported, you can still:
+- **Browse TIFF files**: Navigate directories containing TIFF files
+- **View file properties**: See file size, modification date, and basic metadata
+- **Create data links**: Share TIFF files via Fileglancer data links
+- **Request conversions**: Convert TIFF files to supported formats like OME-Zarr
+
+### Planned Enhancements
+Future releases will include:
+- **Direct TIFF viewing**: Browser-based TIFF file preview capabilities
+- **Metadata extraction**: Display of TIFF tags and OME metadata
+- **Multi-page navigation**: Browse through TIFF stacks and series
+- **Thumbnail generation**: Visual previews for TIFF files
 
 ## Understanding TIFF Format
 

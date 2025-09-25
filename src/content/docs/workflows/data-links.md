@@ -115,7 +115,7 @@ You can create data links for any directory, not just Zarr files:
 
 1. **Navigate to the links page**
    - Go to `/links` in your browser (add this to the base Fileglancer URL)
-   - Example: `fileglancer-dev.int.janelia.org/links`
+   - Example: `fileglancer.int.janelia.org/links`
 
 2. **Review your active links**
    - See all currently active data links

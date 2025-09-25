@@ -11,7 +11,7 @@ Fileglancer is a web-based file browser and data sharing platform specifically d
 
 Fileglancer addresses common challenges researchers face when working with large scientific imaging datasets:
 
-- **Eliminates data movement friction**: Browse and share data directly from existing file systems (PRFS/NRS/Nearline)
+- **Eliminates data movement friction**: Browse and share data directly from existing file systems (PRFS, NRS, Nearline)
 - **Simplifies data sharing**: Create shareable links with appropriate permission controls
 - **Streamlines file format conversions**: Request data conversions through integrated help desk routing
 - **Integrates with analysis tools**: Open datasets directly in Neuroglancer for visualization
@@ -58,7 +58,7 @@ For compatible datasets, Fileglancer provides one-click opening in Neuroglancer,
 
 Ready to start using Fileglancer? Here are your next steps:
 
-1. **Access the platform**: Navigate to [fileglancer-dev.int.janelia.org](https://fileglancer-dev.int.janelia.org) from the Janelia network
+1. **Access the platform**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) from the Janelia network
 2. **Learn navigation**: Start with our [Navigation Guide](/workflows/navigation/) to understand how to browse your data
 3. **Try sharing**: Follow the [Data Links Guide](/workflows/data-links/) to create your first shareable link
 4. **Explore features**: Review the [Features](/features/file-browser/) section to understand all available capabilities
@@ -72,10 +72,12 @@ Ready to start using Fileglancer? Here are your next steps:
 
 ## Supported File Systems
 
-Fileglancer connects to these Janelia file systems:
+Fileglancer connects to Janelia's multi-tier storage infrastructure:
 
-- **PRFS** (Primary Research File System): Main storage for active research data
-- **NRS** (Nearline Research Storage): Long-term storage for archived research data
-- **Nearline**: Extended storage for less frequently accessed data
+- **PRFS (Primary Research File System)**: High-performance storage optimized for active research data with fast access times and frequent read/write operations. Best for current experiments and active analysis work.
 
-All systems are accessible through the same Fileglancer interface, allowing you to browse across different storage tiers seamlessly.
+- **NRS (Non-Recoverable Storage)**: Cost-effective storage for large datasets that don't require backup. Offers good throughput for large file operations and larger storage quotas. Ideal for raw microscopy data and reproducible datasets.
+
+- **Nearline Storage**: Long-term archival storage with retrieval capabilities. Provides very large storage capacity at lower cost but with slower access times. Perfect for completed project archives and reference datasets.
+
+All systems are accessible through the same Fileglancer interface, allowing you to browse across different storage tiers seamlessly. The platform automatically handles the performance characteristics of each system to provide the best user experience.

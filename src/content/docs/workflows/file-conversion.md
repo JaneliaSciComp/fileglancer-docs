@@ -123,7 +123,7 @@ When completing the conversion request form, include:
 
 1. **Navigate to the jobs page**
    - Go to `/jobs` in your browser
-   - Example: `fileglancer-dev.int.janelia.org/jobs`
+   - Example: `fileglancer.int.janelia.org/jobs`
 
 ![Tasks Page](../../../assets/fileglancer-tasks-page.png)
 *The Tasks page showing conversion request status and history*
@@ -226,7 +226,8 @@ After successful conversion:
 
 3. **Plan for processing time**
    - Allow adequate time for conversion processing in your project timeline
-   - Complex conversions may take several days
+   - Processing time varies based on dataset size, complexity, and current queue
+   - Contact technical staff for timeline estimates on specific conversion requests
 
 ## Advanced Conversion Options
 
