@@ -5,37 +5,16 @@ description: Learn how to request file format conversions for your scientific im
 
 ## Overview
 
-Fileglancer integrates with Janelia's help desk system to handle manual data conversions. This feature allows you to request professional conversion services for your scientific imaging data, ensuring proper handling by qualified technical staff.
+Fileglancer integrates with Janelia's JIRA help desk system to handle manual data conversions. This feature allows you to request assistance converting your scientific imaging data between different formats.
 
-## Understanding File Conversions
-
-### What File Conversions Provide
-
-- **Format standardization**: Convert data to analysis-ready formats
-- **Professional handling**: Conversions performed by qualified technical staff
-- **Metadata preservation**: Maintain important imaging metadata during conversion
-- **Quality assurance**: Verified conversion processes with validation
-- **Integration support**: Converted data works seamlessly with analysis tools
-
-### Common Conversion Scenarios
-
-1. **Legacy format updates**: Convert older imaging formats to modern standards
-2. **Analysis preparation**: Convert raw data to formats suitable for specific analysis tools
-3. **Sharing optimization**: Convert to formats that are easier to share or view
-4. **Storage optimization**: Convert to formats with better compression or structure
-5. **Integration requirements**: Convert to formats required by specific software or pipelines
-
-### Supported Source Formats
+## Supported Source Formats
 
 Fileglancer conversion requests typically support:
 
 - **Zarr arrays**: Existing Zarr datasets that need reformatting
 - **OME-Zarr**: Conversion between OME-Zarr versions or structures
-- **TIFF files**: Legacy TIFF data conversion to modern formats
+- **TIFF files**: TIFF data conversion to OME-Zarr format
 - **OME-TIFF**: Metadata-rich TIFF conversions
-- **Proprietary formats**: Manufacturer-specific formats (CZI, LIF, etc.)
-- **HDF5**: Scientific data format conversions
-- **NetCDF**: Climate and scientific data formats
 
 ## Requesting File Conversions
 
@@ -55,7 +34,6 @@ Before requesting a conversion:
 
 3. **Prepare conversion details**
    - Document any special requirements or constraints
-   - Gather information about the original acquisition parameters
    - Note any metadata that must be preserved
 
 ### Step-by-Step Conversion Request
@@ -67,8 +45,8 @@ Before requesting a conversion:
    - Ensure you're at the correct directory level containing the data
 
 2. **Open the Properties Panel**
-   - Locate the Properties Panel (typically on the right side)
-   - If not visible, look for a Properties button or panel toggle
+   - Locate the Properties Panel on the right side
+   - If not visible, look for the expand Properties button in the browser toolbar, on the right
 
 3. **Switch to the Conversion tab**
    - Click on the "Conversion" tab within the Properties Panel
@@ -77,45 +55,18 @@ Before requesting a conversion:
 ![Convert Tab](../../../assets/fileglancer-convert-tab.png)
 *The Convert tab in the Properties Panel showing conversion request options*
 
-4. **Review conversion options**
-   - The panel will display available conversion options for your data type
-   - Review any preset conversion parameters or templates
-
 5. **Open the conversion request**
-   - Click the button or link to "Open conversion request" or similar
-   - This will launch the integrated help desk system
+   - Click the button or link to "Open conversion request"
+   - This will open a dialog
 
-6. **Complete the request form**
-   - Fill out the help desk form with required information
+6. **Complete the dialog**
+   - Fill out the dialog with required information
    - Include details about:
-     - Source data location and format
-     - Desired output format and specifications
      - Target location for converted data
-     - Timeline requirements
-     - Any special instructions or requirements
 
 7. **Submit your request**
-   - Review all information for accuracy
-   - Submit the request through the help desk system
-   - Note the ticket or request ID for tracking
-
-### Request Information Requirements
-
-When completing the conversion request form, include:
-
-#### Essential Information
-- **Source data path**: Complete path to the data requiring conversion
-- **Current format**: Detailed information about the existing format
-- **Target format**: Specific format requirements for the conversion
-- **Output location**: Where the converted data should be stored
-- **Contact information**: Your preferred contact method for updates
-
-#### Additional Details
-- **Metadata requirements**: Specific metadata that must be preserved
-- **Parameter specifications**: Any custom conversion parameters needed
-- **Timeline constraints**: When you need the conversion completed
-- **Analysis workflow context**: How the converted data will be used
-- **Quality requirements**: Any specific validation or quality checks needed
+   - Submit the dialog
+   - View the information about the ticket now populated in the Properties panel
 
 ## Tracking Your Conversion Requests
 
@@ -123,7 +74,6 @@ When completing the conversion request form, include:
 
 1. **Navigate to the jobs page**
    - Go to `/jobs` in your browser
-   - Example: `fileglancer.int.janelia.org/jobs`
 
 ![Tasks Page](../../../assets/fileglancer-tasks-page.png)
 *The Tasks page showing conversion request status and history*
@@ -134,11 +84,6 @@ When completing the conversion request form, include:
 
 3. **Check status updates**
    - Track when requests are received, in progress, or completed
-   - View any messages or updates from technical staff
-
-4. **Access completed conversions**
-   - Find links to converted data when processing is complete
-   - Download or access converted files
 
 ### Status Meanings
 
@@ -151,16 +96,13 @@ Understanding conversion request statuses:
 - **On Hold**: Waiting for additional information or clarification
 - **Failed**: Conversion encountered errors (details provided)
 
-## Post-Conversion Workflow
-
 ### Accessing Converted Data
 
 1. **Check completion notification**
    - Monitor the `/jobs` page for completion status
-   - Look for email notifications if configured
+   - Look for email notifications
 
 2. **Locate converted data**
-   - Follow links provided in the completion notification
    - Navigate to the specified output directory
    - Verify the converted data is accessible
 
@@ -168,87 +110,6 @@ Understanding conversion request statuses:
    - Check that the converted data opens properly in your analysis tools
    - Verify metadata preservation
    - Compare file sizes and structure as expected
-
-### Creating Data Links for Converted Data
-
-After successful conversion:
-
-1. **Navigate to the converted data location**
-   - Use the path provided in the completion notification
-
-2. **Create data links**
-   - Follow the [Data Links Guide](/workflows/data-links/) to create shareable links
-   - Enable data links for the new converted datasets
-
-3. **Update collaborators**
-   - Share new data links with team members
-   - Update documentation with converted data locations
-
-## Best Practices for Conversion Requests
-
-### Planning Your Request
-
-1. **Batch similar conversions**
-   - Group related datasets in single requests when possible
-   - This is more efficient for technical staff and you
-
-2. **Provide comprehensive information**
-   - Include all relevant details in the initial request
-   - This reduces back-and-forth communication and speeds processing
-
-3. **Plan for storage requirements**
-   - Converted data may be larger than original formats
-   - Ensure adequate storage space in the target location
-
-### Working with Technical Staff
-
-1. **Be responsive to questions**
-   - Monitor your email and the jobs page for staff questions
-   - Respond promptly to requests for clarification
-
-2. **Test converted data promptly**
-   - Validate converted data as soon as possible after completion
-   - Report any issues immediately
-
-3. **Provide feedback**
-   - Let staff know if conversions meet your requirements
-   - Share feedback about the process for continuous improvement
-
-### Managing Multiple Requests
-
-1. **Use descriptive request titles**
-   - Make it easy to identify different conversion requests
-   - Include project names or dataset identifiers
-
-2. **Track dependencies**
-   - Note if some conversions depend on others being completed first
-   - Communicate priority and sequencing needs
-
-3. **Plan for processing time**
-   - Allow adequate time for conversion processing in your project timeline
-   - Processing time varies based on dataset size, complexity, and current queue
-   - Contact technical staff for timeline estimates on specific conversion requests
-
-## Advanced Conversion Options
-
-### Custom Conversion Parameters
-
-For specialized requirements:
-
-1. **Compression settings**: Specify compression algorithms or levels
-2. **Chunk sizes**: For Zarr conversions, specify optimal chunk dimensions
-3. **Metadata handling**: Detailed instructions for metadata preservation or modification
-4. **Multi-resolution pyramids**: Request creation of multi-resolution datasets
-5. **Format-specific options**: Parameters specific to target formats
-
-### Batch Processing
-
-For large datasets:
-
-1. **Directory-level conversions**: Convert entire directory hierarchies
-2. **Pattern matching**: Convert files matching specific naming patterns
-3. **Automated workflows**: Set up recurring conversions for ongoing data
-4. **Parallel processing**: Request parallel conversion of independent datasets
 
 ## Troubleshooting Conversion Issues
 
@@ -280,25 +141,5 @@ For large datasets:
 - Solution: Check the jobs page for status updates
 - Contact technical staff if no progress updates are visible
 - Consider if the dataset size or complexity requires additional processing time
-
-## Integration with Research Workflows
-
-### Publication Preparation
-
-- Request conversions to standard formats for data sharing
-- Ensure metadata compliance with publication requirements
-- Create data links for converted datasets to include in publications
-
-### Analysis Pipeline Integration
-
-- Convert data to formats optimized for your analysis tools
-- Request specific parameter settings that match your pipeline requirements
-- Coordinate conversion timing with analysis project schedules
-
-### Collaboration Support
-
-- Convert data to formats that collaborators can easily access
-- Request conversions that facilitate data sharing across institutions
-- Ensure converted data works with collaborators' analysis environments
 
 The file conversion system in Fileglancer provides professional data conversion services while maintaining the integrity and accessibility of your scientific imaging data. Use it as a reliable way to prepare your data for analysis, sharing, and long-term preservation.

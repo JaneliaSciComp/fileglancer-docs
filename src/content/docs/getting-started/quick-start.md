@@ -5,14 +5,14 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 
 ## Access Fileglancer
 
-1. **Connect to Janelia network**: Ensure you're on the Janelia internal network
+1. **Connect to Janelia network**: Ensure you're on the Janelia internal network or using the VPN
 2. **Open your browser**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org)
-3. **Authenticate**: Log in with your Janelia credentials when prompted
+3. **Authenticate**: Log in via Okta with your Janelia credentials
 
 ## Your First Navigation
 
 ### Find Your Data
-1. **Use the search**: In the left sidebar, search for your zone or file share path
+1. **Use the search**: In the left sidebar, search for a group or team project
 2. **Click the path**: Select the file share path from search results to access the file browser
 3. **Browse directories**: Navigate through folders using the main file browser interface
 
@@ -25,12 +25,12 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 
 ### For Zarr/OME-Zarr Files
 1. **Navigate to the Zarr directory**: Browse to a folder containing Zarr or OME-Zarr data
-2. **Enable the link**: Click the switch in the Properties Panel Overview tab, OR click the tool icon and approve through the dialog
+2. **Enable the link**: Click a tool icon under the image thumbnail and approve creating a data link through the dialog OR click the switch in the Properties panel. 
 3. **Copy the link**: Use the generated URL to share your data
 
 ### For Any Directory
 1. **Navigate to the target folder**: Browse to any directory you want to share
-2. **Open Properties Panel**: Ensure the Properties Panel is visible (usually on the right side)
+2. **Open Properties panel**: Ensure the Properties panel is visible on the right
 3. **Click the switch**: In the Overview tab, toggle the sharing switch to enable the data link
 
 ## Request a File Conversion
@@ -59,18 +59,17 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 
 ## Common First Tasks
 
-### Scenario 1: Sharing Lab Data with a Collaborator
+### Scenario 1: Sharing Lab Data with an Internal Collaborator
 1. Navigate to your lab's shared data directory
 2. Find the specific dataset you want to share
 3. Create a data link using the Properties Panel
-4. Send the link to your collaborator with any necessary access instructions
+4. Send the link to your collaborator
 
 ### Scenario 2: Preparing Data for Analysis
 1. Browse to your raw imaging data
-2. Check if it's already in a suitable format (Zarr/OME-Zarr)
-3. If conversion is needed, submit a conversion request
-4. Monitor the conversion progress on the `/jobs` page
-5. Once complete, create a data link for the converted data
+2. Submit a conversion request using the Convert tab in the Properties panel
+3. Monitor the conversion progress on the `/jobs` page
+4. Once complete, create a data link for the converted data
 
 ### Scenario 3: Organizing Your Workflow
 1. Use search to find all your project directories
@@ -91,11 +90,11 @@ Now that you've completed the basics, explore these guides for more detailed wor
 
 | Task | Location | Action |
 |------|----------|---------|
-| Search for data | Left sidebar | Type zone/path name |
+| Search for data | Left sidebar | Type group/team name |
 | Navigate to specific path | Toolbar widget | Paste path and navigate |
 | Save favorite | Toolbar | Click star icon |
 | Create data link | Properties Panel | Toggle switch in Overview |
 | Request conversion | Properties Panel | Use Conversion tab |
-| View all links | URL | Navigate to `/links` |
+| View all data links | URL | Navigate to `/links` |
 | Check job status | URL | Navigate to `/jobs` |
-| Go home | Toolbar | Click home icon |
+| Go home directory | Toolbar | Click home icon |

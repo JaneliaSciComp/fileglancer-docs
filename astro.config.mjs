@@ -29,23 +29,13 @@ export default defineConfig({
 					items: [
 						{ label: 'File Browser', slug: 'features/file-browser' },
 						{ label: 'Data Sharing', slug: 'features/data-sharing' },
-						{ label: 'Neuroglancer Integration', slug: 'features/neuroglancer' },
-						{ label: 'File Permissions', slug: 'features/permissions' },
-					],
-				},
-				{
-					label: 'File Formats',
-					items: [
-						{ label: 'Supported Formats', slug: 'file-formats/supported-formats' },
-						{ label: 'Zarr and OME-Zarr', slug: 'file-formats/zarr' },
-						{ label: 'TIFF and OME-TIFF', slug: 'file-formats/tiff' },
+						{ label: 'Data Tools', slug: 'features/data-tools' },
 					],
 				},
 				{
 					label: 'Help & Support',
 					items: [
 						{ label: 'Troubleshooting', slug: 'support/troubleshooting' },
-						{ label: 'Common Issues', slug: 'support/common-issues' },
 						{ label: 'Getting Help', slug: 'support/getting-help' },
 					],
 				},
