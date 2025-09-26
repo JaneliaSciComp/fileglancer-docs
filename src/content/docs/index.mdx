@@ -1,0 +1,62 @@
+---
+title: Fileglancer User Guide
+description: Your complete guide to using Fileglancer for browsing, sharing, and managing scientific imaging data at Janelia Research Campus.
+template: splash
+hero:
+  tagline: Browse, share, and manage scientific imaging data with ease
+  actions:
+    - text: Get Started
+      link: /getting-started/introduction/
+      icon: right-arrow
+    - text: Core Workflows
+      link: /workflows/navigation/
+      icon: document
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is Fileglancer?
+
+Fileglancer is a web application designed specifically for researchers at Janelia Research Campus to easily browse, share, and manage scientific imaging data. It connects directly to Janelia's internal filesystems (PRFS/NRS/Nearline) without requiring data movement, making it simple to work with large imaging datasets.
+
+## Key Features
+
+<CardGrid stagger>
+	<Card title="Easy File Navigation" icon="open-book">
+		Browse your scientific imaging data using an intuitive web interface connected directly to Janelia's file systems.
+	</Card>
+	<Card title="Seamless Data Sharing" icon="external">
+		Create internally-shareable links for your data with simple permission management.
+	</Card>
+	<Card title="Data Viewer Integration" icon="puzzle">
+		Open Zarr files directly in Neuroglancer and other tools for visualization and analysis with one-click integration.
+	</Card>
+	<Card title="Format Support" icon="seti:svg">
+		Request support in converting image data between common formats, including Zarr, OME-Zarr, and TIFF.
+	</Card>
+</CardGrid>
+
+## Common Workflows
+
+<CardGrid>
+	<Card title="Navigate Your Data" icon="right-arrow">
+		Learn how to browse files, save favorites, and efficiently navigate large directory structures.
+
+		[Navigation Guide →](/workflows/navigation/)
+	</Card>
+	<Card title="Share Data Links" icon="external">
+		Create and manage shareable links for your datasets with proper access controls.
+
+		[Data Links Guide →](/workflows/data-links/)
+	</Card>
+	<Card title="Request Conversions" icon="setting">
+		Submit requests for file format conversions and data processing through the integrated help desk system.
+
+		[Conversion Guide →](/workflows/file-conversion/)
+	</Card>
+</CardGrid>
+
+## Getting Help
+
+If you encounter issues or need assistance, Fileglancer integrates with Janelia's help desk system for manual data conversions and technical support. Visit the [Troubleshooting](/support/troubleshooting/) section for common solutions or [Getting Help](/support/getting-help/) for support options.

@@ -1,0 +1,79 @@
+---
+title: Data Sharing
+description: Learn about Fileglancer's comprehensive data sharing capabilities.
+---
+
+## Overview
+
+Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with internal colleagues and collaborators.
+
+## Understanding Data Sharing in Fileglancer
+
+### Core Sharing Principles
+
+1. **No data movement**: Files remain in their original locations
+2. **Persistent links**: URLs remain valid while data link is enabled
+3. **Revocable sharing**: Disable sharing for a given file or folder at any time
+
+### Types of Data Sharing
+
+#### Zarr and OME-Zarr Sharing
+- Share individual Zarr or OME-Zarr datasets
+- Integrated with visualization tools in Fileglancer
+
+#### Directory-Level Sharing
+- Share entire directories and their contents
+- Collaborators can browse the full directory structure
+- Use the data in visualization and analysis tools
+
+## Creating Shareable Links
+
+### Basic Sharing Workflow
+
+1. **Navigate to your data**
+   - Use any navigation method to reach the target directory
+   - Ensure you have appropriate permissions to share the data
+
+2. **Enable sharing**
+   - Open the Properties Panel
+   - Use the Overview tab to toggle data link creation
+   - Copy the generated shareable URL
+
+3. **Share with internal collaborators**
+   - Send the URL via email, messaging, or documentation
+   - Collaborators must be on the Janelia internal network to view data
+
+#### Automatic Link Creation
+- Enable automatic data links to streamline the sharing process
+- Reduce clicks by removing the confirmation dialog step
+
+## Permission Management
+
+### Understanding Access Controls
+
+Fileglancer data links allow anyone with the link to view the data on Janelia's internal network:
+
+#### Network Access
+- **Internal network**: Full access from Janelia internal network
+- **VPN access**: Remote access through Janelia VPN
+
+#### Data Sensitivity
+1. **Review data content**: Ensure shared data is appropriate for the intended audience
+2. **Consider privacy**: Be aware of any privacy implications of shared data
+
+#### Access Monitoring
+1. **Regular reviews**: Periodically review active data links on `/links` page
+2. **Disable unused links**: Remove links that are no longer needed
+
+## Troubleshooting Sharing Issues
+
+**Collaborators can't access shared links**
+- Verify data integrity at source location
+- Check network connectivity requirements
+- Confirm sharing is enabled at correct directory level
+
+**Performance issues with shared data**
+- Consider data format optimization
+- Check network bandwidth limitations
+
+Data sharing in Fileglancer enables powerful collaboration that can enhance your research productivity and impact.
