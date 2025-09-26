@@ -4,6 +4,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://JaneliaSciComp.github.io',
+	base: '/fileglancer-user-docs',
 	integrations: [
 		starlight({
 			title: 'Fileglancer User Guide',
