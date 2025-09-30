@@ -3,8 +3,6 @@ title: File Conversion Requests
 description: Learn how to request file format conversions for your scientific imaging data through Fileglancer's integrated help desk system.
 ---
 
-## Overview
-
 Fileglancer integrates with Janelia's JIRA help desk system to handle manual data conversions. This feature allows you to request assistance converting your scientific imaging data between different formats.
 
 ## Supported Source Formats

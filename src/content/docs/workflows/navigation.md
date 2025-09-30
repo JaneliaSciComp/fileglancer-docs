@@ -3,8 +3,6 @@ title: Navigating Files
 description: Master all the ways to browse, search, and organize your data in Fileglancer.
 ---
 
-## Overview
-
 Fileglancer provides multiple methods to navigate Janelia's file systems. This guide covers all navigation features.
 
 ![Fileglancer Homepage](../../../assets/fileglancer-homepage.png)
@@ -12,11 +10,11 @@ Fileglancer provides multiple methods to navigate Janelia's file systems. This g
 
 ## Primary Navigation Methods
 
-### 1. Search and Browse Method (Recommended)
+### 1. Search and Browse
 
-This is the most efficient way to access your data:
+You can browse your data as you would in macOS Finder or Windows Explorer.
 
-1. **Open the search interface**
+1. **Open the Zone search interface**
    - Locate the search box at the top of the left sidebar
    - The sidebar remains accessible throughout your session
 
@@ -38,11 +36,14 @@ This is the most efficient way to access your data:
 For when you know exactly where you want to go:
 
 1. **Locate the "Navigate to path" widget**
-   - Found on the Fileglancer home page (`/browse`), at the top of the central panel
+   - Found on the Fileglancer home page, at the top of the central panel
+   - OR click the "Navigate to path" button in the toolbar
 
 2. **Enter your complete file path**
-   - Paste or type the full path to your target directory
-   - Example: `/groups/smithlab/experiments/2024/imaging-data`
+   - Paste or type the full path to your target directory. Any style of path will work (Mac, Windows, Linux), for example:
+   - `/misc/public`
+   - `smb://prfs.hhmi.org/public`
+   - `\\prfs.hhmi.org\public\`
 
 3. **Navigate to the path**
    - Press Enter or click the navigation button
@@ -82,13 +83,13 @@ For frequently accessed zones, file shares, and folders:
 ## Troubleshooting Navigation Issues
 
 ### Path Not Found
-- Verify you have correct permissions to view the target directory
 - Check if the path exists and hasn't been moved
 
 ### Search Returns No Results
 - Try broader search terms
-- Verify the zone or share name spelling
-https://hhmi.atlassian.net/wiki/spaces/SCS/pages/152469629/Lab+and+Project+File+Share+Paths
+- Verify the zone or share name spelling 
+- Ensure that your file share is listed on the [Lab and Project File Share Paths](https://hhmi.atlassian.net/wiki/spaces/SCS/pages/152469629/Lab+and+Project+File+Share+Paths) wiki page.
+
 
 ### Slow Loading
 - Large directories with many files may take time to populate

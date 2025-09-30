@@ -3,7 +3,7 @@ title: Fileglancer User Guide
 description: Your complete guide to using Fileglancer for browsing, sharing, and managing scientific imaging data at Janelia Research Campus.
 template: splash
 hero:
-  tagline: Browse, share, and manage scientific imaging data with ease
+  tagline: Browse and share large scientific imaging data with ease
   actions:
     - text: Get Started
       link: /fileglancer-user-docs/getting-started/introduction/
@@ -18,7 +18,8 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ## What is Fileglancer?
 
-Fileglancer is a web application designed specifically for researchers at Janelia Research Campus to easily browse, share, and manage scientific imaging data. It connects directly to Janelia's internal filesystems (PRFS/NRS/Nearline) without requiring data movement, making it simple to work with large imaging datasets.
+Fileglancer is a web application designed to allow researchers at Janelia to easily browse, share, and manage large scientific imaging data. It leverages emerging [next generation file format standards](https://www.nature.com/articles/s41592-021-01326-w) (e.g. OME-Zarr) to allow for efficient visualization and sharing of image data via compatible tools such as Neuroglancer, Fiji, and Avivator. It connects to data on Janelia's network filesystems without requiring data movement, making it simple to work with large imaging datasets. 
+
 
 ## Key Features
 
@@ -27,13 +28,13 @@ Fileglancer is a web application designed specifically for researchers at Janeli
 		Browse your scientific imaging data using an intuitive web interface connected directly to Janelia's file systems.
 	</Card>
 	<Card title="Seamless Data Sharing" icon="external">
-		Create internally-shareable links for your data with simple permission management.
+		Create views of your data, sharable either internally or externally (for data in `data_external` folders) 
 	</Card>
 	<Card title="Data Viewer Integration" icon="puzzle">
-		Open Zarr files directly in Neuroglancer and other tools for visualization and analysis with one-click integration.
+		Open OME-Zarr data sets directly in Neuroglancer and other tools for visualization and analysis with one-click integration.
 	</Card>
 	<Card title="Format Support" icon="seti:svg">
-		Request support in converting image data between common formats, including Zarr, OME-Zarr, and TIFF.
+		Request support in converting image data between common formats, including CZI, TIFF, N5, etc.
 	</Card>
 </CardGrid>
 
@@ -59,4 +60,8 @@ Fileglancer is a web application designed specifically for researchers at Janeli
 
 ## Getting Help
 
-If you encounter issues or need assistance, Fileglancer integrates with Janelia's help desk system for manual data conversions and technical support. Visit the [Troubleshooting](/support/troubleshooting/) section for common solutions or [Getting Help](/support/getting-help/) for support options.
+If you encounter issues or need assistance, chat with us in the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) channel in the Janelia-Software Slack workspace. You can also report a bug or request a new feature using the online request form link on the Fileglancer Help page.
+
+## Interested in using Fileglancer outside of Janelia?
+
+We welcome interest from other institutions and are excited to collaborate on making Fileglancer more broadly accessible! While the application was initially developed for use at Janelia, we’re eager to help adapt it for different environments. If you’d like to use Fileglancer at your organization, or have ideas for improvements, we encourage you to [open an issue](https://github.com/JaneliaSciComp/fileglancer/issues) or [submit a pull request](https://github.com/JaneliaSciComp/fileglancer/pulls). Your feedback and contributions are greatly appreciated and will help to make Fileglancer even better for the scientific community!

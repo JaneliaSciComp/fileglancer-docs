@@ -3,8 +3,6 @@ title: File Browser
 description: Explore the file browsing capabilities of Fileglancer, designed specifically for scientific imaging data.
 ---
 
-## Overview
-
 The Fileglancer file browser is the core interface for exploring your data. Built specifically for researchers working with scientific imaging data, it provides specialized features for navigating, viewing, and managing these types of files.
 
 ## Browser Interface Components

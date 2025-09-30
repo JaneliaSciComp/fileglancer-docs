@@ -9,51 +9,56 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 2. **Open your browser**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org)
 3. **Authenticate**: Log in via Okta with your Janelia credentials
 
-## Your First Navigation
+## Navigate to your file share
 
-### Find Your Data
+### Open your home folder
+1. **Home button**: In the toolbar, click the home icon to view the contents of your home folder.
+
+### Find your group's data
 1. **Use the search**: In the left sidebar, search for a group or team project
-2. **Click the path**: Select the file share path from search results to access the file browser
-3. **Browse directories**: Navigate through folders using the main file browser interface
+2. **Expand zones**: Click on a Zone to expand it and see the file share paths it contains
+3. **Browse file share path**: Click on a file share path to view its contents in the file browser
 
-### Save a Favorite
+### Save a favorite
 1. **Navigate to a frequently-used folder**: Use the file browser to reach an important directory
 2. **Click the favorites icon**: Use the star icon in the toolbar to save the current location
 3. **Access later**: Your saved favorites will appear in the left sidebar for quick access
 
-## Create Your First Data Link
+## View OME-Zarr data
 
-### For Zarr/OME-Zarr Files
-1. **Navigate to the Zarr directory**: Browse to a folder containing Zarr or OME-Zarr data
-2. **Enable the link**: Click a tool icon under the image thumbnail and approve creating a data link through the dialog OR click the switch in the Properties panel. 
-3. **Copy the link**: Use the generated URL to share your data
+We'll use an example data set to get familiar with the interface. 
 
-### For Any Directory
-1. **Navigate to the target folder**: Browse to any directory you want to share
-2. **Open Properties panel**: Ensure the Properties panel is visible on the right
-3. **Click the switch**: In the Overview tab, toggle the sharing switch to enable the data link
+1. **Copy path**: Copy this path into your clipboard: 
+    * ```/nrs/opendata/ome-zarr-examples/fused-timeseries.zarr```
+2. **Navigate**: Click the "Navigate to path" button in the toolbar, paste the path and click "Go"
+3. **See metadata**: Since this is an OME-Zarr image, you can view all of its metadata along with a thumbnail image.
+3. **View image**: Click on the "View in Neuroglancer" button
+4. **Create data link**: Viewing an image requires a data link, so click "Create Data Link" on the dialog that appears
+5. **Visualize**: Your image will open in the Neuroglancer viewer for viewing
 
-## Request a File Conversion
+## Request a file conversion
+
+If your data is not already in OME-Zarr format, we can help!
 
 1. **Navigate to Zarr data**: Browse to a Zarr or OME-Zarr directory
-2. **Open Properties Panel**: Ensure the panel is visible
+2. **Open Properties Panel**: Ensure the right-side Properties panel is visible
 3. **Switch to Conversion tab**: Click the Conversion tab in the Properties Panel
 4. **Open conversion request**: Follow the prompts to submit your conversion request
-5. **Track progress**: Monitor your request status on the `/jobs` page
+5. **Track progress**: Monitor your request status on the Tasks page
 
 ## Essential Tips
 
 ### Navigation Shortcuts
-- **Home button**: Click the home icon in the toolbar to go to your home directory
-- **Navigate to path**: Use the "Navigate to path" widget to paste and jump to specific file paths
-- **Breadcrumbs**: Use the breadcrumb trail to quickly move up directory levels
+- **Breadcrumbs**: Use the breadcrumb trail to quickly move up directory levels.
+- **Copy path**: Hover over the breadcrumbs to reveal a copy button that copies the current path into your clipboard.
+- **Paste onto page**: Power users can take advantage of a special hidden feature: if you have a path in your clipboard, simply click anywhere in the file browser and paste using your usual keyboard shortcut. The "Navigate" dialog will come up automatically, prefilled with your path.
 
 ### Link Management
-- **View all links**: Visit the `/links` page to see all your current data links
+- **View all links**: Visit the *Data Links* page to see all your current data links
 - **Enable automatic links**: When creating links, you can choose to enable automatic link creation for future similar actions
 
 ### Getting Help
-- **Check job status**: Visit `/jobs` to monitor conversion requests
+- **Check job status**: Visit the Tasks page to monitor conversion requests
 - **Built-in help**: Look for help icons and tooltips throughout the interface
 - **Technical support**: Use the integrated help desk system for complex issues
 

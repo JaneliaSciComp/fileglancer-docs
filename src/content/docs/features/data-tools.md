@@ -3,8 +3,6 @@ title: Data Tools Integration
 description: Learn how to use Fileglancer's seamless integration with multiple data tools including Neuroglancer, Vol-E, Avivator, and OME-ZARR Validator for visualizing and sharing scientific imaging data.
 ---
 
-## Overview
-
 Fileglancer provides seamless integration with multiple data viewers, allowing you to open compatible datasets directly for visualization, analysis, and sharing. When viewing OME-Zarr or compatible scientific imaging data, Fileglancer automatically displays "Open with" options for appropriate viewers.
 
 ## Available Data Tools
