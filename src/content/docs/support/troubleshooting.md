@@ -85,7 +85,7 @@ description: Solutions for common issues encountered when using Fileglancer with
 1. **Network access**
    - **Issue**: Collaborators not on Janelia network
    - **Solution**: Ensure they're connected to VPN or internal network
-   - **Alternative**: Consider data export for external collaborators
+   - **Alternative**: Consider setting up a `data_external` folder to share the data
 
 ## File Conversion Issues
 

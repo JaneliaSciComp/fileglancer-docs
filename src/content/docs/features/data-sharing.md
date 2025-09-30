@@ -3,8 +3,6 @@ title: Data Sharing
 description: Learn about Fileglancer's comprehensive data sharing capabilities.
 ---
 
-## Overview
-
 Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with internal colleagues and collaborators.
 
 ## Understanding Data Sharing in Fileglancer

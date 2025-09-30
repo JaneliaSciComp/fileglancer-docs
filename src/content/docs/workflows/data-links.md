@@ -3,23 +3,21 @@ title: Creating Data Links
 description: Learn how to create, manage, and share links to your data on Janelia's file systems.
 ---
 
-## Overview
+Data links in Fileglancer allow you to create shareable URLs for your data on Janelia's file systems without moving or copying files. They work similarily to how Google Docs does when you share a document with "Anyone with the link". 
 
-Data links in Fileglancer allow you to create shareable URLs for your data on Janelia's file systems without moving or copying files.
-
-## What are Data Links?
+## What are data links?
 - **Persistent URLs**: Stable web addresses that point to your data
 - **No data movement**: Links point to data in original locations on the Janelia file system
-- **Internally shareable**: Can be sent to interal collaborators or used with online tools on the internal network
+- **Internally shareable**: Can be sent to internal collaborators or used with online tools on the internal network
+- **Revokeable**: You can delete a data link at any time to revoke access to the data
 
-## Creating Data Links for Zarr/OME-Zarr Files
 
-Zarr and OME-Zarr files have special integration features for data links:
+## Creating data links for OME-Zarr Data
+
+Zarr and OME-Zarr data sets have special integration features for data links:
 
 ![Zarr File View](../../../assets/fileglancer-zarr-file-view.png)
 *Viewing an OME-Zarr file in Fileglancer with metadata display and properties panel*
-
-### Method 1: Tool Icons (Recommended)
 
 1. **Navigate to your Zarr directory**
    - Browse to the target Zarr or OME-Zarr directory
@@ -33,48 +31,18 @@ Zarr and OME-Zarr files have special integration features for data links:
    - Review any permissions or access settings
 
 4. **Approve the link creation**
-   - Click "Approve," "Create Link," or similar confirmation button
-   - The dialog may offer additional options
-
-5. **Enable automatic links (optional)**
-   - The dialog may offer to enable automatic link creation for similar future actions
-   - Choose this option to streamline future link creation
-
-6. **Copy the generated link**
-   - The dialog or interface will display the new link
-   - Copy and share as needed
-
-### Method 2: Properties Panel 
-
-1. **Navigate to your Zarr directory**
-   - Use any navigation method to reach the folder containing your Zarr or OME-Zarr data
-   - Ensure you're at the directory level, not inside the Zarr structure
-
-2. **Open the Properties Panel**
-   - The Properties Panel is located on the right side of the file browser
-   - If not visible, look click the expand icon on the right side of the file browser toolbar
-   - OR right click on the Zarr directory and select "view properties" from the pop-up menu
-
-3. **Locate the Overview tab**
-   - Click on the "Overview" tab within the Properties Panel
-   - This tab shows general information about the selected directory
-
-4. **Enable the data link**
-   - Find the data link toggle switch
-   - Click the switch to enable link creation
-   - The switch will change state to indicate the link is active
-
-5. **Copy the generated link**
-   - Once enabled, a shareable URL will be generated
-   - Copy this URL to share with others
-   - The link will remain active until you disable it
+   - Click "Create Data Link"
+   - Choose the "enable automatic data link creation" option to streamline future link creation
+   
+6. **Share the generated links**
+   - When you open the data in a tool, it uses the data link to access your data. Certain tools, such as Neuroglancer, also save your viewer state in the URL. You can copy the URL in the address bar and send it to a collaborator and they will see the same view of the data.
 
 ![Data Link Success](../../../assets/fileglancer-data-link-success.png)
 *Successful data link creation showing the generated URL and external viewer integration options*
 
-## Creating Data Links for Any Directory
+## Creating data links for non-Zarr data
 
-You can create data links for any directory, not just Zarr files:
+You can create data links for any directory, not just Zarr files. This is especially useful for other image file formats such as the Saalfeld Lab's N5 format.
 
 1. **Navigate to the target directory**
    - Use any navigation method to reach the desired folder
@@ -88,14 +56,14 @@ You can create data links for any directory, not just Zarr files:
    - Click on the "Overview" tab within the Properties Panel
    - This shows general directory information and controls
 
-4. **Enable directory sharing**
+4. **Enable data link**
    - Find the data link toggle switch in the Overview tab
    - Click the switch to enable sharing for this directory
    - The switch indicates whether sharing is active
 
 5. **Use the generated link**
    - Copy the generated URL for sharing
-   - The link provides access to browse the directory contents
+   - The link provides access to browse the directory contents, and can be opened in compatible viewers such as Fiji. 
 
 ## Automatic Link Creation
 
@@ -106,7 +74,7 @@ When creating links through the tool icon dialog:
    - This will remove the dialog confirmation step for future link creation
 
 3. **Managing automatic settings**
-   - Review and modify automatic link settings in your profile at any time
+   - Review and modify automatic link settings in your preferences at any time
    - Disable automatic creation if you prefer manual control
 
 ## Managing Your Data Links
@@ -114,8 +82,8 @@ When creating links through the tool icon dialog:
 ### Viewing All Data Links
 
 1. **Navigate to the links page**
-   - Go to `/links` in your browser (add this to the base Fileglancer URL)
-   - See table with all currently active data links. Sort and filter links, if desired
+   - Click on the Data Links page link at the top
+   - View the table with all currently active data links. Sort and filter links, if desired
 
 ![Data Links Page](../../../assets/fileglancer-data-links-page.png)
 *The Data Links page showing all created data links with management options*
@@ -140,10 +108,7 @@ When creating links through the tool icon dialog:
 
 3. **Disable the link**
    - Click the toggle switch to turn off the data link
-   - The link will immediately become inactive
-
-4. **Confirm on the links page**
-   - If desired, check `/links` to verify the link has been removed
+   - The link will immediately be deleted. If you re-enable the button, a new data link will be created. Therefore, collaborators who received the previous link will not be able to access the data until they receive the new data link.
 
 ## Security Considerations
 
@@ -152,7 +117,13 @@ When creating links through the tool icon dialog:
    - Be aware of what data is included in shared directories
 
 2. **Disable links that are no longer needed**
-   - Regularly review data links on the `/links` page
+   - Regularly review data links on the Data Links page and delete them if they are no longer needed
+
+
+## Sharing data outside of Janelia
+
+Some file shares have a special folder called `data_external`. Any files or folders placed inside `data_external` are automatically made public on [s3.janelia.org](https://s3.janelia.org). You do not need to create a data link in Fileglancer for these items, since public access is already available. Whenever you open a image inside a `data_external` folder in Fileglancer, you will get a link that anyone on the internet can use to access the data.
+
 
 ## Troubleshooting Data Links
 

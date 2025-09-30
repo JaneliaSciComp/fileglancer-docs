@@ -3,8 +3,6 @@ title: Getting Help
 description: Learn how to get support for Fileglancer, including technical assistance, file conversion help, and troubleshooting resources.
 ---
 
-## Overview
-
 This guide explains how to access different types of Fileglancer support.
 
 ## Types of Support Available
