@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import rehypeExternalLinks from 'rehype-external-links';
+import { externalLinkIcon } from './external-link-icon.js';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +10,11 @@ export default defineConfig({
 	base: '/fileglancer-user-docs',
 	markdown: {
 		rehypePlugins: [
-			[rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }]
+			[rehypeExternalLinks, {
+				target: '_blank',
+				rel: ['noopener', 'noreferrer'],
+				content: externalLinkIcon
+			}]
 		]
 	},
 	integrations: [
