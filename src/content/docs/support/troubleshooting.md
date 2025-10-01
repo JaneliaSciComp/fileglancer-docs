@@ -78,7 +78,7 @@ description: Solutions for common issues encountered when using Fileglancer with
 
 ## Data Links Not Working for Collaborators
 
-**Symptoms**: Links work for you but not for others
+**Symptoms**: Data links work for you but not for others
 
 **Possible Causes & Solutions**:
 

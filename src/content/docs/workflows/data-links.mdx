@@ -29,13 +29,13 @@ Browse to the target Zarr or OME-Zarr directory.
 2. **Click one of the tool icons under the image thumbnail**<br/>
 Select one of the available tools, including Neuroglancer, Vol-E, Avivator, OME-Zarr Validator, or copy link. If you don't have automatic data links enabled, this will open the data link creation dialog.
 
-3. **Review the link creation dialog**<br/>
+3. **Review the data link creation dialog**<br/>
 The dialog shows information about the link being created. Review the access settings.
 
-4. **Approve the link creation**<br/>
+4. **Approve the data link creation**<br/>
 Click "Create Data Link". Choose the "enable automatic data link creation" option to streamline future link creation.
    
-6. **Share the generated links**<br/>
+6. **Share the generated data links**<br/>
 When you open the data in a tool, it uses the data link to access your data. Certain tools, such as Neuroglancer, also save your viewer state in the URL. You can copy the URL in the address bar and send it to a collaborator and they will see the same view of the data.
 </Steps>
 
@@ -63,15 +63,15 @@ Find the data link toggle switch in the Overview tab. Click the switch to enable
 Copy the generated URL for sharing. The link provides access to browse the directory contents, and can be opened in compatible viewers such as Fiji. 
 </Steps>
 
-## Automatic Link Creation
+## Automatic Data Link Creation
 
-When creating links through the tool icon dialog:
+When creating data links through the tool icon dialog:
 <Steps>
 1. **Enable automatic creation**<br/>
-Choose the option to enable automatic links during the approval process. This will remove the dialog confirmation step for future link creation.
+Choose the option to enable automatic data links during the approval process. This will remove the dialog confirmation step for future link creation.
 
 2. **Managing automatic settings**<br/>
-Review and modify automatic link settings in your preferences at any time. Disable automatic creation if you prefer manual control.
+Review and modify automatic data link settings in your preferences at any time. Disable automatic creation if you prefer manual control.
 </Steps>
 
 ## Managing Your Data Links
@@ -79,7 +79,7 @@ Review and modify automatic link settings in your preferences at any time. Disab
 ### Viewing All Data Links
 
 <Steps>
-1. **Navigate to the links page**<br/>
+1. **Navigate to the data links page**<br/>
 Click on the Data Links page link at the top of the interface. View the table with all currently active data links. Sort and filter links, if desired.
 </Steps>
 
@@ -93,29 +93,29 @@ Click on the Data Links page link at the top of the interface. View the table wi
 1. **Click the actions button**<br/>
 The circle icon with three dots on the right side of the data links table.
 
-2. **Select delete link from the pop-up menu**<br/>
+2. **Select delete data link from the pop-up menu**<br/>
 Confirm deleting in the link in the dialog.
 </Steps>
 
 #### Method 2 - From the Properties panel
 <Steps>
 1. **Navigate to the linked directory**<br/>
-Use navigation to return to the directory with an active link.
+Use navigation to return to the directory with an active data link.
 
 2. **Open Properties Panel**<br/>
 Access the Overview tab as before.
 
-3. **Disable the link**<br/>
+3. **Disable the data link**<br/>
 Click the toggle switch to turn off the data link. The link will immediately be deleted. If you re-enable the button, a new data link will be created. Therefore, collaborators who received the previous link will not be able to access the data until they receive the new data link.
 </Steps>
 
 ## Security Considerations
 
 **Understand access scope**
-   - Anyone with the link and using the Janelia network can view directory contents
+   - Anyone with the data link and using the Janelia network can view directory contents
    - Be aware of what data is included in shared directories
 
-**Disable links that are no longer needed**
+**Disable data links that are no longer needed**
    - Regularly review data links on the Data Links page and delete them if they are no longer needed
 
 
@@ -126,7 +126,7 @@ Some file shares have a special folder called `data_external`. Any files or fold
 
 ## Troubleshooting Data Links
 
-### Link Creation Issues
+### Data Link Creation Issues
 
 **Problem**: Toggle switch doesn't respond
 - Solution: Verify you have write permissions for the directory
@@ -138,16 +138,16 @@ Some file shares have a special folder called `data_external`. Any files or fold
 - Check if the panel is collapsed or minimized
 - Try different browser window sizes
 
-### Link Access Issues
+### Data Link Access Issues
 
-**Problem**: Collaborators can't access links
-- Solution: Verify collaborators have network access and updated links
+**Problem**: Collaborators can't access data links
+- Solution: Verify collaborators have network access and updated data links
 - Check if they're on the correct network (Janelia internal)
-- Confirm the link is still active on your `/links` page
+- Confirm the data link is still active on your Data Links page
 
-**Problem**: Links stop working
+**Problem**: Data links stop working
 - Solution: Check if the data has been moved or permissions changed
-- Verify the link wasn't accidentally disabled
+- Verify the data link wasn't accidentally disabled
 - Contact system administrators for file system issues
 
 Remember that data links are a powerful feature for collaboration, but they should be used thoughtfully with consideration for security, permissions, and data management best practices.

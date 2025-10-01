@@ -12,7 +12,7 @@ Fileglancer is a web-based file browser and data sharing platform specifically d
 Fileglancer addresses common challenges researchers face when working with large datasets:
 
 - **Eliminates data movement friction**: Browse and share data directly from existing file systems (PRFS, NRS, Nearline)
-- **Simplifies data sharing**: Create shareable links with appropriate permission controls
+- **Simplifies data sharing**: Create shareable data links with appropriate permission controls
 - **Streamlines file format conversions**: Request imaging data conversions through integrated help desk routing
 - **Integrates with analysis tools**: Open Zarr and OME-Zarr files directly in tools like Neuroglancer for visualization
 - **Familiar user interface**: No familiarity with the command line required to carry out common file management tasks.
@@ -23,5 +23,5 @@ Ready to start using Fileglancer? Here are your next steps:
 
 1. **Access the platform**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) from the Janelia network 
 2. **Learn navigation**: Start with the [Navigation Guide](/workflows/navigation/) to understand how to browse your data
-3. **Try sharing**: Follow the [Data Links Guide](/workflows/data-links/) to create your first shareable link
+3. **Try sharing**: Follow the [Data Links Guide](/workflows/data-links/) to create your first shareable data link
 4. **Explore features**: Review the [Features](/features/file-browser/) section to understand all available capabilities
