@@ -1,0 +1,55 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from "astro:assets";
+
+interface Props {
+  alt: string;
+  src?: ImageMetadata;
+  lightSrc?: ImageMetadata;
+  darkSrc?: ImageMetadata;
+  class?: string;
+};
+
+const { lightSrc, darkSrc, src, alt, class: className } = Astro.props;
+
+// If both light and dark sources are provided, use theme-specific display
+// Otherwise, use single image for both themes
+const hasThemeVariants = Boolean(lightSrc && darkSrc);
+---
+
+<div
+  class:list={[
+    "image-container",
+    "rounded-lg border border-gray-200 dark:border-gray-700",
+    "p-4 bg-gray-100 dark:bg-gray-800",
+    "shadow-sm hover:shadow-md transition-shadow",
+    "my-4",
+    className,
+  ]}
+>
+  {
+    hasThemeVariants ? (
+      <>
+        <Image
+          src={lightSrc!}
+          alt={alt}
+          class="block dark:hidden w-full h-auto rounded mt-0"
+          loading="lazy"
+        />
+        <Image
+          src={darkSrc!}
+          alt={alt}
+          class="hidden dark:block w-full h-auto rounded mt-0"
+          loading="lazy"
+        />
+      </>
+    ) : (
+      <Image
+        src={src!}
+        alt={alt}
+        class="w-full h-auto rounded mt-0"
+        loading="lazy"
+      />
+    )
+  }
+</div>
