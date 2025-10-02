@@ -22,6 +22,12 @@ export default defineConfig({
       starlight({
           title: 'Fileglancer User Guide',
           description: 'Comprehensive documentation for the Fileglancer scientific imaging file browser and sharing platform at Janelia Research Campus.',
+			logo: {
+				src: './src/assets/logo.svg',
+			},
+			customCss: [
+				'./src/styles/custom.css',
+			],
           sidebar: [
               {
                   label: 'Getting Started',

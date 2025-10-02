@@ -1,0 +1,37 @@
+/* Custom color overrides to match fileglancer app */
+:root {
+  /* Primary color (HHMI teal/cyan brand color) */
+  --sl-color-accent-low: #36a9b01a;
+  --sl-color-accent: #058d96;
+  --sl-color-accent-high: #36a9b0;
+
+  /* Use primary color for links */
+  --sl-color-text-accent: #058d96;
+
+
+/* Dark mode colors */
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #36a9b01a;
+  --sl-color-accent: #36a9b0;
+  --sl-color-accent-high: #66c7d0;
+
+  /* Links in dark mode */
+  --sl-color-text-accent: #36a9b0;
+}
+
+/* Ensure site title uses the primary color */
+.site-title {
+  color: var(--sl-color-text-accent) !important;
+}
+
+/* Button colors to match primary */
+button[type='button'],
+.sl-button {
+  background-color: var(--sl-color-accent);
+  color: white;
+}
+
+button[type='button']:hover,
+.sl-button:hover {
+  background-color: var(--sl-color-accent-high);
+}

@@ -22,6 +22,6 @@ Fileglancer addresses common challenges researchers face when working with large
 Ready to start using Fileglancer? Here are your next steps:
 
 1. **Access the platform**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) from the Janelia network 
-2. **Learn navigation**: Start with the [Navigation Guide](/workflows/navigation/) to understand how to browse your data
-3. **Try sharing**: Follow the [Data Links Guide](/workflows/data-links/) to create your first shareable data link
-4. **Explore features**: Review the [Features](/features/file-browser/) section to understand all available capabilities
+2. **Learn navigation**: Start with the [Navigation Guide](/fileglancer-user-docs/workflows/navigation/) to understand how to browse your data
+3. **Try sharing**: Follow the [Data Links Guide](/fileglancer-user-docs/workflows/data-links/) to create your first shareable data link
+4. **Explore features**: Review the [Features](/fileglancer-user-docs/features/file-browser/) section to understand all available capabilities
