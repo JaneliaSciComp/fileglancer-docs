@@ -2,6 +2,7 @@
 title: Data Sharing
 description: Learn about Fileglancer's comprehensive data sharing capabilities.
 ---
+import { Steps } from '@astrojs/starlight/components';
 
 Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with internal colleagues and collaborators.
 
@@ -24,24 +25,22 @@ Fileglancer provides powerful data sharing capabilities designed specifically fo
 - Collaborators can browse the full directory structure
 - Use the data in visualization and analysis tools
 
-## Creating Shareable Links
+## Creating Shareable Data Links
 
 ### Basic Sharing Workflow
 
+<Steps>
 1. **Navigate to your data**
-   - Use any navigation method to reach the target directory
-   - Ensure you have appropriate permissions to share the data
+Use any navigation method to reach the target directory. Ensure you have appropriate permissions to share the data.
 
 2. **Enable sharing**
-   - Open the Properties Panel
-   - Use the Overview tab to toggle data link creation
-   - Copy the generated shareable URL
+Open the Properties Panel. Use the Overview tab to toggle data link creation. Copy the generated shareable URL.
 
 3. **Share with internal collaborators**
-   - Send the URL via email, messaging, or documentation
-   - Collaborators must be on the Janelia internal network to view data
+Send the URL via email or messaging. Collaborators must be on the Janelia internal network to view data
+</Steps>
 
-#### Automatic Link Creation
+#### Automatic Data Link Creation
 - Enable automatic data links to streamline the sharing process
 - Reduce clicks by removing the confirmation dialog step
 
@@ -60,12 +59,12 @@ Fileglancer data links allow anyone with the link to view the data on Janelia's 
 2. **Consider privacy**: Be aware of any privacy implications of shared data
 
 #### Access Monitoring
-1. **Regular reviews**: Periodically review active data links on `/links` page
-2. **Disable unused links**: Remove links that are no longer needed
+1. **Regular reviews**: Periodically review active data links on the Data Links page
+2. **Disable unused data links**: Remove links that are no longer needed
 
 ## Troubleshooting Sharing Issues
 
-**Collaborators can't access shared links**
+**Collaborators can't access shared data links**
 - Verify data integrity at source location
 - Check network connectivity requirements
 - Confirm sharing is enabled at correct directory level

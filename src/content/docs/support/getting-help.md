@@ -2,9 +2,6 @@
 title: Getting Help
 description: Learn how to get support for Fileglancer, including technical assistance, file conversion help, and troubleshooting resources.
 ---
-
-This guide explains how to access different types of Fileglancer support.
-
 ## Types of Support Available
 
 ### Technical Support
@@ -29,12 +26,9 @@ For data format conversions and processing requests:
 
 ### Documentation
 
-Before contacting support, consult these resources:
-
-1. **This User Guide**: Comprehensive documentation for all Fileglancer features
-2. **Quick Start Guide**: Basic operations and common workflows
-3. **Troubleshooting Section**: Solutions for common problems
-4. **Format Documentation**: Information about supported file formats
+Before contacting support, consult this user guide. Key sections include:
+1. [**Quick Start Guide**](/fileglancer-user-docs/getting-started/quick-start/): Basic operations and common workflows
+3. [**Troubleshooting**](/fileglancer-user-docs/support/troubleshooting/): Solutions for common problems
 
 ### Built-in Help Features
 
@@ -44,31 +38,19 @@ Before contacting support, consult these resources:
 - **Context menus**: Right-click for additional options and information
 
 #### Status Pages
-- **Jobs page** (`/jobs`): Monitor conversion requests and their status
-- **Links page** (`/links`): View and manage all your data links
+- **Tasks page**: Monitor conversion requests and their status
+- **Data Links page**: View and manage all your data links
 
 ## Contacting Support
 
-### How to Contact Support
-
-#### Through Fileglancer (Recommended)
-
-1. **File conversion requests**
+**File conversion requests**
    - Use the Conversion tab in the Properties Panel
-   - This automatically creates a help desk ticket with relevant context
-   - Include all required information in the request form
+   - Include all required information in the dialog
+   - Submit the request to open a conversion request in JIRA
 
-2. **Integrated help links**
-   - Look for "Get Help" or "Support" links within Fileglancer
-   - These may direct you to appropriate support channels
-   - Context is automatically included when possible
-
-#### Direct Contact Methods
-
-1. **Janelia IT Help Desk**
-   - **Email**: [Standard Janelia IT support email]
-   - **Phone**: [Internal support phone number]
-   - **Online**: Internal IT support portal
+**For all other support**
+- Reach out on the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) Slack channel
+- Fill out the [Clickup issue form](https://forms.clickup.com/10502797/f/a0gmd-713/NBUCBCIN78SI2BE71G)
 
 ### Information to Provide
 
@@ -86,23 +68,3 @@ When contacting support, include:
 - **Screenshots**: Visual evidence of the issue (when helpful)
 - **Previous attempts**: What troubleshooting steps you've already tried
 - **Urgency level**: How quickly you need the issue resolved
-
-#### For File Conversion Requests
-- **Source data**: Complete path and format details
-- **Target format**: Desired output format and specifications
-- **Output location**: Where converted data should be stored
-- **Timeline**: When you need the conversion completed
-- **Special requirements**: Any specific parameters or constraints
-
-## Emergency Support
-
-### Data Loss or Corruption
-
-If you suspect data problems:
-
-1. **Stop using the affected data immediately**
-2. **Contact support with highest priority**
-3. **Provide exact details** about what you observed
-4. **Preserve error conditions** for technical analysis
-
-Don't hesitate to reach out when you need assistance – early intervention often prevents small issues from becoming major problems.
