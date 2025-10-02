@@ -3,6 +3,10 @@ title: Data Sharing
 description: Learn about Fileglancer's comprehensive data sharing capabilities.
 ---
 import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+
+import lightDataLink from '@assets/task-images/light-any-dir-data-link.png'
+import darkDataLink from '@assets/task-images/dark-any-dir-data-link.png'
 
 Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with internal colleagues and collaborators.
 
@@ -40,7 +44,13 @@ Open the Properties Panel. Use the Overview tab to toggle data link creation. Co
 Send the URL via email or messaging. Collaborators must be on the Janelia internal network to view data
 </Steps>
 
-#### Automatic Data Link Creation
+<StyledImage
+lightSrc={lightDataLink}
+darkSrc={darkDataLink}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the 'Create data link' switch in the Overview tab of the Properties panel."
+/>
+
+### Automatic Data Link Creation
 - Enable automatic data links to streamline the sharing process
 - Reduce clicks by removing the confirmation dialog step
 

@@ -4,6 +4,9 @@ description: Learn how to use Fileglancer's seamless integration with multiple d
 ---
 
 import { Steps } from "@astrojs/starlight/components";
+import StyledImage from "@components/StyledImage.astro";
+import lightDataTools from '@assets/task-images/light-features-data-tools.png'
+import darkDataTools from '@assets/task-images/dark-features-data-tools.png'
 
 Fileglancer provides seamless integration with multiple data viewers, allowing you to open compatible datasets directly for visualization, analysis, and sharing. When viewing OME-Zarr or compatible scientific imaging data, Fileglancer automatically displays "Open with" options for appropriate viewers.
 
@@ -58,6 +61,12 @@ Navigate to your OME-Zarr dataset directory. The dataset will be recognized auto
 2. **Find the "Open with" section**<br/>
    Located in the file preview area, below the thumbnail preview of the dataset. These is a list of compatible viewers with their respective logos. There is also a button to copy the direct data link.
 </Steps>
+
+<StyledImage
+lightSrc={lightDataTools}
+darkSrc={darkDataTools}
+alt="Screenshot of the Fileglancer interface, with arrows pointing to the Zarr viewer buttons under a Zarr thumbnail."
+/>
 
 ### Launching Viewers
 

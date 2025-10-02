@@ -4,6 +4,14 @@ description: Learn how to create, manage, and share links to your data on Janeli
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+
+import lightZarrDataLink from '@assets/task-images/light-zarr-data-link.png'
+import darkZarrDataLink from '@assets/task-images/dark-zarr-data-link.png'
+import lightAutomaticLinks from '@assets/task-images/light-automatic-links-pref-page.png'
+import darkAutomaticLinks from '@assets/task-images/dark-automatic-links-pref-page.png'
+import lightDataLinksPage from '@assets/base-images/light-data-links-page.png'
+import darkDataLinksPage from '@assets/base-images/dark-data-links-page.png'
 
 Data links in Fileglancer allow you to create shareable URLs for your data on Janelia's file systems without moving or copying files. They work similarily to how Google Docs does when you share a document with "Anyone with the link". 
 
@@ -13,14 +21,9 @@ Data links in Fileglancer allow you to create shareable URLs for your data on Ja
 - **Internally shareable**: Can be sent to internal collaborators or used with online tools on the internal network
 - **Revokeable**: You can delete a data link at any time to revoke access to the data
 
-
 ## Creating data links for OME-Zarr Data
 
 Zarr and OME-Zarr data sets have special integration features for data links:
-
-![Zarr File View](../../../assets/fileglancer-zarr-file-view.png)
-*Viewing an OME-Zarr file in Fileglancer with metadata display and properties panel*
-
 
 <Steps>
 1. **Navigate to your Zarr directory**<br/>
@@ -39,8 +42,12 @@ Click "Create Data Link". Choose the "enable automatic data link creation" optio
 When you open the data in a tool, it uses the data link to access your data. Certain tools, such as Neuroglancer, also save your viewer state in the URL. You can copy the URL in the address bar and send it to a collaborator and they will see the same view of the data.
 </Steps>
 
-![Data Link Success](../../../assets/fileglancer-data-link-success.png)
-*Successful data link creation showing the generated URL and external viewer integration options*
+<StyledImage
+lightSrc={lightZarrDataLink}
+darkSrc={darkZarrDataLink}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the Zarr viewer buttons under a Zarr thumbnail and another arrow pointing to the 'Create data link' switch in the Overview tab of the Properties panel."
+/>
+<br/>
 
 ## Creating data links for non-Zarr data
 
@@ -63,6 +70,7 @@ Find the data link toggle switch in the Overview tab. Click the switch to enable
 Copy the generated URL for sharing. The link provides access to browse the directory contents, and can be opened in compatible viewers such as Fiji. 
 </Steps>
 
+
 ## Automatic Data Link Creation
 
 When creating data links through the tool icon dialog:
@@ -74,6 +82,13 @@ Choose the option to enable automatic data links during the approval process. Th
 Review and modify automatic data link settings in your preferences at any time. Disable automatic creation if you prefer manual control.
 </Steps>
 
+<StyledImage
+lightSrc={lightAutomaticLinks}
+darkSrc={darkAutomaticLinks}
+alt="Screenshot of the Fileglancer user preferences page, with one arrow pointing to the profile menu icon in the navigation bar at the top of the interface, and one arrow pointing to the 'Automatic Data Links' section on the Preferences page."
+/>
+<br/>
+
 ## Managing Your Data Links
 
 ### Viewing All Data Links
@@ -83,8 +98,12 @@ Review and modify automatic data link settings in your preferences at any time. 
 Click on the Data Links page link at the top of the interface. View the table with all currently active data links. Sort and filter links, if desired.
 </Steps>
 
-![Data Links Page](../../../assets/fileglancer-data-links-page.png)
-*The Data Links page showing all created data links with management options*
+<StyledImage
+lightSrc={lightDataLinksPage}
+darkSrc={darkDataLinksPage}
+alt="Screenshot of the Data Links page on Fileglancer interface, showing the table with created data links."
+/>
+<br/>
 
 ### Disabling Data Links
 
