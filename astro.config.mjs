@@ -1,14 +1,23 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
 import tailwindcss from '@tailwindcss/vite';
+import rehypeExternalLinks from 'rehype-external-links';
+import { externalLinkIcon } from './external-link-icon.js';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://JaneliaSciComp.github.io',
   base: '/fileglancer-user-docs',
-
+  markdown: {
+	  rehypePlugins: [
+		  [rehypeExternalLinks, {
+			  target: '_blank',
+			  rel: ['noopener', 'noreferrer'],
+			  content: externalLinkIcon
+		  }]
+	  ]
+  },
   integrations: [
       starlight({
           title: 'Fileglancer User Guide',
@@ -48,7 +57,6 @@ export default defineConfig({
           customCss:['./src/styles/global.css']
       }),
 	],
-
   vite: {
     plugins: [tailwindcss()],
   },
