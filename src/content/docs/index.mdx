@@ -15,11 +15,19 @@ hero:
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+import lightFileglancer from '@assets/base-images/light-fileglancer.png'
+import darkFileglancer from '@assets/base-images/dark-fileglancer.png'
 
 ## What is Fileglancer?
 
 Fileglancer is a web application designed to allow researchers at Janelia to easily browse, share, and manage large scientific imaging data. It leverages emerging [next generation file format standards](https://www.nature.com/articles/s41592-021-01326-w) (e.g. OME-Zarr) to allow for efficient visualization and sharing of image data via compatible tools such as Neuroglancer, Fiji, and Avivator. It connects to data on Janelia's network filesystems without requiring data movement, making it simple to work with large imaging datasets. 
 
+<StyledImage
+lightSrc={lightFileglancer}
+darkSrc={darkFileglancer}
+alt="Screenshot of the Fileglancer interface showing a directory of OME-Zarr datasets."
+/>
 
 ## Key Features
 

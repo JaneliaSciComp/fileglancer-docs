@@ -35,3 +35,8 @@ button[type='button']:hover,
 .sl-button:hover {
   background-color: var(--sl-color-accent-high);
 }
+
+.hero {
+  padding-block: clamp(2.5rem,calc(1rem + 10vmin),6rem);
+}
+};

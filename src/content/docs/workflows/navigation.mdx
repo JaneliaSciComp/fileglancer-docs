@@ -4,11 +4,15 @@ description: Master all the ways to browse, search, and organize your data in Fi
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+import lightSearchAndZones from '@assets/task-images/light-search-and-zones.png'
+import darkSearchAndZones from '@assets/task-images/dark-search-and-zones.png'
+import lightDirectPathNavigation from '@assets/task-images/light-direct-path-navigation.png'
+import darkDirectPathNavigation from '@assets/task-images/dark-direct-path-navigation.png'
+import lightHomeNavigation from '@assets/task-images/light-home-button.png'
+import darkHomeNavigation from '@assets/task-images/dark-home-button.png'
 
 Fileglancer provides multiple methods to navigate Janelia's file systems. This guide covers all navigation features.
-
-![Fileglancer Homepage](../../../assets/fileglancer-homepage.png)
-*The Fileglancer main interface showing the left sidebar with zones, file share paths, and navigation options*
 
 ## Primary Navigation Methods
 
@@ -30,6 +34,12 @@ Click on a zone name in the search results to view the file share paths it conta
 Use the main file browser (central panel) to navigate through directories. Click on a directory name to enter it; click on a file name to preview its contents. Use the breadcrumb trail at the top of the browser to navigate back up the hierarchy.
 </Steps>
 
+<StyledImage
+lightSrc={lightSearchAndZones}
+darkSrc={darkSearchAndZones}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the search box in the left sidebar and another arrow pointing to an expanded zone."
+/>
+<br/>
 ### 2. Direct Path Navigation
 
 For when you know exactly where you want to go:
@@ -47,6 +57,12 @@ Paste or type the full path to your target directory. Any style of path will wor
 Press Enter or click the navigation button. Fileglancer will take you directly to that location.
 </Steps>
 
+<StyledImage
+lightSrc={lightDirectPathNavigation}
+darkSrc={darkDirectPathNavigation}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the 'Navigate to path' input box at the top of the central panel and another arrow pointing to the 'Navigate to path' button in the toolbar above the central panel."
+/>
+<br/>
 ### 3. Home Directory Access
 
 Quick access to your personal directory:
@@ -57,6 +73,13 @@ Located in the toolbar at the top of the central navigation panel.
 2. **Access your home directory**<br/>
 Takes you directly to your personal home directory on the Janelia file system.
 </Steps>
+
+<StyledImage
+lightSrc={lightHomeNavigation}
+darkSrc={darkHomeNavigation}
+alt="Screenshot of the top of the Fileglancer homepage, with an arrow pointing to the home directory icon."
+/>
+<br/>
 
 ## Organizing Your Navigation
 

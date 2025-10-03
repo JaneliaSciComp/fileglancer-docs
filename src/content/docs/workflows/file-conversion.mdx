@@ -4,6 +4,12 @@ description: Learn how to request file format conversions for your scientific im
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+
+import lightZarrConversion from '@assets/task-images/light-zarr-conversion-request.png'
+import darkZarrConversion from '@assets/task-images/dark-zarr-conversion-request.png'
+import lightTasksPage from '@assets/base-images/light-tasks-page.png'
+import darkTasksPage from '@assets/base-images/dark-tasks-page.png'
 
 Fileglancer integrates with Janelia's JIRA help desk system to handle manual data conversions. This feature allows you to request assistance converting your scientific imaging data between different formats.
 
@@ -47,9 +53,7 @@ Use any navigation method to reach the Zarr or OME-Zarr directory. Ensure you're
 Locate the Properties Panel on the right side. If not visible, look for the expand Properties button in the browser toolbar, on the right.
 
 3. **Switch to the Conversion tab**<br/>
-Click on the "Conversion" tab within the Properties Panel.<br/><br/>
-![Convert Tab](../../../assets/fileglancer-convert-tab.png)
-*The Convert tab in the Properties Panel showing conversion request options*<br/>
+Click on the "Conversion" tab within the Properties Panel.<br/>
 
 5. **Open the conversion request**<br/>
 Click the button to "Open conversion request". This will open a dialog.
@@ -60,18 +64,30 @@ Fill out the dialog with required information.
 7. **Submit your request**<br/>
 Submit the dialog. View the information about the ticket now populated in the Properties panel.
 </Steps>
+
+<StyledImage
+lightSrc={lightZarrConversion}
+darkSrc={darkZarrConversion}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the Conversion tab in the Properties panel on the right side of the screen, and the button in the Conversion tab to open the file conversion dialog."
+/>
+
 ## Tracking Your Conversion Requests
 
 ### Using the Tasks Page
 <Steps>
 1. **Navigate to the Tasks page**<br/>
-Click on the Tasks page link at the top of the interface.<br/><br/>
-![Tasks Page](../../../assets/fileglancer-tasks-page.png)
-*The Tasks page showing conversion request status and history*<br/>
+Click on the Tasks page link at the top of the interface.<br/>
 
 2. **View your requests**<br/>
 See all current conversion requests and their status. Monitor progress through different conversion stages.
 </Steps>
+
+<StyledImage
+lightSrc={lightTasksPage}
+darkSrc={darkTasksPage}
+alt="Screenshot of the Tasks page on Fileglancer interface, showing the table with created tasks."
+/>
+
 ### Status Meanings
 
 Understanding conversion request statuses:

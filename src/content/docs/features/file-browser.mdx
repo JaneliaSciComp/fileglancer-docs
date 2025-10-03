@@ -3,9 +3,20 @@ title: File Browser
 description: Explore the file browsing capabilities of Fileglancer, designed specifically for scientific imaging data.
 ---
 
+import StyledImage from '@components/StyledImage.astro';
+
+import lightFileBrowser from '@assets/task-images/light-file-browser-annotated.png'
+import darkFileBrowser from '@assets/task-images/dark-file-browser-annotated.png'
+
 The Fileglancer file browser is the core interface for exploring your data. Built specifically for researchers working with scientific imaging data, it provides specialized features for navigating, viewing, and managing these types of files.
 
 ## Browser Interface Components
+
+<StyledImage
+lightSrc={lightFileBrowser}
+darkSrc={darkFileBrowser}
+alt="Annotated screenshot of the Fileglancer file browser interface, showing the main file list, toolbar, properties panel, and locations panel."
+/>
 
 ### Main File List
 
@@ -21,17 +32,17 @@ The central area displays your directory contents with:
 
 Located above the file list, the toolbar provides essential navigation and management controls:
 
-#### Navigation Controls
+**Navigation Controls**
 - **Home button** (house icon): Quick access to your home directory on the file system
 - **Navigate to path** (arrow icon): Direct path entry field
 - **Copy path** (clipboard icon): Copy the path of the directory or file you're currently viewing
 
-#### Directory Management
+**Directory Management**
 - **Refresh button** (circular arrow): Update directory contents to reflect any changes
 - **Favorites star**: Save current directory as a favorite for quick access later
 - **Create folder button**: Create new directories (when permissions allow)
 
-#### View and Display
+**View and Display**
 - **Hide/view dot files** (eye icon): Show/hide files and folder that start with "."
 - **Locations panel toggle**: Show/hide the left-side Locations panel
 - **Properties panel toggle**: Show/hide the right-side Properties Panel
@@ -61,10 +72,8 @@ Customize the browser interface:
 - **Resize columns**: Drag the boundary between columns to resize
 
 ### Sorting and Filtering
+Organize large datasets by:
 
-Organize large datasets:
-
-#### Sorting Options
 - **Name**: Alphabetical sorting with natural number ordering
 - **Type**: Group files by format or extension
 - **Last Modified**: Most recent or oldest files first

@@ -4,6 +4,17 @@ description: Get up and running with Fileglancer in minutes with this step-by-st
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+import lightHomeNavigation from '@assets/task-images/light-home-button.png'
+import darkHomeNavigation from '@assets/task-images/dark-home-button.png'
+import lightSearchAndZones from '@assets/task-images/light-search-and-zones.png'
+import darkSearchAndZones from '@assets/task-images/dark-search-and-zones.png'
+import lightSaveFavorite from '@assets/task-images/light-save-favorite.png'
+import darkSaveFavorite from '@assets/task-images/dark-save-favorite.png'
+import lightZarrDataLink from '@assets/task-images/light-quick-start-zarr-data-link.png'
+import darkZarrDataLink from '@assets/task-images/dark-quick-start-zarr-data-link.png'
+import lightZarrConversion from '@assets/task-images/light-zarr-conversion-request.png'
+import darkZarrConversion from '@assets/task-images/dark-zarr-conversion-request.png'
 
 ## Access Fileglancer
 
@@ -15,6 +26,12 @@ import { Steps } from '@astrojs/starlight/components';
 
 ### Open your home folder
 **Home button**: In the toolbar, click the home icon to view the contents of your home folder.
+
+<StyledImage
+lightSrc={lightHomeNavigation}
+darkSrc={darkHomeNavigation}
+alt="Screenshot of the top of the Fileglancer homepage, with an arrow pointing to the home directory icon."
+/>
 
 ### Find your group's data
 <Steps>
@@ -28,6 +45,12 @@ Click on a Zone to expand it and see the file share paths it contains
 Click on a file share path to view its contents in the file browser
 </Steps>
 
+<StyledImage
+lightSrc={lightSearchAndZones}
+darkSrc={darkSearchAndZones}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the search box in the left sidebar and another arrow pointing to an expanded zone."
+/>
+
 ### Save a favorite
 <Steps>
 1. **Navigate to a frequently-used folder**<br/>
@@ -39,6 +62,12 @@ Use the star icon in the toolbar to save the current location
 3. **Access later**<br/>
 Your saved favorites will appear in the left sidebar for quick access
 </Steps>
+
+<StyledImage
+lightSrc={lightSaveFavorite}
+darkSrc={darkSaveFavorite}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the star icon for favoriting the current directory in the toolbar."
+/>
 
 ## View OME-Zarr data
 
@@ -64,6 +93,11 @@ Viewing an image requires a data link, so click "Create Data Link" on the dialog
 Your image will open in the Neuroglancer viewer for viewing.
 </Steps>
 
+<StyledImage
+lightSrc={lightZarrDataLink}
+darkSrc={darkZarrDataLink}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the 'navigate to path' button in the toolbar and to the Zarr viewer buttons under a Zarr thumbnail."
+/>
 ## Request a file conversion
 
 If your data is not already in OME-Zarr format, we can help!
@@ -83,6 +117,12 @@ Follow the prompts to submit your conversion request
 5. **Track progress**<br/>
 Monitor your request status on the Tasks page
 </Steps>
+<StyledImage
+lightSrc={lightZarrConversion}
+darkSrc={darkZarrConversion}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the Conversion tab in the Properties panel on the right side of the screen, and the button in the Conversion tab to open the file conversion dialog."
+/>
+
 ## Essential Tips
 
 ### Navigation Shortcuts
@@ -95,7 +135,7 @@ Monitor your request status on the Tasks page
 - **Enable automatic data links**: When creating data links, you can choose to enable automatic link creation for future similar actions
 
 ### Getting Help
-- **Check data conversion task status**: Visit the Tasks page to monitor conversion requests
+- **Check data conversion task status**: Visit the *Tasks* page to monitor conversion requests
 - **Built-in help**: Look for help icons and tooltips throughout the interface
 - **Technical support**: Use the integrated help desk system for complex issues
 
@@ -110,7 +150,7 @@ Monitor your request status on the Tasks page
 ### Scenario 2: Preparing Data for Analysis
 1. Browse to your raw imaging data
 2. Submit a conversion request using the Convert tab in the Properties panel
-3. Monitor the conversion progress on the Tasks page
+3. Monitor the conversion progress on the *Tasks* page
 4. Once complete, create a data link for the converted data
 
 ### Scenario 3: Organizing Your Workflow
@@ -136,6 +176,6 @@ Now that you've completed the basics, explore these guides for more detailed wor
 | Save favorite | Toolbar | Click star icon |
 | Create data link | Properties Panel | Toggle switch in Overview |
 | Request conversion | Properties Panel | Use Conversion tab |
-| View all data links | URL | Navigate to the *Data Links* page |
-| Check data conversion task status | URL | Navigate to the *Tasks* page |
+| View all data links | URL | Navigate to the **Data Links** page |
+| Check data conversion task status | URL | Navigate to the **Tasks** page |
 | Go to home directory | Toolbar | Click home icon |
