@@ -7,7 +7,7 @@
 
   /* Use primary color for links */
   --sl-color-text-accent: #058d96;
-
+}
 
 /* Dark mode colors */
 :root[data-theme='dark'] {
@@ -39,4 +39,3 @@ button[type='button']:hover,
 .hero {
   padding-block: clamp(2.5rem,calc(1rem + 10vmin),6rem);
 }
-};
