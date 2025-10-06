@@ -27,8 +27,8 @@ For data format conversions and processing requests:
 ### Documentation
 
 Before contacting support, consult this user guide. Key sections include:
-1. [**Quick Start Guide**](/fileglancer-user-docs/getting-started/quick-start/): Basic operations and common workflows
-3. [**Troubleshooting**](/fileglancer-user-docs/support/troubleshooting/): Solutions for common problems
+1. [**Quick Start Guide**](../../getting-started/quick-start/): Basic operations and common workflows
+3. [**Troubleshooting**](../troubleshooting/): Solutions for common problems
 
 ### Built-in Help Features
 
