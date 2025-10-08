@@ -2,6 +2,9 @@
 title: Getting Help
 description: Learn how to get support for Fileglancer, including technical assistance, file conversion help, and troubleshooting resources.
 ---
+
+<img src="/fileglancer-user-docs/src/assets/mascot/fg-hurdle-02.png" alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
+
 ## Types of Support Available
 
 ### Technical Support
