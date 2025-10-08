@@ -3,6 +3,8 @@ title: Troubleshooting
 description: Solutions for common issues encountered when using Fileglancer with scientific imaging data.
 ---
 
+<img src="/fileglancer-user-docs/src/assets/mascot/fg-network-issue.png" alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
+
 ## Common Access Issues
 
 ### Cannot Access Fileglancer

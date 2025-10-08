@@ -39,3 +39,11 @@ button[type='button']:hover,
 .hero {
   padding-block: clamp(2.5rem,calc(1rem + 10vmin),6rem);
 }
+
+/* Prevent hero image from stretching */
+.hero img {
+  max-width: 300px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
