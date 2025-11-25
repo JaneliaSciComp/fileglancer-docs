@@ -11,6 +11,6 @@ npm install
 
 Run local server:
 ```
-./node_modules/.bin/astro dev --host 0.0.0.0
+npm run dev
 ```
 
