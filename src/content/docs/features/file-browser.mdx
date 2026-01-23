@@ -7,6 +7,8 @@ import StyledImage from '@components/StyledImage.astro';
 
 import lightFileBrowser from '@assets/task-images/light-file-browser-annotated.png'
 import darkFileBrowser from '@assets/task-images/dark-file-browser-annotated.png'
+import lightFileglancerWithZarr from '@assets/base-images/light-fileglancer.png'
+import darkFileglancerWithZarr from '@assets/base-images/dark-fileglancer.png'
 import mascot from '@assets/mascot/fg-computer.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
@@ -65,6 +67,33 @@ Navigation and organization panel (left side):
 - **Search interface**: Find zones and file share paths
 - **Saved favorites**: Quick access to bookmarked locations
 - **Zones and file share paths**: Available file systems
+
+## Modern Imaging Format Support
+
+<StyledImage
+lightSrc={lightFileglancerWithZarr}
+darkSrc={darkFileglancerWithZarr}
+alt="Screenshot of the Fileglancer interface, showing a Zarr dataset with metadata displayed in the file browser."
+/>
+
+The file browser is optimized for working with modern scientific imaging formats like OME-Zarr and N5. When these formats are detected, Fileglancer provides specialized features:
+
+**Automatic Metadata Display**
+- **Format recognition**: Automatically identifies OME-Zarr, Zarr, and N5 datasets
+- **Metadata tables**: Displays key metadata such as multiscale levels, axes, shape, and units
+- **Thumbnail preview**: Shows a visual preview of the dataset when available
+
+**Quick Viewer Integration**
+- **One-click access**: Open datasets directly in compatible viewers like Neuroglancer, Vol-E, and Avivator
+- **Viewer buttons**: Located below the thumbnail preview in the Properties Panel
+- **Copy data URL**: Quick button to copy shareable data links
+
+**Supported Formats**
+- **OME-Zarr**: Full metadata support with OME-NGFF specification compliance
+- **Zarr**: Standard Zarr arrays with metadata display
+- **N5**: Cellmap-style N5 datasets with automatic metadata parsing
+
+These specialized features make it easy to browse, preview, and share large imaging datasets without leaving the file browser interface. For more details on using data viewers, see the [Data Tools Integration](/features/data-tools/) guide.
 
 ## Browser Customization
 
