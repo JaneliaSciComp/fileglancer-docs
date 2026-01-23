@@ -64,6 +64,7 @@ export default defineConfig({
         {
           label: "Help & Support",
           items: [
+            { label: "Tutorials", slug: "support/tutorials"},
             { label: "Troubleshooting", slug: "support/troubleshooting" },
             { label: "Getting Help", slug: "support/getting-help" },
           ],
