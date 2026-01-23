@@ -15,6 +15,8 @@ import lightZarrDataLink from '@assets/task-images/light-quick-start-zarr-data-l
 import darkZarrDataLink from '@assets/task-images/dark-quick-start-zarr-data-link.png'
 import lightZarrConversion from '@assets/task-images/light-zarr-conversion-request.png'
 import darkZarrConversion from '@assets/task-images/dark-zarr-conversion-request.png'
+import createNgLinkDark from '@assets/task-images/create-ng-link-dark.png'
+import createNgLinkLight from '@assets/task-images/create-ng-link-light.png'
 import mascot from '@assets/mascot/fg-starting-line.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
@@ -103,6 +105,38 @@ lightSrc={lightZarrDataLink}
 darkSrc={darkZarrDataLink}
 alt="Screenshot of the Fileglancer interface, with an arrow pointing to the 'navigate to path' button in the toolbar and to the Zarr viewer buttons under a Zarr thumbnail."
 />
+
+## Share a configured Neuroglancer view
+
+Once you have your image open in Neuroglancer (via a data link), you can save and share the exact viewer state (including layer visibility, colors, zoom level, and camera position) using Neuroglancer Short Links. This allows collaborators to see not just the image data, but your specific configuration of how to view it.
+
+<Steps>
+1. **Configure your view**<br/>
+With your image open in Neuroglancer, adjust the layers, colors, and camera position exactly how you want collaborators to see it.
+
+2. **Copy the Neuroglancer URL**<br/>
+From your Neuroglancer browser tab, copy the full URL from the address bar.
+
+3. **Navigate to NG Links page**<br/>
+In Fileglancer, click "NG Links" in the top navigation bar.
+
+4. **Create a new link**<br/>
+Click "+ New Link" button, select "URL Mode", paste your Neuroglancer URL, and optionally add a name and title.
+
+5. **Share the short link**<br/>
+Copy the generated short link and share it with your collaborators. They'll see exactly what you configured, and you can update the Neuroglancer state associated with the link later without changing the short link URL.
+</Steps>
+
+:::tip[Why use Neuroglancer short links?]
+Neuroglancer URLs can be very long and complex. The Neuroglancer short links created in Fileglancer are stable, shareable URLs that are easier to work with and can be updated without breaking existing links shared with collaborators.
+:::
+
+<StyledImage
+lightSrc={createNgLinkLight}
+darkSrc={createNgLinkDark}
+alt="Screenshot of the Fileglancer NG Links page, with an arrow pointing to the '+ New Link' button."
+/>
+
 ## Request a file conversion
 
 If your data is not already in OME-Zarr format, we can help!
@@ -158,7 +192,13 @@ alt="Screenshot of the Fileglancer interface, with an arrow pointing to the Conv
 3. Monitor the conversion progress on the *Tasks* page
 4. Once complete, create a data link for the converted data
 
-### Scenario 3: Organizing Your Workflow
+### Scenario 3: Collaborating on Image Analysis
+1. Open your OME-Zarr image in Neuroglancer
+2. Configure the viewer to highlight specific features or regions
+3. Create a Neuroglancer Short Link on the NG Links page
+4. Share the short link with collaborators so they see exactly what you configured
+
+### Scenario 4: Organizing Your Workflow
 1. Use search to find all your project directories
 2. Save frequently-accessed folders as favorites
 3. Create data links for datasets you reference often
@@ -170,6 +210,7 @@ Now that you've completed the basics, explore these guides for more detailed wor
 
 - **[Navigation Guide](../../workflows/navigation/)**: Master all navigation features
 - **[Data Links Guide](../../workflows/data-links/)**: Learn advanced sharing options
+- **[Neuroglancer Short Links Guide](../../workflows/ng-links/)**: Deep dive into creating and managing viewer state links
 - **[File Conversion Guide](../../workflows/file-conversion/)**: Understand the complete conversion process
 
 ## Quick Reference
@@ -180,7 +221,9 @@ Now that you've completed the basics, explore these guides for more detailed wor
 | Navigate to specific path | Toolbar widget | Paste path and navigate |
 | Save favorite | Toolbar | Click star icon |
 | Create data link | Properties Panel | Toggle switch in Overview |
+| Create Neuroglancer Short Link | NG Links page | Click "+ New Link" button |
 | Request conversion | Properties Panel | Use Conversion tab |
 | View all data links | URL | Navigate to the **Data Links** page |
+| View all Neuroglancer Short Links | URL | Navigate to the **NG Links** page |
 | Check data conversion task status | URL | Navigate to the **Tasks** page |
 | Go to home directory | Toolbar | Click home icon |
