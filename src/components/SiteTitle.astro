@@ -1,0 +1,36 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/SiteTitle.astro';
+
+// Import the version data
+import versionData from '../fileglancer-version.json';
+---
+
+<Default {...Astro.props}>
+	<slot />
+</Default>
+{versionData.version !== 'unknown' ? (
+	<span class="version-badge">
+		v{versionData.version}
+	</span>
+): null}
+
+<style>
+	.version-badge {
+		display: flex;
+		align-items: center;
+		margin-left: 0.5rem;
+		padding: 0.125rem 0.5rem;
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: var(--sl-color-gray-2);
+		background-color: var(--sl-color-gray-5);
+		border-radius: 0.25rem;
+	}
+
+	@media (max-width: 50rem) {
+		.version-badge {
+			display: none;
+		}
+	}
+</style>
