@@ -5,7 +5,17 @@ description: Create and share persistent Neuroglancer viewer states to collabora
 
 import { Steps } from "@astrojs/starlight/components";
 import StyledImage from "@components/StyledImage.astro";
-import mascot from "@assets/mascot/fg-engineer.png";
+import mascot from "@assets/mascot/fg-point-self.png";
+import createNgLinkLight from "@assets/task-images/create-ng-link-light.png";
+import createNgLinkDark from "@assets/task-images/create-ng-link-dark.png";
+import creatNgUrlDark from "@assets/task-images/create-ng-link-url-dark.png";
+import createNgUrlLight from "@assets/task-images/create-ng-link-url-light.png";
+import createNgStateDark from "@assets/task-images/create-ng-link-json-dark.png";
+import createNgStateLight from "@assets/task-images/create-ng-link-json-light.png";
+import ngActionsDark from "@assets/task-images/ng-link-actions-dark.png";
+import ngActionsLight from "@assets/task-images/ng-link-actions-light.png";
+import ngEditLinkDark from "@assets/task-images/ng-link-edit-url-dark.png";
+import ngEditLinkLight from "@assets/task-images/ng-link-edit-url-light.png";
 
 <img
   src={mascot.src}
@@ -46,6 +56,12 @@ Adjust the image to appear exactly as you want collaborators to see it.
 
 ### Step 2: Create the Short Link
 
+<StyledImage
+  lightSrc={createNgLinkLight}
+  darkSrc={createNgLinkDark}
+  alt="Screenshot of the Fileglancer NG Links page, with an arrow pointing to the '+ New Link' button."
+/>
+
 <Steps>
 1. **Navigate to the NG Links page**<br/>
 Return to Fileglancer and click "NG Links" in the top navigation bar.
@@ -59,7 +75,13 @@ Select either URL Mode or State Mode depending on how you want to save your view
 
 ### URL Mode
 
-Use URL Mode to save the complete Neuroglancer URL with embedded state:
+Use URL Mode to save the complete Neuroglancer URL with embedded state.
+
+<StyledImage
+  lightSrc={createNgUrlLight}
+  darkSrc={creatNgUrlDark}
+  alt="Screenshot of the Fileglancer Create Neuroglancer Short Link dialog, with the URL Mode option selected."
+/>
 
 <Steps>
 1. **Copy the Neuroglancer URL**<br/>
@@ -78,14 +100,20 @@ Your short link will be generated and added to the NG Links table.
 
 ### State Mode
 
-Use State Mode when you want to save just the JSON state separately from the base URL:
+Use State Mode when you want to save just the JSON state separately from the base URL.
+
+<StyledImage
+  lightSrc={createNgStateLight}
+  darkSrc={createNgStateDark}
+  alt="Screenshot of the Fileglancer Create Neuroglancer Short Link dialog, with the State Mode option selected."
+/>
 
 <Steps>
 1. **Copy the JSON state from Neuroglancer**<br/>
 In Neuroglancer, access the JSON state (typically through the state sharing dialog or browser console).
 
 2. **Paste into the JSON State field**<br/>
-Paste the JSON state object into the large text area. Example format:
+Paste the JSON state object into the large text area.
 
 3. **Verify the Neuroglancer Base URL**<br/>
 Check that the base URL field contains the correct Neuroglancer instance URL. Adjust if necessary (e.g., `https://neuroglancer-demo.appspot.com/`).
@@ -120,6 +148,12 @@ All your Neuroglancer Short Links appear in a table on the NG Links page. The ta
 
 ### Sharing with Collaborators
 
+<StyledImage
+  lightSrc={ngActionsLight}
+  darkSrc={ngActionsDark}
+  alt="Screenshot of the Fileglancer NG Links page, with an arrow pointing to the Actions button on a link row."
+/>
+
 <Steps>
 1. **Click the Actions button**<br/>
 On the right side of the table row for your link.
@@ -139,6 +173,12 @@ On the right side of the table row for your link.
 </Steps>
 
 ### Updating an Existing Link
+
+<StyledImage
+  lightSrc={ngEditLinkLight}
+  darkSrc={ngEditLinkDark}
+  alt="Screenshot of the Fileglancer NG Links page with the Edit dialog open."
+/>
 
 If you need to update the viewer state for an existing short link:
 
