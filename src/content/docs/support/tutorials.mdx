@@ -1,0 +1,114 @@
+---
+title: Tutorials
+description: Learn about the interactive guided tours available in Fileglancer to help you master key workflows.
+---
+
+import mascot from "@assets/mascot/fg-beach.png";
+import StyledImage from "@components/StyledImage.astro";
+import tutorialCardHomeDark from "@assets/task-images/tutorial-card-landing-page-dark.png";
+import tutorialCardHomeLight from "@assets/task-images/tutorial-card-landing-page-light.png";
+import tutorialCardHelpDark from "@assets/task-images/tutorial-card-help-page-dark.png";
+import tutorialCardHelpLight from "@assets/task-images/tutorial-card-help-page-light.png";
+import tutorialInterfaceDark from "@assets/base-images/tutorial-interface-dark.png";
+import tutorialInterfaceLight from "@assets/base-images/tutorial-interface-light.png";
+import tutorialEndDark from "@assets/task-images/tutorial-end-dark.png";
+import tutorialEndLight from "@assets/task-images/tutorial-end-light.png";
+
+<img
+  src={mascot.src}
+  alt="Fileglancer mascot"
+  style="width: 150px; float: right; margin: 0 0 1rem 1rem;"
+/>
+
+Fileglancer provides interactive guided tours to help you learn the platform's key features. These tours walk you through common workflows step-by-step.
+
+## Accessing the Tours
+
+### From the Landing Page
+
+<StyledImage
+  lightSrc={tutorialCardHomeLight}
+  darkSrc={tutorialCardHomeDark}
+  alt="Screenshot of the Fileglancer landing page, with an arrow pointing to the 'Start Tour' button on the welcome card and another arrow pointing to the option to hide the card."
+/>
+
+When you first log in to Fileglancer, you'll see a welcome card on the landing page with a "Start Tour" button. This card offers quick access to the tutorials.
+
+You can hide this card by checking the "Hide this card" option. Don't worry—you can always access the tours from the Help page.
+
+### From the Help Page
+
+<StyledImage
+  lightSrc={tutorialCardHelpLight}
+  darkSrc={tutorialCardHelpDark}
+  alt="Screenshot of the Fileglancer Help page, with an arrow pointing to the 'Take a Tutorial' card."
+/>
+
+The tours are always accessible from the Help page:
+
+1. Click the **Help** link in the top navigation bar
+2. Find the **Take a Tutorial** card
+3. Click to open the tour selection dialog
+
+## Available Tours
+
+<StyledImage
+  lightSrc={tutorialInterfaceLight}
+  darkSrc={tutorialInterfaceDark}
+  alt="Screenshot of the Fileglancer tutorial interface, showing the tour selection dialog with three tour options."
+/>
+
+When you open the tutorial interface, you'll be presented with three tour options. Each tour focuses on a specific workflow in Fileglancer.
+
+### 1. Navigation Tour
+
+Learn how to browse and find files in Fileglancer. This tour covers:
+
+- **"Navigate to path" widget**: Quickly jump to a specific directory
+- **Sidebar**: Accessing zones, file shares, and favorites
+- **Main file browser**: Browsing directories and viewing files
+- **Properties panel**: Viewing file and folder information
+
+For further information on navigation features, see the [Navigating Files](../../workflows/navigation/) workflow guide.
+
+### 2. Data Links Tour
+
+Discover how to create and share links to your data. This tour covers:
+
+- **Creating data links from the Properties panel**: Using the toggle switch to enable sharing for any directory
+- **Creating data links for OME-Zarr, Zarr, or Cellmap N5 images**: Opening viewers and creating shareable links for imaging data
+- **Enabling automatic data links**: Streamlining the link creation process through enabling this preference
+
+For further information on data links, see the [Creating Data Links](../../workflows/data-links/) workflow guide.
+
+### 3. File Conversion Tour
+
+Learn how to request file format conversions for your scientific imaging data. This tour covers:
+
+- **Opening the Convert tab**: Accessing the conversion interface in the Properties panel
+- **Opening a conversion request**: Filling out and submitting a conversion request form
+- **Monitoring conversion status**: Using the Tasks page to track your conversion requests
+
+For further information on file conversions, see the [File Conversion Requests](../../workflows/file-conversion/) workflow guide.
+
+## Taking Multiple Tours
+
+At the end of any tour, you have two options:
+
+- **Take Another Tour**: Returns you to the tour selection dialog to choose a different tour
+- **Exit Tour**: Closes the tutorial interface and returns you to your workflow
+
+You can take the tours in any order and repeat them as many times as you'd like.
+
+<StyledImage
+  lightSrc={tutorialEndLight}
+  darkSrc={tutorialEndDark}
+  alt="Screenshot of the Fileglancer tutorial interface at the end of a tour, showing the 'Take Another Tour' and 'Exit Tour' buttons."
+/>
+
+## Tips for Using the Tours
+
+- **Follow along in real-time**: The tours guide you through actual features in the interface, so you can practice as you learn
+- **Repeat as needed**: Revisit any tour when you need a refresher on a workflow
+- **Explore after completion**: Once you finish a tour, try using the features on your own to reinforce what you learned
+- **Consult the workflow guides**: Each tour corresponds to a detailed workflow guide for deeper understanding
