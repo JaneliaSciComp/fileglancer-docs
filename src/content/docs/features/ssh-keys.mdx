@@ -1,0 +1,121 @@
+---
+title: SSH Keys
+description: Generate and manage SSH keys in Fileglancer to enable seamless access across cluster nodes and integration with platforms like Seqera.
+---
+
+import { Steps } from "@astrojs/starlight/components";
+import StyledImage from "@components/StyledImage.astro";
+
+import lightSshKeysMenu from "@assets/task-images/ssh-keys-menu-light.png";
+import darkSshKeysMenu from "@assets/task-images/ssh-keys-menu-dark.png";
+import lightSshKeysEmpty from "@assets/task-images/ssh-keys-empty-light.png";
+import darkSshKeysEmpty from "@assets/task-images/ssh-keys-empty-dark.png";
+import lightSshKeysDialog from "@assets/base-images/ssh-keys-generate-dialog-light.png";
+import darkSshKeysDialog from "@assets/base-images/ssh-keys-generate-dialog-dark.png";
+import lightSshKeysGenerated from "@assets/task-images/ssh-keys-copy-light.png";
+import darkSshKeysGenerated from "@assets/task-images/ssh-keys-copy-dark.png";
+import lightSshKeysList from "@assets/base-images/ssh-keys-list-light.png";
+import darkSshKeysList from "@assets/base-images/ssh-keys-list-dark.png";
+
+Fileglancer's SSH key manager lets you generate authorized SSH keys directly from your browser profile. Keys are automatically added to your `~/.ssh/authorized_keys` file. The main intended use for this feature is streamline onboarding for new users of Janelia's [Seqera Platform instance](https://hhmi.atlassian.net/wiki/x/yllNCQ).
+
+## Accessing the SSH Key Manager
+
+The SSH key manager is available from the profile menu in the upper-right corner of any Fileglancer page.
+
+<StyledImage
+  lightSrc={lightSshKeysMenu}
+  darkSrc={darkSshKeysMenu}
+  alt="Fileglancer profile menu open in the upper-right corner, with 'SSH Keys' highlighted."
+/>
+
+Click your **username or profile icon** in the top-right corner, then select **SSH Keys** from the dropdown menu.
+
+## Generating a New SSH Key
+
+<StyledImage
+  lightSrc={lightSshKeysEmpty}
+  darkSrc={darkSshKeysEmpty}
+  alt="SSH Keys page showing 'No SSH keys found' and a '+ New Key' button."
+/>
+
+<Steps>
+1. **Open the SSH Keys page**<br/>
+   Select **SSH Keys** from the profile menu. If you have not generated any keys yet, the page will show an empty state with a **+ New Key** button.
+
+2. **Click "+ New Key"**<br/>
+   The **Generate SSH Key** dialog opens. This will create a new `ed25519` key pair and add the public key to your `~/.ssh/authorized_keys` file automatically.
+
+3. **Optionally enter a passphrase**<br/>
+   You may enter a passphrase to add an extra layer of security to your private key. Leave the field empty if you want passwordless access. Note that if you set a passphrase, you will need to enter it each time the key is used.
+
+4. **Click "Generate Key"**<br/>
+   Fileglancer generates the key pair. A confirmation dialog appears immediately with your new key's details.
+</Steps>
+
+<StyledImage
+     lightSrc={lightSshKeysDialog}
+     darkSrc={darkSshKeysDialog}
+     alt="'Generate SSH Key' dialog with an optional passphrase field and 'Generate Key' and 'Cancel' buttons."
+/>
+
+## Copying Your Private Key
+
+:::caution[Save your private key now — it will not be shown again]
+The private key is never stored by Fileglancer. You must copy it immediately after generation. Once you close the confirmation dialog, the private key cannot be retrieved.
+:::
+
+After the key is generated, the **SSH Key Generated** dialog displays:
+
+- A prominent warning to copy the private key immediately
+- A **Copy Private Key** button to copy the key to your clipboard
+- **Key Information** showing the key type (`ssh-ed25519`), full fingerprint, and comment (`fileglancer`)
+
+<StyledImage
+  lightSrc={lightSshKeysGenerated}
+  darkSrc={darkSshKeysGenerated}
+  alt="'SSH Key Generated' confirmation dialog with a warning to copy the private key, a 'Copy Private Key' button, and key fingerprint details."
+/>
+
+Click **Copy Private Key** and paste the key somewhere safe before clicking **Close**. Common destinations include:
+
+- Seqera Platform's **Managed Identities** page (see [Using SSH Keys with Seqera Platform](#using-ssh-keys-with-seqera-platform) below)
+- A secure password manager or key vault
+
+## Viewing Your Authorized Keys
+
+After closing the confirmation dialog, the SSH Keys page lists all keys you have generated through Fileglancer. Each entry shows the key type and its SHA256 fingerprint.
+
+<StyledImage
+  lightSrc={lightSshKeysList}
+  darkSrc={darkSshKeysList}
+  alt="SSH Keys page showing a listed key with its type (ssh-ed25519) and SHA256 fingerprint."
+/>
+
+Keys are tagged with the comment `fileglancer` so you can identify them in your `~/.ssh/authorized_keys` file. This also means they are visible on any cluster node that shares your home directory.
+
+## Using SSH Keys with Seqera Platform
+
+The primary use case for Fileglancer-generated SSH keys is onboarding to Janelia's Seqera Platform instance. Seqera Platform uses SSH keys to authenticate pipeline jobs running on cluster nodes. 
+
+The [Janelia wiki](https://hhmi.atlassian.net/wiki/spaces/SCSW/pages/156064202/Using+Seqera+Platform+formerly+Nextflow+Tower) provides more information about the Janelia Seqera Platform instance and detailed instructions for adding SSH keys.
+
+In brief, to add your key to Seqera Platform:
+
+1. Generate a new SSH key in Fileglancer and copy the private key as described above.
+2. [Log into Seqera Platform](https://hhmi.atlassian.net/wiki/spaces/SCSW/pages/156064202/Using+Seqera+Platform+formerly+Nextflow+Tower#4\)-Log-into-Tower)
+3. [Navigate to **Your credentials** settings](https://hhmi.atlassian.net/wiki/spaces/SCSW/pages/156064202/Using+Seqera+Platform+formerly+Nextflow+Tower#5\)-Add-Cluster-Credentials)
+4. Click **Add credentials**. Under **Provider**, select **SSH**, and paste in the private key you copied from Fileglancer.
+
+Once configured, Seqera Platform can authenticate as you when launching jobs across cluster nodes — no manual SSH setup required.
+
+## Removing SSH Keys
+
+The SSH Keys page in Fileglancer does not provide a way to delete keys. This must be done manually by editing your `~/.ssh/authorized_keys` file on a cluster node.
+
+## Troubleshooting
+
+**I closed the confirmation dialog before copying my private key**
+
+- The private key cannot be recovered. Generate a new key using **+ New Key** and copy it before closing the dialog.
+- You may want to remove the old key from `~/.ssh/authorized_keys` to keep your authorized keys list tidy.

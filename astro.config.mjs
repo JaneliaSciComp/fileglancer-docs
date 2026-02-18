@@ -63,6 +63,7 @@ export default defineConfig({
             { label: "File Browser", slug: "features/file-browser" },
             { label: "Data Sharing", slug: "features/data-sharing" },
             { label: "Data Tools", slug: "features/data-tools" },
+            { label: "SSH Keys", slug: "features/ssh-keys" },
           ],
         },
         {
