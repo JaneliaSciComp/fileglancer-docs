@@ -17,7 +17,7 @@ import darkSshKeysGenerated from "@assets/task-images/ssh-keys-copy-dark.png";
 import lightSshKeysList from "@assets/base-images/ssh-keys-list-light.png";
 import darkSshKeysList from "@assets/base-images/ssh-keys-list-dark.png";
 
-Fileglancer's SSH key manager lets you generate authorized SSH keys directly from your browser profile. Keys are automatically added to your `~/.ssh/authorized_keys` file. The main intended use for this feature is streamline onboarding for new users of Janelia's [Seqera Platform instance](https://hhmi.atlassian.net/wiki/x/yllNCQ).
+Fileglancer's SSH key manager lets you generate authorized SSH keys from the browser. Keys are automatically added to your `~/.ssh/authorized_keys` file on the Janelia filesystem. The main purpose of this feature is to streamline onboarding for new users of Janelia's [Seqera Platform instance](https://hhmi.atlassian.net/wiki/x/yllNCQ).
 
 ## Accessing the SSH Key Manager
 
@@ -79,7 +79,7 @@ After the key is generated, the **SSH Key Generated** dialog displays:
 
 Click **Copy Private Key** and paste the key somewhere safe before clicking **Close**. Common destinations include:
 
-- Seqera Platform's **Managed Identities** page (see [Using SSH Keys with Seqera Platform](#using-ssh-keys-with-seqera-platform) below)
+- Seqera Platform (see [Using SSH Keys with Seqera Platform](#using-ssh-keys-with-seqera-platform) below)
 - A secure password manager or key vault
 
 ## Viewing Your Authorized Keys
@@ -111,7 +111,7 @@ Once configured, Seqera Platform can authenticate as you when launching jobs acr
 
 ## Removing SSH Keys
 
-The SSH Keys page in Fileglancer does not provide a way to delete keys. This must be done manually by editing your `~/.ssh/authorized_keys` file on a cluster node.
+The SSH Keys page in Fileglancer does not provide a way to delete keys. This must be done manually by editing your `~/.ssh/authorized_keys` file, found in your home directory on the Janelia filesystem.
 
 ## Troubleshooting
 
