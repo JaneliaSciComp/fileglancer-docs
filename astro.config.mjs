@@ -62,14 +62,16 @@ export default defineConfig({
           items: [
             { label: "File Browser", slug: "features/file-browser" },
             { label: "Data Sharing", slug: "features/data-sharing" },
-            { label: "Data Tools", slug: "features/data-tools" },
-            { label: "SSH Keys", slug: "features/ssh-keys" },
+            {
+              label: "Modern Imaging Format Support",
+              slug: "features/image-support",
+            },
           ],
         },
         {
           label: "Help & Support",
           items: [
-            { label: "Tutorials", slug: "support/tutorials"},
+            { label: "Tutorials", slug: "support/tutorials" },
             { label: "Troubleshooting", slug: "support/troubleshooting" },
             { label: "Getting Help", slug: "support/getting-help" },
           ],
