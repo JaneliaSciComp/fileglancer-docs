@@ -1,0 +1,225 @@
+---
+title: Apps and Jobs
+description: Run command-line tools on the compute cluster directly from Fileglancer. Add apps from GitHub repositories, configure parameters, and monitor job status.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+
+import mascot from '@assets/mascot/fg-hurdle-03.png'
+import lightAppsPageEmpty from '@assets/base-images/apps-page-empty-light.png'
+import darkAppsPageEmpty from '@assets/base-images/apps-page-empty-dark.png'
+import lightAddAppDialog from '@assets/base-images/apps-add-dialog-light.png'
+import darkAddAppDialog from '@assets/base-images/apps-add-dialog-dark.png'
+import lightAppsPageWithApp from '@assets/task-images/app-launch-btn-light.png'
+import darkAppsPageWithApp from '@assets/task-images/app-launch-btn-dark.png'
+import lightMultipleEntryPoints from '@assets/task-images/apps-select-entry-point-light.png'
+import darkMultipleEntryPoints from '@assets/task-images/apps-select-entry-point-dark.png'
+import lightLaunchForm from '@assets/task-images/apps-demo-launch-form-light.png'
+import darkLaunchForm from '@assets/task-images/apps-demo-launch-form-dark.png'
+import lightAppInfoIcon from '@assets/task-images/app-info-icon-light.png'
+import darkAppInfoIcon from '@assets/task-images/app-info-icon-dark.png'
+import lightAppInfoDialog from '@assets/base-images/app-info-dialog-light.png'
+import darkAppInfoDialog from '@assets/base-images/app-info-dialog-dark.png'
+
+
+<img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
+
+Fileglancer's Apps feature lets you run command-line tools on the compute cluster without leaving the browser. An app is defined by a GitHub repository containing a manifest file that describes the tool's commands, parameters, and resource requirements. Once added, you can launch jobs, fill in parameters through a form, and monitor their progress — all from the Fileglancer UI.
+
+## Why Use Apps?
+
+Apps bridge the gap between viewing your data in Fileglancer and processing it on the compute cluster. Instead of SSH-ing into a cluster node, writing job scripts, and manually tracking output, you can:
+
+- **Launch tools with a few clicks** — select an app, fill in parameters, and submit
+- **Use file and directory pickers** — browse your data directly from the parameter form instead of typing paths
+- **Track job status in one place** — see which jobs are pending, running, done, or failed
+- **View logs in the browser** — read stdout and stderr without navigating the filesystem
+- **Relaunch with the same settings** — quickly re-run a job with identical or tweaked parameters
+
+Apps work with any command-line tool. Common use cases include image conversion pipelines (e.g. bioformats2raw), Nextflow workflows, data analysis scripts, and interactive services like JupyterLab.
+
+## Adding an App
+
+Apps are added by providing a GitHub repository URL. The repository must contain either a `runnables.yaml` manifest file describing the tool, or a recognized project format (Nextflow pipeline with `nextflow_schema.json`, or a Pixi project) that Fileglancer can auto-detect.
+
+<StyledImage
+  lightSrc={lightAppsPageEmpty}
+  darkSrc={darkAppsPageEmpty}
+  alt="Fileglancer Apps page showing an empty state with a prompt to add an app."
+/>
+
+<Steps>
+1. **Navigate to the Apps page**<br/>
+   Click **Apps** in the navigation bar to open the Apps page.
+
+2. **Click "Add App"**<br/>
+   The Add App dialog opens with fields for the GitHub repository URL and an optional branch name.
+
+3. **Enter the repository URL**<br/>
+   Paste the full GitHub URL (e.g. `https://github.com/org/repo`). If the tool lives on a specific branch, enter the branch name as well. Otherwise, the default branch is used.
+
+4. **Click "Add App"**<br/>
+   Fileglancer clones the repository and searches for manifest files. If found, the app appears as a card on the Apps page. A single repository can contain multiple apps if it has manifests in different subdirectories.
+</Steps>
+
+<StyledImage
+  lightSrc={lightAddAppDialog}
+  darkSrc={darkAddAppDialog}
+  alt="The 'Add App' dialog with fields for GitHub repository URL and branch name."
+/>
+
+### What Fileglancer Looks For
+
+When you add a repository, Fileglancer walks the directory tree looking for:
+
+- **`runnables.yaml`** — a manifest file that explicitly defines the app's commands and parameters
+- **`nextflow_schema.json`** — a Nextflow pipeline schema, automatically converted to an app manifest
+- **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project, where each task becomes a launchable entry point
+
+If you're a tool author, see the [Authoring Apps](https://github.com/JaneliaSciComp/fileglancer/blob/main/docs/AuthoringApps.md) guide for the full manifest reference.
+
+## Launching a Job
+
+Once an app is added, you can launch it as a job on the compute cluster.
+
+<StyledImage
+  lightSrc={lightAppsPageWithApp}
+  darkSrc={darkAppsPageWithApp}
+  alt="Fileglancer Apps page showing an app card with a 'Launch' button."
+/>
+
+<Steps>
+1. **Click "Launch" on an app card**<br/>
+   You will either be prompted to select an entry point or the launch form will open immediately.
+</Steps>
+
+<StyledImage
+  lightSrc={lightMultipleEntryPoints}
+  darkSrc={darkMultipleEntryPoints}
+  alt="App launch form showing multiple cards to select an entry point defined by the app."
+/>
+
+<Steps>
+2. **If prompted, select the entry point to run**<br/>
+   A single app can define multiple **entry points** (also called **runnables**) — distinct commands that serve different purposes but share the same repository. For example, the [Fileglancer Demo App](https://github.com/JaneliaSciComp/fileglancer-demo-app) defines three entry points: "Run Demo" (a batch job that prints a message repeatedly), "Demo Service" (a long-running HTTP server), and "Demo Container" (a containerized command using Apptainer). Each entry point has its own parameters, resource defaults, and execution mode. When an app has multiple entry points, each one is shown as a card with its name and description. Click **Select** on the desired entry point to open its parameter form. Apps with only one entry point skip this step and go straight to the form.
+</Steps>
+
+<StyledImage
+  lightSrc={lightLaunchForm}
+  darkSrc={darkLaunchForm}
+  alt="The app launch form with tabs at the top showing parameters on the left and Resources and Environment to the right. A submit button is at both the top and bottom right."
+/>
+
+<Steps>
+3. **Fill in parameters on the launch form**<br/>
+   The form shows the app's parameters with their types, defaults, and descriptions. For `file` and `directory` parameters, a browse button lets you pick paths from the Fileglancer file browser. Required parameters are marked and validated before submission.
+
+4. **Review resources and environment (optional)**<br/>
+   Switch to the **Resources** tab to adjust CPU, memory, and walltime requests. The **Environment** tab lets you set environment variables, pre/post-run scripts, and tool-specific options like Nextflow profiles.
+
+5. **Click "Submit"**<br/>
+   The job is submitted to the cluster and you are redirected to the Jobs page. A toast notification confirms the submission.
+</Steps>
+
+
+### Tips for Launching
+
+- **Pull latest**: If the app's code is actively developed, enable "Pull latest" before submitting to ensure you're running the newest version.
+- **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
+- **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
+
+## Monitoring Jobs
+
+All jobs launched from apps appear on the **Jobs** page, accessible from the Apps page navigation.
+
+### Jobs Table
+
+The Jobs page displays a table with the following columns:
+
+| Column | Description |
+|--------|-------------|
+| **App** | Name of the app that was launched |
+| **Entry Point** | The specific runnable that was executed (click to view details) |
+| **Status** | Current job state: PENDING, RUNNING, DONE, FAILED, or KILLED |
+| **Submitted** | When the job was submitted |
+| **Duration** | How long the job has been running or ran in total |
+| **Actions** | Menu with options to view details, relaunch, cancel, or delete |
+
+### Job Statuses
+
+- **PENDING** — the job is queued and waiting for cluster resources
+- **RUNNING** — the job is actively executing on a cluster node
+- **DONE** — the job completed successfully
+- **FAILED** — the job exited with a non-zero exit code
+- **KILLED** — the job was cancelled by the user or terminated by the cluster (e.g. walltime exceeded)
+
+### Job Detail View
+
+Click an entry point name in the jobs table (or select **View Details** from the actions menu) to open the detail view. This page shows:
+
+- **Header** — app name, entry point, status badge, and timestamps (submitted, started, finished, exit code)
+- **Parameters tab** — the parameter values that were used for this job
+- **Script tab** — the generated shell script that was submitted to the cluster, with a link to the script file on disk
+- **Output Log tab** — the job's stdout, streamed in near-real-time while the job is running. Includes a download button
+- **Error Log tab** — the job's stderr, also available for download
+
+From the detail view you can **Relaunch** the job, which opens the launch form pre-filled with the same parameters so you can re-run or adjust settings.
+
+### Services
+
+Some apps define **service** entry points — long-running processes like JupyterLab, web viewers, or APIs. Services work like regular jobs, with a few differences:
+
+- While a service is starting, the detail view shows a "Service is starting up..." banner
+- Once the service is ready and has published its URL, a green banner appears with an **Open Service** button that opens the service in a new tab
+- To stop a service, click **Stop Service** from the detail view or select **Stop Service** from the actions menu in the jobs table
+
+## Managing Apps
+
+### App Info
+
+Each app card has an **info button** (the "i" icon) that opens a dialog with details about the app, including its source repository, description, and available entry points.
+
+<StyledImage
+  lightSrc={lightAppInfoIcon}
+  darkSrc={darkAppInfoIcon}
+  alt="App card with an info icon button in the top right corner."
+/>
+
+### Updating an App
+
+If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app from the info dialog. This re-fetches the manifest from the repository.
+
+<StyledImage
+  lightSrc={lightAppInfoDialog}
+  darkSrc={darkAppInfoDialog}
+  alt="App info dialog showing the app's description, source repository URL, and a list of entry points. In the bottom left is the 'Launch' button to start a new job with this app, and in the bottom right are 'Update' and 'Delete' buttons, to update or remove the app, respectively."
+/>
+
+### Removing an App
+
+Click the **trash icon** on an app card on the 'Delete' button in the app's info dialog to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page.
+
+## Sharing Apps by URL
+
+Apps can be launched directly via URL without being added to your library first. If someone shares a launch URL with you, Fileglancer will load the app manifest and show the launch form. A banner at the top offers to **Install** the app to your library for quick access later.
+
+## Troubleshooting
+
+**App fails to add**
+- Verify the GitHub URL is correct and the repository is accessible
+- Check that the repository contains a `runnables.yaml`, `nextflow_schema.json`, or `pixi.toml` file
+- If using a specific branch, make sure the branch name is correct
+
+**Job stays in PENDING**
+- The cluster may be busy. Check cluster load or try requesting fewer resources
+
+**Job fails immediately**
+- Check the **Error Log** tab in the job detail view for error messages
+- Review the **Script** tab to see the exact command that was generated
+- Ensure file and directory paths used as parameters still exist and are readable
+
+**Service URL not appearing**
+- The service may take time to start. Wait for the status to change from PENDING to RUNNING
+- Check the output and error logs for startup errors
+- The service must write its URL to a specific file — check with the app author if the service doesn't seem to publish its URL
