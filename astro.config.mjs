@@ -52,6 +52,10 @@ export default defineConfig({
               slug: "workflows/ng-links",
             },
             {
+              label: "Apps and Jobs",
+              slug: "workflows/apps-and-jobs",
+            },
+            {
               label: "File Conversion Requests",
               slug: "workflows/file-conversion",
             },
