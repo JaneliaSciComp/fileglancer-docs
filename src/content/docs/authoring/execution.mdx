@@ -9,7 +9,9 @@ This page covers everything about *how* and *where* your command runs: setting u
 
 ## The Generated Job Script
 
-When a user submits a job, Fileglancer assembles a shell script and submits it to the cluster. Understanding its structure helps you reason about where your `env`, `pre_run`, `conda_env`, and command fit in.
+When a user submits a job, Fileglancer assembles a shell script and submits it to the cluster. Understanding its structure helps you reason about where your `env`, `pre_run`, `conda_env`, and command fit in. 
+
+Here is an example of the generated script:
 
 ```bash
 unset PIXI_PROJECT_MANIFEST
@@ -111,6 +113,17 @@ When `conda_env` is set, the script initializes conda and activates the environm
 eval "$(conda shell.bash hook)"
 conda activate my-analysis-env
 ```
+
+<Aside type="caution" title="Conda environments are user-wide, not job-scoped">
+A Conda environment is **not** contained to the job's working directory. A named environment lives in the user's shared Conda installation (e.g. `~/miniforge3/envs/`), persists between jobs, and is shared by every app and runnable that references the same name. That global, mutable state brings real risks:
+
+- **Name collisions** — two apps that both expect an env called `analysis` will silently fight over one shared environment, and whichever created it first wins.
+- **Version drift** — if anyone updates, adds to, or rebuilds the environment elsewhere, your job's behavior can change without any edit to your manifest.
+- **Non-reproducibility** — the same manifest can succeed on one machine or account and fail on another, because the result depends on the state of the user's conda install rather than on anything you've declared.
+- **Concurrency hazards** — if a `pre_run` creates the environment on first use, two jobs starting at once can race and leave it half-built or corrupted.
+
+Because of this, when possible we recommend using **[Pixi](https://pixi.sh/)** instead of Conda. A Pixi project pins its dependencies in a lockfile committed alongside your code, resolves into a project-local environment, and reproduces the same versions everywhere. Add `pixi` to your `requirements` and use a `pixi run …` command instead of `conda_env`. 
+</Aside>
 
 <Aside type="tip" title="Creating the environment on first run">
 If the conda environment needs to be created before use (e.g. from an `environment.yml`), use `pre_run` to create it idempotently:
