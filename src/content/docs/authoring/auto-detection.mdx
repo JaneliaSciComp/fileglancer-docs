@@ -11,10 +11,6 @@ You don't always have to write a `runnables.yaml` by hand. If a repository conta
 Hand-written manifests take priority. If Fileglancer finds **any** `runnables.yaml` in the repository, it uses those manifests and skips auto-detection entirely. To customize an auto-detected app — change the command, add resources, or reorganize parameters — add a `runnables.yaml` at the repository root and it will be used instead of the generated manifest.
 </Aside>
 
-<Aside type="note" title="Auto-detection is root-only">
-Auto-detection for Nextflow and Pixi projects only inspects the repository root. A `nextflow_schema.json`, `pixi.toml`, or `pyproject.toml` in a subdirectory is not auto-detected — add a `runnables.yaml` to expose nested projects as apps.
-</Aside>
-
 ## Nextflow Pipelines
 
 If a directory contains a `nextflow_schema.json` (and no `runnables.yaml`), Fileglancer generates a manifest from the Nextflow schema. The generated app:
@@ -75,4 +71,4 @@ args = [
 ]
 ```
 
-Fileglancer generates an app with a single **greet** runnable that runs `pixi run greet`, offering a free-text **message** parameter and a **style** dropdown (`plain` / `fancy`). When added from a Git repository the app is named `repo/branch`; the `demo` project name is used only outside a Git clone.
+Fileglancer generates an app with a single **greet** runnable that runs `pixi run greet`, offering a free-text **message** parameter and a **style** dropdown (`plain` / `fancy`). 
