@@ -108,7 +108,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 <StyledImage
   lightSrc={lightLaunchForm}
   darkSrc={darkLaunchForm}
-  alt="The app launch form with tabs at the top showing parameters on the left and Resources and Environment to the right. A submit button is at both the top and bottom right."
+  alt="The app launch form with tabs for Parameters, Environment, and Cluster. A submit button is at both the top and bottom right."
 />
 
 <Steps>
@@ -116,7 +116,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
    The form shows the app's parameters with their types, defaults, and descriptions. For `file` and `directory` parameters, a browse button lets you pick paths from the Fileglancer file browser. Required parameters are marked and validated before submission.
 
 4. **Review resources and environment (optional)**<br/>
-   Switch to the **Resources** tab to adjust CPU, memory, and walltime requests. The **Environment** tab lets you set environment variables, pre/post-run scripts, and tool-specific options like Nextflow profiles.
+   Switch to the **Cluster** tab and open the Resources section to adjust CPU, memory, and walltime requests. The **Environment** tab lets you set environment variables, pre/post-run scripts, and tool-specific options like Nextflow profiles.
 
 5. **Click "Submit"**<br/>
    The job is submitted to the cluster and you are redirected to the Jobs page. A toast notification confirms the submission.
