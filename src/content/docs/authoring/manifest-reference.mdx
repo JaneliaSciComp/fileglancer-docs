@@ -29,6 +29,7 @@ Each runnable defines a single command that users can launch. If a manifest has 
 | `description` | string | no | Longer description of what this runnable does |
 | `command` | string | yes | Base shell command to execute (see [Command Building](/authoring/parameters/#command-building)) |
 | `parameters` | list of objects | no | Parameter definitions shown in the Parameters tab (see [Parameters](/authoring/parameters/)) |
+| `env_parameters` | list of objects | no | Parameter definitions shown in the **Environment** tab instead of the Parameters tab (e.g. a Nextflow `-profile` selector). Same structure as `parameters` (see [Parameters](/authoring/parameters/)) |
 | `resources` | object | no | Default cluster resource requests (see [Resources](#resources)) |
 | `env` | object | no | Default environment variables to export (see [Environment Variables](/authoring/execution/#environment-variables)) |
 | `pre_run` | string | no | Shell script to run before the main command (see [Pre/Post-Run Scripts](/authoring/execution/#prepost-run-scripts)) |
@@ -131,7 +132,7 @@ Compound, comma-separated, or chained version constraints such as `"pixi>=0.40,<
 
 ### How Requirements Are Checked
 
-A requirement check is prepended to the generated job script and runs at submission time, in the job's actual execution environment (after `$PATH`, conda, and env setup). If a requirement is unmet — the tool is missing or its version is too old — the job fails early with a descriptive message in stderr.
+A requirement check is included in the generated job script and runs at **job runtime** on the compute node, in the job's actual execution environment — after the script preamble, `$PATH` additions, conda activation, and environment-variable exports, but before any `pre_run` script and the main command. If a requirement is unmet — the tool is missing or its version is too old — the job fails early with a descriptive message in stderr.
 
 - Only requirements relevant to the **selected** entry point are checked. Unmet requirements for other entry points do not block submission.
 - If `requirements` is omitted or empty at both levels, no checks are performed.

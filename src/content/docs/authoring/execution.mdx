@@ -26,6 +26,10 @@ conda activate myenv
 export JAVA_HOME='/opt/java'
 export NXF_SINGULARITY_CACHEDIR='/scratch/singularity'
 
+# Requirement check (from `requirements`) — verified now that PATH, conda,
+# and env vars are in place
+command -v nextflow >/dev/null 2>&1 || { echo "Missing required tool: nextflow" >&2; exit 1; }
+
 # Pre-run script (from `pre_run`)
 module load java/21
 
@@ -38,7 +42,7 @@ nextflow run main.nf \
 echo "Conversion complete"
 ```
 
-A requirement check (see [Requirements](/authoring/manifest-reference/#requirements)) is prepended ahead of all of this, so unmet requirements fail the job before any of your code runs.
+A requirement check (see [Requirements](/authoring/manifest-reference/#requirements)) runs at job runtime once `$PATH`, conda, and environment variables are set up — but before your `pre_run` script and main command — so unmet requirements fail the job before any of your code runs.
 
 ## Environment Variables
 
@@ -196,7 +200,7 @@ container_args: "--nv"
 `conda_env` and `container` cannot both be set on the same entry point.
 </Aside>
 
-The SIF cache directory defaults to `~/.fileglancer/apptainer_cache/` and can be overridden per-user in Preferences, or by the administrator (see [Server Configuration](/authoring/server-config/#container-cache-directory)).
+The SIF cache directory defaults to `~/.fileglancer/apptainer_cache/` and can be overridden per-user in Preferences (see [Server Configuration](/authoring/server-config/#container-cache-directory)).
 
 ## Job Lifecycle
 

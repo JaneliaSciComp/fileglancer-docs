@@ -81,11 +81,14 @@ python greet.py --message 'Hello!' --repeat '3'
 
 ## Manifest Discovery
 
-When a user adds a GitHub repository, Fileglancer clones it and walks the directory tree looking for manifest files. These are resolved in the following precedence order:
+When a user adds a GitHub repository, Fileglancer clones it and looks for manifest files:
 
-- **`runnables.yaml`** — an explicit Fileglancer manifest that always takes priority.
-- **`nextflow_schema.json`** — a Nextflow pipeline. Fileglancer auto-generates a runnable for the pipeline. 
-- **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project. Each task becomes a runnable.
+- **`runnables.yaml`** — an explicit Fileglancer manifest. Fileglancer walks the **entire** directory tree and turns every `runnables.yaml` it finds into an app.
+- If no `runnables.yaml` is found anywhere, Fileglancer falls back to auto-detection at the repository **root only**:
+  - **`nextflow_schema.json`** — a Nextflow pipeline. Fileglancer auto-generates a runnable for the pipeline.
+  - **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project. Each task becomes a runnable.
+
+Because auto-detection is root-only and is skipped entirely when any `runnables.yaml` exists, a Nextflow or Pixi project in a subdirectory needs its own `runnables.yaml` to be discovered.
 
 See [Auto-Detected Projects](/authoring/auto-detection/) for how Nextflow and Pixi repositories are converted, and how to override the result.
 

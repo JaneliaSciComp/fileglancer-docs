@@ -71,9 +71,12 @@ Apps are added by providing a GitHub repository URL. The repository must contain
 
 ### What Fileglancer Looks For
 
-When you add a repository, Fileglancer walks the directory tree looking for:
+When you add a repository, Fileglancer first walks the entire directory tree looking for:
 
-- **`runnables.yaml`** — a manifest file that explicitly defines the app's commands and parameters
+- **`runnables.yaml`** — a manifest file that explicitly defines the app's commands and parameters. Every `runnables.yaml` found anywhere in the repository becomes a separate app.
+
+If no `runnables.yaml` is found anywhere in the repository, Fileglancer falls back to auto-detecting a recognized project format **at the repository root only**:
+
 - **`nextflow_schema.json`** — a Nextflow pipeline schema, automatically converted to an app manifest
 - **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project, where each task becomes a launchable entry point
 
@@ -125,7 +128,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 
 ### Tips for Launching
 
-- **Pull latest**: If the app's code is actively developed, enable "Pull latest" before submitting to ensure you're running the newest version.
+- **Run the latest version**: If the app's code is actively developed, use **Update** in the app's info dialog before launching to re-fetch the newest manifest and code from the repository.
 - **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
 - **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
 
@@ -193,12 +196,35 @@ If the source repository has been updated (e.g. new parameters added, commands c
 <StyledImage
   lightSrc={lightAppInfoDialog}
   darkSrc={darkAppInfoDialog}
-  alt="App info dialog showing the app's description, source repository URL, and a list of entry points. In the bottom left is the 'Launch' button to start a new job with this app, and in the bottom right are 'Update' and 'Delete' buttons, to update or remove the app, respectively."
+  alt="App info dialog showing the app's description, source repository URL, and a list of entry points. In the bottom left is the 'Launch' button to start a new job with this app, and in the bottom right are 'Update' and 'Remove' buttons, to update or remove the app, respectively."
 />
 
 ### Removing an App
 
-Click the **trash icon** on an app card on the 'Delete' button in the app's info dialog to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page.
+Click the **trash icon** on an app card, or the **Remove** button in the app's info dialog, to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing.
+
+## Using the App Catalog
+
+The Apps area has two views, selectable from the navigation at the top of the page: **My Apps** (the apps in your personal library) and **App Catalog** (apps that other users have shared). The catalog lets you discover and reuse apps without needing the GitHub URL.
+
+### Browsing the catalog
+
+Open **App Catalog** to see all shared apps. Each listing shows the app name, description, and who shared it. You can:
+
+- **Search** by app name, description, or owner using the search box
+- **Hide installed** apps you already have in your library, using the toggle, so you only see new ones
+
+### Adding an app from the catalog
+
+Open a listing's info dialog and click **Add to my apps**. The app is added to your library just as if you had entered its GitHub URL, and it then appears under **My Apps** where you can launch it.
+
+### Sharing your apps
+
+To share one of your own apps so others can find it in the catalog, open the app's info dialog and click **Share to Catalog**. Shared apps display a **Shared** badge on their card in My Apps.
+
+To stop sharing, click **Unshare** (from the listing's info dialog or your app card). Unsharing removes the catalog listing but leaves the app in your own library. Likewise, removing a shared app from your library does **not** remove its catalog listing — unshare it first if you want to take it down.
+
+Catalog listings point at the owner's repository and branch. Other users always add the app from that source, so they get whatever the repository currently contains when they add or update it.
 
 ## Sharing Apps by URL
 
