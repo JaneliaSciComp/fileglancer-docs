@@ -52,3 +52,13 @@ button[type='button']:hover,
 .sl-markdown-content table :is(td, th) code {
   white-space: nowrap;
 }
+
+/* Highlight the current page in the left sidebar, matching the accent used
+   by the right-hand table of contents */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  color: var(--sl-color-text-accent);
+  background-color: var(--sl-color-accent-low);
+  font-weight: 600;
+}

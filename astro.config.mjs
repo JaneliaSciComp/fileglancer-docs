@@ -8,7 +8,7 @@ import { externalLinkIcon } from "./external-link-icon.js";
 // https://astro.build/config
 export default defineConfig({
   site: "https://fileglancer-docs.janelia.org",
-  base: ".",
+  base: "/",
   markdown: {
     rehypePlugins: [
       [
