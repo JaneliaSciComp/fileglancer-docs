@@ -47,3 +47,8 @@ button[type='button']:hover,
   height: auto;
   object-fit: contain;
 }
+
+/* Keep inline code (e.g. field names) from breaking mid-word in table cells */
+.sl-markdown-content table :is(td, th) code {
+  white-space: nowrap;
+}
