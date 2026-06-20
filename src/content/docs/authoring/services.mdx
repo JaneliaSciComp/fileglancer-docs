@@ -1,0 +1,94 @@
+---
+title: Services
+description: Author long-running service entry points — notebooks, web viewers, and APIs — that run until the user stops them and expose a URL in the Fileglancer UI.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A **service** is a long-running process — a web server, notebook, API, or viewer — that runs until the user explicitly stops it. Services are declared with `type: service` on the runnable:
+
+```yaml title="runnables.yaml"
+runnables:
+  - id: notebook
+    name: JupyterLab
+    type: service
+    command: jupyter lab --no-browser --ip=0.0.0.0 --port=0
+    resources:
+      cpus: 4
+      memory: "32 GB"
+      walltime: "08:00"
+```
+
+## How It Works
+
+From the cluster's perspective, a service is just a long-running batch job. The difference is in how Fileglancer communicates the service URL to the user:
+
+1. The user launches a service-type runnable → the job enters PENDING.
+2. The cluster picks it up → RUNNING.
+3. The service starts, binds a port, and writes its URL to the file at `SERVICE_URL_PATH`.
+4. On the next poll (every few seconds), Fileglancer reads the file and displays the URL in the UI.
+5. The user clicks **Open Service** → the service opens in a new browser tab.
+6. When done, the user clicks **Stop Service** → the job is killed and the URL disappears.
+
+## Writing the Service URL
+
+For service-type runnables, Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
+
+In Python:
+
+```python
+import os, socket
+
+url = f"http://{socket.gethostname()}:{port}"
+service_url_path = os.environ.get("SERVICE_URL_PATH")
+if service_url_path:
+    with open(service_url_path, "w") as f:
+        f.write(url)
+```
+
+In Bash:
+
+```bash
+echo "http://$(hostname):${PORT}" > "$SERVICE_URL_PATH"
+```
+
+<Aside type="caution" title="URL scheme is validated">
+The URL must start with `http://` or `https://`. Fileglancer validates this before displaying it. If the file doesn't exist or contains an invalid URL, no link is shown.
+</Aside>
+
+## Service Lifecycle
+
+- **Startup**: write the URL to `SERVICE_URL_PATH` as soon as the service is ready. Until the file exists, the UI shows "Service is starting up…".
+- **Running**: Fileglancer reads the URL file on each poll. If the URL changes (e.g. a port rebind), the UI updates automatically.
+- **Shutdown**: when the user clicks **Stop Service**, Fileglancer sends a SIGTERM to the job. Handle this signal for graceful shutdown. Cleaning up the URL file on exit is good practice but not required — Fileglancer only reads it while the job status is RUNNING.
+
+## Tips
+
+- **Port selection**: use port `0` or auto-detection to avoid conflicts when multiple services run on the same node.
+- **Walltime**: set a generous walltime — services run until stopped, but the cluster will kill them when walltime expires. Consider `"08:00"` or longer for interactive sessions.
+- **Flush output**: under a batch scheduler like LSF, Python's stdout may be buffered. Use `flush=True` on print statements or set `PYTHONUNBUFFERED=1` so logs appear in real time.
+
+## Full Service Example
+
+```yaml title="runnables.yaml"
+name: My Viewer
+description: Interactive data viewer
+
+runnables:
+  - id: view
+    name: Start Viewer
+    type: service
+    description: Launch an interactive viewer for browsing datasets
+    command: pixi run python start_viewer.py
+    parameters:
+      - flag: --data-dir
+        name: Data Directory
+        type: directory
+        description: Directory containing datasets to view
+        required: true
+
+    resources:
+      cpus: 2
+      memory: "8 GB"
+      walltime: "08:00"
+```

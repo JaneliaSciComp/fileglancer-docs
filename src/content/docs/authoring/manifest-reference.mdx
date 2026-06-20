@@ -1,0 +1,140 @@
+---
+title: The Manifest
+description: Full reference for the runnables.yaml manifest — top-level fields, runnable definitions, resource defaults, and tool requirements.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The `runnables.yaml` manifest describes your app. This page documents its structure: the top-level fields, each runnable's fields, resource defaults, and the requirements system. Parameters are large enough to warrant their own page — see [Parameters & Command Building](/authoring/parameters/).
+
+## Top-Level Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | yes | Display name shown in the Fileglancer UI |
+| `description` | string | no | Short description of the app |
+| `repo_url` | string | no | GitHub URL of a separate repository containing the tool code (see [Separate Tool Repo](/authoring/execution/#separate-tool-repo)) |
+| `requirements` | list of strings | no | Tools that must be available in the job environment (see [Requirements](#requirements)) |
+| `runnables` | list of objects | yes | One or more runnable definitions (see [Runnables](#runnables)) |
+
+## Runnables
+
+Each runnable defines a single command that users can launch. If a manifest has multiple runnables, the user selects which one to run before the launch form opens.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | yes | Unique identifier (used in CLI flags and URLs, should be URL-safe) |
+| `name` | string | yes | Display name shown in the UI |
+| `type` | string | no | `"job"` (default) for batch jobs or `"service"` for long-running services (see [Services](/authoring/services/)) |
+| `description` | string | no | Longer description of what this runnable does |
+| `command` | string | yes | Base shell command to execute (see [Command Building](/authoring/parameters/#command-building)) |
+| `parameters` | list of objects | no | Parameter definitions shown in the Parameters tab (see [Parameters](/authoring/parameters/)) |
+| `env_parameters` | list of objects | no | Parameters shown in the Environment tab, emitted before `parameters` in the command (see [Environment Tab Parameters](/authoring/parameters/#environment-tab-parameters)) |
+| `resources` | object | no | Default cluster resource requests (see [Resources](#resources)) |
+| `env` | object | no | Default environment variables to export (see [Environment Variables](/authoring/execution/#environment-variables)) |
+| `pre_run` | string | no | Shell script to run before the main command (see [Pre/Post-Run Scripts](/authoring/execution/#prepost-run-scripts)) |
+| `post_run` | string | no | Shell script to run after the main command (see [Pre/Post-Run Scripts](/authoring/execution/#prepost-run-scripts)) |
+| `conda_env` | string | no | Conda environment name or absolute path to activate (see [Conda Environments](/authoring/execution/#conda-environments)) |
+| `container` | string | no | Container image URL for Apptainer (see [Containers](/authoring/execution/#containers-apptainer)) |
+| `bind_paths` | list of strings | no | Additional paths to bind-mount into the container (requires `container`) |
+| `container_args` | string | no | Default extra arguments for container exec (e.g. `--nv`), overridable at launch time |
+| `requirements` | list of strings | no | Additional tool requirements specific to this runnable, merged with manifest-level requirements |
+
+A manifest with two runnables:
+
+```yaml title="runnables.yaml"
+name: Image Toolkit
+description: Convert and inspect microscopy images
+
+runnables:
+  - id: convert
+    name: Convert to OME-Zarr
+    command: python convert.py
+    parameters:
+      - flag: --input
+        name: Input
+        type: file
+        required: true
+
+  - id: inspect
+    name: Inspect Metadata
+    command: python inspect.py
+    parameters:
+      - flag: --path
+        name: Path
+        type: directory
+        required: true
+```
+
+## Resources
+
+Default resource requests for the cluster scheduler. Users can override any of these in the UI before submitting.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `cpus` | integer | Number of CPUs to request |
+| `memory` | string | Memory allocation, e.g. `"16 GB"` |
+| `walltime` | string | Wall clock time limit, e.g. `"04:00"` (hours:minutes) |
+| `queue` | string | Cluster queue/partition name to submit to |
+
+```yaml
+resources:
+  cpus: 4
+  memory: "16 GB"
+  walltime: "24:00"
+```
+
+If a field is omitted, the server's global default is used. The precedence is: **user override** (highest) → **runnable default** → **server default** (lowest).
+
+## Requirements
+
+The `requirements` field lists tools that must be installed in the job execution environment. Requirements can be specified at two levels:
+
+- **Manifest-level** (`requirements` on the top-level manifest): apply to all runnables by default. Use this for tools needed by every entry point.
+- **Entry-point-level** (`requirements` on a runnable): additional requirements specific to that runnable. These are **merged** with manifest-level requirements when submitting a job. If the same tool appears at both levels, the entry-point version spec takes precedence.
+
+```yaml title="runnables.yaml"
+name: My App
+requirements:
+  - "pixi>=0.40"        # needed by all runnables
+runnables:
+  - id: run
+    name: Run with Pixi
+    command: pixi run demo
+    # effective requirements: [pixi>=0.40]
+
+  - id: container-run
+    name: Run in Container
+    command: cowsay
+    container: godlovedc/lolcow
+    requirements:
+      - apptainer          # only needed by this runnable
+    # effective requirements: [pixi>=0.40, apptainer]
+```
+
+Each entry is a tool name with an optional single version constraint:
+
+```yaml
+requirements:
+  - "pixi>=0.40"
+  - npm
+  - "maven>=3.9"
+  - miniforge
+```
+
+**Supported tools:** `pixi`, `npm`, `maven`, `miniforge`, `apptainer`, `nextflow`
+
+**Supported version operators:** `>=`, `<=`, `!=`, `==`, `>`, `<`
+
+<Aside type="caution" title="One comparison per tool">
+Compound, comma-separated, or chained version constraints such as `"pixi>=0.40,<0.60"` or `"pixi>=0.40<0.60"` are **not** supported. Use at most one comparison per tool.
+</Aside>
+
+### How Requirements Are Checked
+
+A requirement check is prepended to the generated job script and runs at submission time, in the job's actual execution environment (after `$PATH`, conda, and env setup). If a requirement is unmet — the tool is missing or its version is too old — the job fails early with a descriptive message in stderr.
+
+- Only requirements relevant to the **selected** entry point are checked. Unmet requirements for other entry points do not block submission.
+- If `requirements` is omitted or empty at both levels, no checks are performed.
+
+The version of each tool is detected with its standard version command (e.g. `pixi --version`, `nextflow -version`, `mvn --version`, `conda --version` for `miniforge`).

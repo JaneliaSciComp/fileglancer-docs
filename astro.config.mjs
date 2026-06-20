@@ -73,6 +73,24 @@ export default defineConfig({
           ],
         },
         {
+          label: "Authoring Apps",
+          items: [
+            { label: "Authoring Apps", slug: "authoring/overview" },
+            { label: "The Manifest", slug: "authoring/manifest-reference" },
+            {
+              label: "Parameters & Command Building",
+              slug: "authoring/parameters",
+            },
+            { label: "Execution Environment", slug: "authoring/execution" },
+            { label: "Services", slug: "authoring/services" },
+            {
+              label: "Auto-Detected Projects",
+              slug: "authoring/auto-detection",
+            },
+            { label: "Server Configuration", slug: "authoring/server-config" },
+          ],
+        },
+        {
           label: "Help & Support",
           items: [
             { label: "Tutorials", slug: "support/tutorials" },
