@@ -8,7 +8,7 @@ import { externalLinkIcon } from "./external-link-icon.js";
 // https://astro.build/config
 export default defineConfig({
   site: "https://fileglancer-docs.janelia.org",
-  base: ".",
+  base: "/",
   markdown: {
     rehypePlugins: [
       [
@@ -70,6 +70,24 @@ export default defineConfig({
               label: "Modern Imaging Format Support",
               slug: "features/image-support",
             },
+          ],
+        },
+        {
+          label: "Authoring Apps",
+          items: [
+            { label: "Authoring Apps", slug: "authoring/overview" },
+            { label: "The Manifest", slug: "authoring/manifest-reference" },
+            {
+              label: "Parameters & Command Building",
+              slug: "authoring/parameters",
+            },
+            { label: "Execution Environment", slug: "authoring/execution" },
+            { label: "Services", slug: "authoring/services" },
+            {
+              label: "Auto-Detected Projects",
+              slug: "authoring/auto-detection",
+            },
+            { label: "Server Configuration", slug: "authoring/server-config" },
           ],
         },
         {

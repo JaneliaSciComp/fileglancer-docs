@@ -1,0 +1,141 @@
+---
+title: Authoring Apps
+description: A developer's guide to building apps for Fileglancer. Learn how a runnables.yaml manifest turns a command-line tool into a launchable app with a parameter form, resource controls, and job tracking.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import mascot from '@assets/mascot/fg-engineer.png'
+
+<img src={mascot.src} alt="Fileglancer mascot dressed as an engineer" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
+
+Fileglancer can discover and run apps from GitHub repositories. An **app** is a command-line tool that Fileglancer can launch as a cluster job, with a generated parameter form, file/directory pickers, resource controls, and live job tracking — all without the user touching a terminal.
+
+This section is for **tool authors**. If you just want to *use* apps that someone else has published, see the [Apps and Jobs](/workflows/apps-and-jobs/) workflow guide instead.
+
+## How Apps Work
+
+An app is defined by a **manifest** — a `runnables.yaml` file checked into a GitHub repository. The manifest describes one or more **runnables** (also called *entry points*): named commands that a user can launch.
+
+When a user adds your repository, Fileglancer:
+
+1. Clones the repo and searches for manifests describing runnables
+2. Renders a parameter form from each runnable's declared parameters
+3. Builds a shell command from the user's input
+4. Submits it to the compute cluster, capturing logs and tracking status
+
+Your job as an author is to write the manifest. Fileglancer handles the UI, validation, command building, and job lifecycle.
+
+## Quick Start
+
+<Aside type="tip" title="Start from the demo app">
+The [Fileglancer Demo App](https://github.com/JaneliaSciComp/fileglancer-demo-app) is a complete, working repository with a batch job, a service, and a container entry point. It's the fastest way to see an example in action.
+</Aside>
+
+To configure your tool as a Fileglancer app:
+
+1. Create a `runnables.yaml` file in your GitHub repository.
+2. Define one or more runnables with their commands and parameters.
+3. In Fileglancer, open the **Apps** page and add your repository URL.
+
+A minimal manifest:
+
+```yaml title="runnables.yaml"
+name: My Tool
+runnables:
+  - id: run
+    name: Run My Tool
+    command: python main.py
+    parameters: []
+```
+
+This registers an app named "My Tool" with a single entry point that runs `python main.py` in your repository's working directory.
+
+A more realistic manifest adds parameters, which become form fields:
+
+```yaml title="runnables.yaml"
+name: Greeter
+description: Prints a greeting a number of times
+
+runnables:
+  - id: greet
+    name: Print Greeting
+    command: python greet.py
+    parameters:
+      - flag: --message
+        name: Message
+        type: string
+        required: true
+        default: "Hello!"
+      - flag: --repeat
+        name: Repeat Count
+        type: integer
+        default: 3
+        min: 1
+```
+
+When launched, the user fills in **Message** and **Repeat Count**, and Fileglancer runs something like:
+
+```bash
+python greet.py --message 'Hello!' --repeat '3'
+```
+
+## Manifest Discovery
+
+When a user adds a GitHub repository, Fileglancer clones it and walks the directory tree looking for manifest files. These are resolved in the following precedence order:
+
+- **`runnables.yaml`** — an explicit Fileglancer manifest that always takes priority.
+- **`nextflow_schema.json`** — a Nextflow pipeline. Fileglancer auto-generates a runnable for the pipeline. 
+- **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project. Each task becomes a runnable.
+
+See [Auto-Detected Projects](/authoring/auto-detection/) for how Nextflow and Pixi repositories are converted, and how to override the result.
+
+The following directories are skipped during discovery: `.git`, `node_modules`, `__pycache__`, `.pixi`, `.venv`, `venv`.
+
+### Multi-App Repositories
+
+A single repository can contain multiple apps by placing manifest files in subdirectories:
+
+```
+my-repo/
+├── tool1/
+│   ├── runnables.yaml    # App: "Image Converter"
+│   └── convert.py
+├── tool2/
+│   ├── runnables.yaml    # App: "Data Analyzer"
+│   └── analyze.py
+└── README.md
+```
+
+Each manifest is discovered and registered as a separate app. When a job runs, the working directory is set to the subdirectory containing the manifest, so relative paths in commands resolve correctly.
+
+### Separate Tool Repo
+
+By default, the job runs inside the cloned repository that contains the manifest. If your tool code lives in a *different* repository, use the top-level `repo_url` field:
+
+```yaml title="runnables.yaml"
+name: My Pipeline
+repo_url: https://github.com/org/pipeline-code
+runnables:
+  - id: run
+    name: Run Pipeline
+    command: nextflow run main.nf
+    parameters: []
+```
+
+When `repo_url` is set:
+
+- The discovery repo (containing `runnables.yaml`) is used only for manifest metadata.
+- The tool repo (`repo_url`) is cloned separately and used as the working directory for the job.
+
+Repos are cloned into a per-user cache on first use and reused across runs; jobs never pull automatically. To get the newest code, use the **Update** action for the app in the UI, which pulls the latest code and re-reads the manifest.
+
+## Where to Go Next
+
+This guide is organized into focused pages:
+
+- **[The Manifest](/authoring/manifest-reference/)** — the full `runnables.yaml` field reference: top-level fields, runnables, resources, and requirements.
+- **[Parameters & Command Building](/authoring/parameters/)** — parameter types, flags, sections, hidden parameters, and exactly how user input becomes a shell command.
+- **[Execution Environment](/authoring/execution/)** — conda environments, containers, pre/post-run scripts, environment variables, the generated job script, and the job lifecycle.
+- **[Services](/authoring/services/)** — long-running entry points like notebooks, viewers, and APIs.
+- **[Auto-Detected Projects](/authoring/auto-detection/)** — how Nextflow and Pixi repositories become apps automatically.
+- **[Server Configuration](/authoring/server-config/)** — settings controlled by the server administrator (`extra_paths`, container cache).

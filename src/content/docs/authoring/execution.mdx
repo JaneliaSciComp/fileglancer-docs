@@ -1,0 +1,212 @@
+---
+title: Execution Environment
+description: Control how your app runs — conda environments, Apptainer containers, pre/post-run scripts, environment variables, the generated job script, and the job lifecycle.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+This page covers everything about *how* and *where* your command runs: setting up environments, the anatomy of the generated job script, and the lifecycle of a job.
+
+## The Generated Job Script
+
+When a user submits a job, Fileglancer assembles a shell script and submits it to the cluster. Understanding its structure helps you reason about where your `env`, `pre_run`, `conda_env`, and command fit in. 
+
+Here is an example of the generated script:
+
+```bash
+unset PIXI_PROJECT_MANIFEST
+export FG_WORK_DIR='/home/user/.fileglancer/jobs/42-MyApp-convert'
+cd "$FG_WORK_DIR/repo"
+
+# Conda activation (if conda_env is set)
+eval "$(conda shell.bash hook)"
+conda activate myenv
+
+# Environment variables (from `env`)
+export JAVA_HOME='/opt/java'
+export NXF_SINGULARITY_CACHEDIR='/scratch/singularity'
+
+# Pre-run script (from `pre_run`)
+module load java/21
+
+# Main command (command + parameters)
+nextflow run main.nf \
+  --input '/data/input' \
+  --outdir '/data/output'
+
+# Post-run script (from `post_run`)
+echo "Conversion complete"
+```
+
+A requirement check (see [Requirements](/authoring/manifest-reference/#requirements)) is prepended ahead of all of this, so unmet requirements fail the job before any of your code runs.
+
+## Environment Variables
+
+The `env` field defines default environment variables exported before the main command runs. Each entry is a `KEY: value` pair.
+
+```yaml
+runnables:
+  - id: convert
+    name: Convert to OME-Zarr
+    command: nextflow run main.nf
+    env:
+      JAVA_HOME: /opt/java
+      NXF_SINGULARITY_CACHEDIR: /scratch/singularity
+```
+
+Users can override or extend these in the UI before submitting. Variable names must match `[A-Za-z_][A-Za-z0-9_]*`, and values are shell-quoted with `shlex.quote()` for safety.
+
+### Variables Set by Fileglancer
+
+Fileglancer exports these variables in every job script. They are available to `pre_run`, the main command, and `post_run`:
+
+| Variable | Availability | Description |
+|----------|-------------|-------------|
+| `FG_WORK_DIR` | All jobs | Absolute path to the job's working directory (contains the `repo/` symlink, log files, etc.) |
+| `SERVICE_URL_PATH` | Service-type jobs only | Absolute path where the service should write its URL. Equivalent to `$FG_WORK_DIR/service_url` (see [Services](/authoring/services/)) |
+
+## Pre/Post-Run Scripts
+
+The `pre_run` and `post_run` fields specify shell commands that run before and after the main command. Use them to load modules, set up the environment, or perform cleanup.
+
+```yaml
+runnables:
+  - id: convert
+    name: Convert to OME-Zarr
+    command: nextflow run main.nf
+    pre_run: |
+      module load java/21
+    post_run: |
+      echo "Conversion complete"
+```
+
+Users can override these in the UI. If a user provides their own script, it replaces the manifest default entirely.
+
+## Conda Environments
+
+The `conda_env` field activates a conda environment before running the command. This requires `miniforge` (or any conda distribution providing the `conda` binary) in the runnable's or manifest's [`requirements`](/authoring/manifest-reference/#requirements).
+
+The value can be:
+
+- **An environment name** (e.g. `myenv`): must match `[a-zA-Z0-9_.-]+`
+- **An absolute path** (e.g. `/opt/envs/myenv`): must not contain shell metacharacters
+
+```yaml title="runnables.yaml"
+name: My Analysis Tool
+runnables:
+  - id: analyze
+    name: Run Analysis
+    command: python analyze.py
+    conda_env: my-analysis-env
+    requirements:
+      - miniforge
+    parameters:
+      - flag: --input
+        name: Input
+        type: file
+        required: true
+```
+
+When `conda_env` is set, the script initializes conda and activates the environment before any env vars, `pre_run`, or the main command:
+
+```bash
+eval "$(conda shell.bash hook)"
+conda activate my-analysis-env
+```
+
+<Aside type="caution" title="Conda environments are user-wide, not job-scoped">
+A Conda environment is **not** contained to the job's working directory. A named environment lives in the user's shared Conda installation (e.g. `~/miniforge3/envs/`), persists between jobs, and is shared by every app and runnable that references the same name. That global, mutable state brings real risks:
+
+- **Name collisions** — two apps that both expect an env called `analysis` will silently fight over one shared environment, and whichever created it first wins.
+- **Version drift** — if anyone updates, adds to, or rebuilds the environment elsewhere, your job's behavior can change without any edit to your manifest.
+- **Non-reproducibility** — the same manifest can succeed on one machine or account and fail on another, because the result depends on the state of the user's conda install rather than on anything you've declared.
+- **Concurrency hazards** — if a `pre_run` creates the environment on first use, two jobs starting at once can race and leave it half-built or corrupted.
+
+Because of this, when possible we recommend using **[Pixi](https://pixi.sh/)** instead of Conda. A Pixi project pins its dependencies in a lockfile committed alongside your code, resolves into a project-local environment, and reproduces the same versions everywhere. Add `pixi` to your `requirements` and use a `pixi run …` command instead of `conda_env`. 
+</Aside>
+
+<Aside type="tip" title="Creating the environment on first run">
+If the conda environment needs to be created before use (e.g. from an `environment.yml`), use `pre_run` to create it idempotently:
+
+```yaml
+conda_env: my-tool-env
+pre_run: |
+  conda env create -f environment.yml -n my-tool-env --yes 2>/dev/null || true
+```
+</Aside>
+
+## Containers (Apptainer)
+
+The `container` field runs the command inside a container using [Apptainer](https://apptainer.org/) (formerly Singularity). This requires `apptainer` in the runnable's or manifest's [`requirements`](/authoring/manifest-reference/#requirements).
+
+The value is a container image URL, typically from a Docker/OCI registry:
+
+- `ghcr.io/org/image:tag` — GitHub Container Registry
+- `docker://ghcr.io/org/image:tag` — explicit Docker protocol prefix (added automatically if absent)
+
+```yaml title="runnables.yaml"
+name: Lolcow
+runnables:
+  - id: say
+    name: Cow Say
+    command: cowsay
+    container: godlovedc/lolcow
+    requirements:
+      - apptainer
+    parameters:
+      - name: Message
+        type: string
+        description: What the cow should say
+        required: true
+        default: "Hello from Fileglancer!"
+```
+
+When `container` is set, the generated script creates a SIF cache directory, pulls the image to a `.sif` file if not already cached, and runs the command inside the container via `apptainer exec`:
+
+```bash
+# Apptainer container setup
+APPTAINER_CACHE_DIR=$HOME/.fileglancer/apptainer_cache
+mkdir -p "$APPTAINER_CACHE_DIR"
+SIF_PATH="$APPTAINER_CACHE_DIR/godlovedc_lolcow.sif"
+if [ ! -f "$SIF_PATH" ]; then
+  apptainer pull "$SIF_PATH" 'docker://godlovedc/lolcow'
+fi
+apptainer exec --bind /home/user/.fileglancer/jobs/1-lolcow-say "$SIF_PATH" \
+  cowsay \
+  'Hello from Fileglancer!'
+```
+
+**Bind mounts** are auto-detected from `file` and `directory` parameters, and the job's working directory is always bound. Use `bind_paths` to add extra paths:
+
+```yaml
+container: ghcr.io/org/image:tag
+bind_paths:
+  - /shared/reference-data
+  - /scratch
+```
+
+**Extra Apptainer arguments** can be set as defaults with `container_args`, and overridden by the user at launch time through the Environment tab:
+
+```yaml
+container: ghcr.io/org/cuda-tool:latest
+container_args: "--nv"
+```
+
+<Aside type="caution" title="Mutually exclusive">
+`conda_env` and `container` cannot both be set on the same entry point.
+</Aside>
+
+The SIF cache directory defaults to `~/.fileglancer/apptainer_cache/` and can be overridden per-user in Preferences, or by the administrator (see [Server Configuration](/authoring/server-config/#container-cache-directory)).
+
+## Job Lifecycle
+
+When a user submits a job:
+
+1. The manifest is re-fetched from the cached clone.
+2. The command is built with validated parameters, with a requirement check prepended.
+3. A working directory is created at `~/.fileglancer/jobs/{id}-{app}-{runnable}/`.
+4. The repository is symlinked into the working directory.
+5. The command runs on the cluster, with `stdout.log` and `stderr.log` captured. Requirements are verified at runtime in the job's execution environment; if any are unmet, the job fails early with a descriptive message in stderr.
+6. Job status is monitored and updated in real time (PENDING → RUNNING → DONE/FAILED/KILLED).
+
+Users can view logs, relaunch with the same parameters, or cancel running jobs from the UI.

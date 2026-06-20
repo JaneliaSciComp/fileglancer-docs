@@ -1,0 +1,35 @@
+---
+title: Server Configuration
+description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH and configuring the container cache directory.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Some aspects of app execution are controlled by the Fileglancer server's `config.yaml`, not by individual app manifests. These settings are managed by the **system administrator** and apply to every job on the server.
+
+<Aside type="note">
+As a tool author you generally don't set these — but knowing they exist explains why a tool like `nextflow` or `pixi` might be available on the cluster without you installing it, and where container images are cached.
+</Aside>
+
+## Extra Paths (`extra_paths`)
+
+The `extra_paths` setting adds directories to `$PATH` for all job scripts. This makes tools like `nextflow`, `pixi`, or `apptainer` available without requiring users to configure their own environments.
+
+```yaml title="config.yaml"
+apps:
+  extra_paths:
+    - /opt/nextflow/bin
+    - /opt/pixi/bin
+    - /usr/local/apptainer/bin
+```
+
+These paths are:
+
+1. **Appended to `$PATH` in every generated job script** — the user's own `$PATH` entries take precedence.
+2. **Visible to the runtime [requirement check](/authoring/manifest-reference/#requirements)** — so `requirements: [nextflow]` can find `/opt/nextflow/bin/nextflow` even if it isn't on the user's default `$PATH`.
+
+## Container Cache Directory
+
+By default, Apptainer container images (SIF files) are cached at `~/.fileglancer/apptainer_cache/`. Users can override this per-user in the Preferences page under "Container cache directory".
+
+See [Containers (Apptainer)](/authoring/execution/#containers-apptainer) for how the cache is used during a job.

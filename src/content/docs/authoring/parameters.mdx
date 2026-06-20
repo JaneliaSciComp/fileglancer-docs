@@ -1,0 +1,159 @@
+---
+title: Parameters & Command Building
+description: How to declare parameters, group them into sections, hide advanced options, and understand exactly how user input becomes a safe shell command.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Parameters define the inputs that users fill in through the Fileglancer UI. Each parameter becomes a form field, and its value is appended to your `command` when the job is built. This page covers how to declare parameters and how they are assembled into the final shell command.
+
+## Parameters
+
+Each parameter with a `flag` field becomes a CLI flag appended to the base command. Parameters without a `flag` are emitted as positional arguments.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `flag` | string | no | CLI flag syntax (e.g. `--outdir`, `-n`). Omit for positional arguments. Must start with `-` |
+| `name` | string | yes | Display label in the UI |
+| `type` | string | yes | Data type (see [Parameter Types](#parameter-types)) |
+| `description` | string | no | Help text shown below the input field |
+| `required` | boolean | no | Whether the user must provide a value. Default: `false` |
+| `default` | any | no | Pre-filled default value. Type must match the parameter type |
+| `options` | list of strings | no | Allowed values (only for `enum` type) |
+| `min` | number | no | Minimum value (only for `integer` and `number` types) |
+| `max` | number | no | Maximum value (only for `integer` and `number` types) |
+| `pattern` | string | no | Regex validation pattern (only for `string` type, uses full match) |
+| `hidden` | boolean | no | Whether the parameter is hidden by default in the UI. Default: `false` |
+| `raw` | boolean | no | If `true`, the value is appended to the command without shell quoting. Validated against shell metacharacters for safety. Default: `false` |
+
+## Parameter Types
+
+| Type | UI Control | CLI Output (flagged) | CLI Output (positional) | Validation |
+|------|-----------|---------------------|------------------------|------------|
+| `string` | Text input | `--flag 'value'` | `'value'` | Optional `pattern` regex (full match) |
+| `integer` | Number input (step=1) | `--flag 42` | `42` | Must be a whole number. Optional `min`/`max` bounds |
+| `number` | Number input | `--flag 3.14` | `3.14` | Must be numeric. Optional `min`/`max` bounds |
+| `boolean` | Checkbox | `--flag` (if true, omitted if false) | N/A | Must be true/false |
+| `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists and is readable on the server |
+| `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists and is readable on the server |
+| `enum` | Dropdown select | `--flag 'chosen_value'` | `'chosen_value'` | Value must be one of the `options` list |
+
+**Notes on `file` and `directory` types:**
+
+- The UI provides a browse button alongside the text input, so users can pick paths from the Fileglancer file browser instead of typing them.
+- Paths are validated server-side before job submission (must exist and be accessible).
+- Both absolute paths (`/data/images`) and home-relative paths (`~/output`) are accepted.
+- Shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, `(`, `)`, etc.) are rejected for safety.
+
+## Flag Forms
+
+Parameters support three flag styles:
+
+- **Double-dash flags** (most common): `flag: --outdir` emits `--outdir '/path'`
+- **Single-dash flags**: `flag: -n` emits `-n 5`
+- **Positional arguments**: omit `flag` entirely. The value is emitted as a bare argument (no flag prefix)
+
+An internal `key` is auto-generated from the flag: `--outdir` becomes key `outdir`, `-n` becomes key `n`. Positional parameters get keys `_arg0`, `_arg1`, etc. Keys must be unique within a runnable.
+
+## Parameter Sections
+
+Parameters can be grouped into collapsible sections in the UI. A section is an item in the `parameters` list that has a `section` key instead of `name`/`type`. Sections contain their own nested `parameters` list (one level deep only). Top-level parameters and sections can be interleaved freely.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `section` | string | yes | Section title displayed in the UI |
+| `description` | string | no | Help text shown next to the section title |
+| `collapsed` | boolean | no | Whether the section starts collapsed. Default: `false` |
+| `parameters` | list of objects | no | Parameter definitions within this section (same schema as top-level parameters) |
+
+```yaml
+parameters:
+  # Top-level parameter (always visible)
+  - flag: --input
+    name: Input Path
+    type: file
+    required: true
+
+  # Collapsible section
+  - section: Advanced Options
+    description: Optional tuning parameters
+    collapsed: true
+    parameters:
+      - flag: --chunk_size
+        name: Chunk Size
+        type: string
+        default: "128,128,128"
+      - flag: --verbose
+        name: Verbose
+        type: boolean
+        default: false
+```
+
+A section with `collapsed: true` renders as a closed accordion; users click to expand it. Sections without `collapsed` (or with `collapsed: false`) start expanded. On form validation, any section containing a parameter with an error is automatically expanded so the user can see and fix the problem.
+
+## Hidden Parameters
+
+Parameters can be marked `hidden: true` to keep them out of the default form view. When any parameter in a runnable is hidden, a **Show hidden** toggle appears in the top right of the Parameters tab; turning it on reveals the hidden parameters.
+
+This is useful for advanced or rarely-changed parameters you want to keep available without cluttering the form.
+
+```yaml
+parameters:
+  - flag: --input
+    name: Input Path
+    type: file
+    required: true
+
+  - flag: --debug-level
+    name: Debug Level
+    type: integer
+    default: 0
+    hidden: true
+```
+
+Hidden parameters still participate in command building — if they have a `default`, it is used even when the parameter is not visible. Hidden parameters inside a section are filtered individually; if all parameters in a section are hidden, the entire section is hidden until the toggle is turned on.
+
+## Command Building
+
+When a job is submitted, Fileglancer constructs the full shell command from the runnable's `command` field and the user-provided values using a two-pass approach:
+
+1. Start with the base `command` string.
+2. Merge user-provided values with defaults for any parameters the user didn't set.
+3. **Pass 1 — Flagged arguments**: emit values for parameters with a `flag`, in declaration order:
+   - Boolean `true` → append the flag (e.g. `--verbose`)
+   - Boolean `false` → omit entirely
+   - All other types → append `{flag} {shell_quoted_value}`
+4. **Pass 2 — Positional arguments**: emit values for parameters without a `flag`, in declaration order. Values are shell-quoted unless `raw: true` is set, in which case the value is appended as-is (after being validated against shell metacharacters).
+5. Join all parts with line-continuation (`\`) for readability.
+
+For example, given this runnable:
+
+```yaml
+command: pixi run python demo.py
+parameters:
+  - flag: --message
+    name: Message
+    type: string
+    required: true
+  - flag: --repeat
+    name: Repeat Count
+    type: integer
+    default: 3
+  - flag: --verbose
+    name: Verbose
+    type: boolean
+    default: false
+```
+
+If the user provides `message: "Hello"`, `verbose: true`, and leaves `repeat` at its default, the resulting command is:
+
+```bash
+pixi run python demo.py \
+  --message 'Hello' \
+  --verbose \
+  --repeat '3'
+```
+
+<Aside type="caution" title="Shell safety">
+All values are shell-quoted with `shlex.quote()` to prevent injection. The only exception is **positional** parameters with `raw: true`, where the value is appended unquoted but first rejected if it contains shell metacharacters. The `raw` flag has no effect on flagged parameters — those are always quoted.
+</Aside>
