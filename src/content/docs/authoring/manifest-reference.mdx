@@ -29,7 +29,6 @@ Each runnable defines a single command that users can launch. If a manifest has 
 | `description` | string | no | Longer description of what this runnable does |
 | `command` | string | yes | Base shell command to execute (see [Command Building](/authoring/parameters/#command-building)) |
 | `parameters` | list of objects | no | Parameter definitions shown in the Parameters tab (see [Parameters](/authoring/parameters/)) |
-| `env_parameters` | list of objects | no | Parameters shown in the Environment tab, emitted before `parameters` in the command (see [Environment Tab Parameters](/authoring/parameters/#environment-tab-parameters)) |
 | `resources` | object | no | Default cluster resource requests (see [Resources](#resources)) |
 | `env` | object | no | Default environment variables to export (see [Environment Variables](/authoring/execution/#environment-variables)) |
 | `pre_run` | string | no | Shell script to run before the main command (see [Pre/Post-Run Scripts](/authoring/execution/#prepost-run-scripts)) |

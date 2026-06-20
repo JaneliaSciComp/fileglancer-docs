@@ -20,11 +20,11 @@ If a directory contains a `nextflow_schema.json` (and no `runnables.yaml`), File
 - Derives the app **name** from the repository as `owner/repo`, and takes the **description** from the schema's top-level `description`.
 - Converts each JSON Schema parameter into a Fileglancer parameter, preserving types, defaults, descriptions, required flags, `enum` options, and `hidden` status.
 - Groups parameters into [sections](/authoring/parameters/#parameter-sections) based on the schema's `definitions`/`$defs`, ordered by the schema's `allOf` list. Section titles and descriptions come from each definition's `title`, `description`, and `help_text`. All sections start expanded.
-- Adds an **Environment tab** with Nextflow-specific options:
+- Surfaces Nextflow-specific options on the launch form's **Environment tab**:
   - **Profiles** (`-profile`) — comma-separated list of Nextflow profiles (e.g. `standard,docker`)
   - **Extra Arguments** — additional Nextflow CLI arguments (e.g. `-resume`, `-with-tower`), appended to the command without shell quoting
 
-Because these tool-level flags live in `env_parameters`, they are emitted *before* the pipeline parameters, so the generated command is well-formed:
+These tool-level flags are emitted *before* the pipeline parameters, so the generated command is well-formed:
 
 ```bash
 nextflow run . -ansi-log false \
