@@ -108,13 +108,34 @@ my-repo/
 
 Each manifest is discovered and registered as a separate app. When a job runs, the working directory is set to the subdirectory containing the manifest, so relative paths in commands resolve correctly.
 
+### Separate Tool Repo
+
+By default, the job runs inside the cloned repository that contains the manifest. If your tool code lives in a *different* repository, use the top-level `repo_url` field:
+
+```yaml title="runnables.yaml"
+name: My Pipeline
+repo_url: https://github.com/org/pipeline-code
+runnables:
+  - id: run
+    name: Run Pipeline
+    command: nextflow run main.nf
+    parameters: []
+```
+
+When `repo_url` is set:
+
+- The discovery repo (containing `runnables.yaml`) is used only for manifest metadata.
+- The tool repo (`repo_url`) is cloned separately and used as the working directory for the job.
+
+Repos are cloned into a per-user cache on first use and reused across runs; jobs never pull automatically. To get the newest code, use the **Update** action for the app in the UI, which pulls the latest code and re-reads the manifest.
+
 ## Where to Go Next
 
 This guide is organized into focused pages:
 
 - **[The Manifest](/authoring/manifest-reference/)** — the full `runnables.yaml` field reference: top-level fields, runnables, resources, and requirements.
 - **[Parameters & Command Building](/authoring/parameters/)** — parameter types, flags, sections, hidden parameters, and exactly how user input becomes a shell command.
-- **[Execution Environment](/authoring/execution/)** — conda environments, containers, pre/post-run scripts, environment variables, the generated job script, and using a separate tool repo.
+- **[Execution Environment](/authoring/execution/)** — conda environments, containers, pre/post-run scripts, environment variables, the generated job script, and the job lifecycle.
 - **[Services](/authoring/services/)** — long-running entry points like notebooks, viewers, and APIs.
 - **[Auto-Detected Projects](/authoring/auto-detection/)** — how Nextflow and Pixi repositories become apps automatically.
 - **[Server Configuration](/authoring/server-config/)** — settings controlled by the server administrator (`extra_paths`, container cache).
