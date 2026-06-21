@@ -44,6 +44,23 @@ echo "Conversion complete"
 
 A requirement check (see [Requirements](/authoring/manifest-reference/#requirements)) runs at job runtime once `$PATH`, conda, and environment variables are set up — but before your `pre_run` script and main command — so unmet requirements fail the job before any of your code runs.
 
+## Working Directory
+
+Every job gets a private **work directory** (`$FG_WORK_DIR`), and the cloned project is symlinked into it as `repo`. The `working_dir` runnable field controls which of these the command runs from:
+
+- **`repo`** (default for most runnables) — the script `cd`s into `$FG_WORK_DIR/repo` (or the manifest's subdirectory within it). Use this when the command relies on the project being the current directory — for example Pixi tasks, or scripts that reference sibling files with relative paths.
+- **`work`** (default for **container** runnables) — the script `cd`s into `$FG_WORK_DIR`. The project is still reachable via the `repo` symlink (e.g. `nextflow run repo`). Use this for tools that should write their outputs into a clean per-job directory rather than the shared repo cache.
+
+```yaml
+runnables:
+  - id: run
+    name: Run Pipeline
+    command: nextflow run repo
+    working_dir: work
+```
+
+Containers default to `work` because the repo clone is **not** bind-mounted into the container (only the work directory and your file/directory parameters are), so a container's current directory should be the work dir. A container runnable that genuinely needs the project can set `working_dir: repo` and bind it explicitly.
+
 ## Environment Variables
 
 The `env` field defines default environment variables exported before the main command runs. Each entry is a `KEY: value` pair.
