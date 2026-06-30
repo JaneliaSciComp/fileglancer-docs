@@ -54,19 +54,21 @@ Apps are added by providing a GitHub repository URL. The repository must contain
    Click **Apps** in the navigation bar to open the Apps page.
 
 2. **Click "Add App"**<br/>
-   The Add App dialog opens with fields for the GitHub repository URL and an optional branch name.
+   The Add App dialog opens with a field for the **GitHub Repository URL** and an optional **Revision** field (a tag or branch name).
 
 3. **Enter the repository URL**<br/>
-   Paste the full GitHub URL (e.g. `https://github.com/org/repo`). If the tool lives on a specific branch, enter the branch name as well. Otherwise, the default branch is used.
+   Paste the full GitHub URL (e.g. `https://github.com/org/repo`). To pin the app to a specific tag or branch, fill in the **Revision** field as well. If you leave it blank, Fileglancer uses the repository's default branch.
 
 4. **Click "Add App"**<br/>
    Fileglancer clones the repository and searches for manifest files. If found, the app appears as a card on the Apps page. A single repository can contain multiple apps if it has manifests in different subdirectories.
+
+   The revision is **fixed when the app is added**: the exact tag, branch, or default branch resolved at add time is recorded, so future launches keep using that same version even if the repository's default branch later moves. To track a different revision, re-add the app. See [Updating an App](#updating-an-app) for how to pull newer commits on the pinned revision.
 </Steps>
 
 <StyledImage
   lightSrc={lightAddAppDialog}
   darkSrc={darkAddAppDialog}
-  alt="The 'Add App' dialog with fields for GitHub repository URL and branch name."
+  alt="The 'Add App' dialog with a field for the GitHub repository URL and an optional revision (tag or branch)."
 />
 
 ### What Fileglancer Looks For
@@ -118,17 +120,17 @@ Once an app is added, you can launch it as a job on the compute cluster.
 3. **Fill in parameters on the launch form**<br/>
    The form shows the app's parameters with their types, defaults, and descriptions. For `file` and `directory` parameters, a browse button lets you pick paths from the Fileglancer file browser. Required parameters are marked and validated before submission.
 
-4. **Review resources and environment (optional)**<br/>
-   Switch to the **Cluster** tab and open the Resources section to adjust CPU, memory, and walltime requests. The **Environment** tab lets you set environment variables, pre/post-run scripts, and tool-specific options like Nextflow profiles.
+4. **Review the cluster and environment settings (optional)**<br/>
+   Switch to the **Cluster** tab to adjust CPU, memory, walltime, and queue requests, along with any extra scheduler arguments. The **Environment** tab lets you set environment variables, pre/post-run scripts, and tool-specific options like Nextflow profiles.
 
-5. **Click "Submit"**<br/>
-   The job is submitted to the cluster and you are redirected to the Jobs page. A toast notification confirms the submission.
+5. **Click "Submit Job"**<br/>
+   Click **Submit Job** (or **Start Service** for a service entry point). The job is submitted to the cluster and you are redirected to the Jobs page. A toast notification confirms the submission.
 </Steps>
 
 
 ### Tips for Launching
 
-- **Run the latest version**: If the app's code is actively developed, use **Update** in the app's info dialog before launching to re-fetch the newest manifest and code from the repository.
+- **Running the latest code**: Each launch uses the revision that was pinned when the app was added. If the app's code is actively developed, use the **Update** action in the app's info dialog to pull the newest commits on that revision before launching (see [Updating an App](#updating-an-app)).
 - **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
 - **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
 
@@ -162,6 +164,7 @@ The Jobs page displays a table with the following columns:
 Click an entry point name in the jobs table (or select **View Details** from the actions menu) to open the detail view. This page shows:
 
 - **Header** — app name, entry point, status badge, and timestamps (submitted, started, finished, exit code)
+- **Overview tab** — a summary of the job: its app, entry point, status, and resource requests
 - **Parameters tab** — the parameter values that were used for this job
 - **Script tab** — the generated shell script that was submitted to the cluster, with a link to the script file on disk
 - **Output Log tab** — the job's stdout, streamed in near-real-time while the job is running. Includes a download button
@@ -191,7 +194,7 @@ Each app card has an **info button** (the "i" icon) that opens a dialog with det
 
 ### Updating an App
 
-If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app from the info dialog. This re-fetches the manifest from the repository.
+If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app from the info dialog with the **Update** button. This pulls the newest commits on the app's **pinned revision** and re-reads the manifest. Updating does not change which revision the app tracks — for a branch pin it fetches new commits on that branch, while a tag or commit pin has nothing newer to pull. To move an app to a different revision, re-add it from the new URL.
 
 <StyledImage
   lightSrc={lightAppInfoDialog}
@@ -201,41 +204,32 @@ If the source repository has been updated (e.g. new parameters added, commands c
 
 ### Removing an App
 
-Click the **trash icon** on an app card, or the **Remove** button in the app's info dialog, to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing.
+Click the **trash icon** on an app card, or the **Remove** button in the app's info dialog, to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing — unshare it first if you want to take it down.
 
-## Using the App Catalog
+## Sharing Apps
 
-The Apps area has two views, selectable from the navigation at the top of the page: **My Apps** (the apps in your personal library) and **App Catalog** (apps that other users have shared). The catalog lets you discover and reuse apps without needing the GitHub URL.
+There are two ways to share an app with colleagues: publishing it to the shared **App Catalog**, or sending someone a direct launch URL.
 
-### Browsing the catalog
+### The App Catalog
 
-Open **App Catalog** to see all shared apps. Each listing shows the app name, description, and who shared it. You can:
+The Apps area has three tabs: **My Apps** (the apps in your library), **App Catalog** (apps shared by anyone on the server), and **Jobs** (your job history).
 
-- **Search** by app name, description, or owner using the search box
-- **Hide installed** apps you already have in your library, using the toggle, so you only see new ones
+To share one of your apps, click the **Share to catalog** icon on its app card (or **Share** from the app's info dialog). You can give the listing a custom **name** and **description** for the catalog — these only affect the catalog entry, not your own copy of the app. Once shared, the app is visible to every Fileglancer user in the **App Catalog** tab.
 
-### Adding an app from the catalog
+To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add to my apps**. This copies the app — pinned to the same revision the publisher shared — into your own library, where it behaves like any other app you added.
 
-Open a listing's info dialog and click **Add to my apps**. The app is added to your library just as if you had entered its GitHub URL, and it then appears under **My Apps** where you can launch it.
+The publisher can edit the listing's name and description at any time, or click **Unshare from catalog** to remove it. Unsharing only removes the catalog listing; it does not affect copies that others have already added to their own libraries.
 
-### Sharing your apps
+### Sharing by URL
 
-To share one of your own apps so others can find it in the catalog, open the app's info dialog and click **Share to Catalog**. Shared apps display a **Shared** badge on their card in My Apps.
-
-To stop sharing, click **Unshare** (from the listing's info dialog or your app card). Unsharing removes the catalog listing but leaves the app in your own library. Likewise, removing a shared app from your library does **not** remove its catalog listing — unshare it first if you want to take it down.
-
-Catalog listings point at the owner's repository and branch. Other users always add the app from that source, so they get whatever the repository currently contains when they add or update it.
-
-## Sharing Apps by URL
-
-Apps can be launched directly via URL without being added to your library first. If someone shares a launch URL with you, Fileglancer will load the app manifest and show the launch form. A banner at the top offers to **Install** the app to your library for quick access later.
+Apps can also be launched directly via URL without being added to your library first. If someone shares a launch URL with you, Fileglancer loads the app manifest and shows the launch form. A banner at the top offers to **Install App** to add it to your library for quick access later.
 
 ## Troubleshooting
 
 **App fails to add**
 - Verify the GitHub URL is correct and the repository is accessible
 - Check that the repository contains a `runnables.yaml`, `nextflow_schema.json`, or `pixi.toml` file
-- If using a specific branch, make sure the branch name is correct
+- If you pinned a specific revision, make sure the tag or branch name is correct
 
 **Job stays in PENDING**
 - The cluster may be busy. Check cluster load or try requesting fewer resources

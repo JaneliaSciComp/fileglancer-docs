@@ -5,10 +5,10 @@ description: How Fileglancer automatically turns Nextflow pipelines and Pixi pro
 
 import { Aside } from '@astrojs/starlight/components';
 
-You don't always have to write a `runnables.yaml` by hand. If a repository contains no `runnables.yaml` anywhere, Fileglancer checks the repository **root** for a recognized project format and generates a manifest automatically. This means many existing Nextflow pipelines and Pixi projects work as Fileglancer apps with no extra files.
+You don't always have to write a `runnables.yaml` by hand. If a repository contains no `runnables.yaml` at all, Fileglancer looks for recognized project formats at the repository root and generates a manifest automatically. This means many existing Nextflow pipelines and Pixi projects work as Fileglancer apps with no extra files.
 
 <Aside type="tip" title="A hand-written manifest always wins">
-Hand-written manifests take priority. If Fileglancer finds **any** `runnables.yaml` in the repository, it uses those manifests and skips auto-detection entirely. To customize an auto-detected app — change the command, add resources, or reorganize parameters — add a `runnables.yaml` at the repository root and it will be used instead of the generated manifest.
+Auto-detection runs only when the repository contains **no `runnables.yaml` anywhere**, and it inspects the repository root only. Adding a single `runnables.yaml` — even in a subdirectory — disables auto-detection for the whole repository. To customize an auto-detected app — change the command, add resources, or reorganize parameters — commit a `runnables.yaml` at the repository root and it will be used instead.
 </Aside>
 
 ## Nextflow Pipelines
@@ -43,7 +43,7 @@ If a directory contains a `pixi.toml`, or a `pyproject.toml` with a `[tool.pixi.
 - Uses `pixi run <task_name>` as the command for each runnable, with the task name as both the `id` and display name.
 - Takes each runnable's description from the task's `description` field.
 - Converts task arguments (`args`) into parameters: an arg with `choices` becomes an `enum`, an arg with a `default` carries it over, and an arg with neither is marked required.
-- Maps each task `env` variable to the runnable's `env` defaults, so the configured values are exported in the generated job script (and can be overridden via the launch form's Environment tab).
+- Carries over each task's `env` variables as the runnable's default environment variables. They are exported in the generated job script and appear on the launch form's **Environment** tab, where users can override them.
 - Prepends `export PATH="$HOME/.pixi/bin:$PATH"` as a `pre_run` step so the `pixi` binary is on `$PATH`.
 - Derives the app **name** from the repository as `repo/branch` when added from a Git clone (falling back to the project metadata `name` otherwise), and takes the **description** from the project metadata.
 - Collects tasks from both the top-level task table and feature-specific task sections.
