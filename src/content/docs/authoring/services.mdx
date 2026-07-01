@@ -30,9 +30,53 @@ From the cluster's perspective, a service is just a long-running batch job. The 
 5. The user clicks **Open Service** → the service opens in a new browser tab.
 6. When done, the user clicks **Stop Service** → the job is killed and the URL disappears.
 
+## The Easy Path: Let Fileglancer Manage the Port and URL
+
+For most services you don't need to write any port-discovery or URL-writing code. For every service-type job Fileglancer exports two variables into the job environment:
+
+- `FG_SERVICE_PORT` — a free TCP port picked on the compute node at job start.
+- `FG_HOSTNAME` — the compute node's hostname.
+
+Bind your service to `$FG_SERVICE_PORT`, and set `auto_url: true` on the runnable so Fileglancer writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` for you.
+
+Because the port is chosen before your command runs and substituted straight into the command line, this works even for container runnables — no wrapper script inside the image is needed:
+
+```yaml title="runnables.yaml"
+runnables:
+  - id: serve
+    name: Code Server
+    type: service
+    auto_url: true
+    container: ghcr.io/coder/code-server:latest
+    command: code-server --bind-addr 0.0.0.0:$FG_SERVICE_PORT --auth none
+    requirements:
+      - apptainer
+    resources:
+      cpus: 2
+      memory: "8 GB"
+      walltime: "08:00"
+```
+
+The same pattern works without a container:
+
+```yaml title="runnables.yaml"
+runnables:
+  - id: notebook
+    name: JupyterLab
+    type: service
+    auto_url: true
+    command: jupyter lab --no-browser --ip=0.0.0.0 --port=$FG_SERVICE_PORT
+    requirements:
+      - pixi
+```
+
+<Aside type="note" title="auto_url writes the URL before the service is listening">
+With `auto_url`, the URL file is written as soon as the job starts, so the UI may briefly show a link that isn't accepting connections yet while the service finishes binding. If you need the link to appear only once the service is truly ready, leave `auto_url` unset and write `SERVICE_URL_PATH` yourself after a readiness check (see below).
+</Aside>
+
 ## Writing the Service URL
 
-For service-type runnables, Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
+If your service picks its own port, needs a readiness check before advertising, or serves a non-trivial URL, write `SERVICE_URL_PATH` yourself instead of using `auto_url`. Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
 
 In Python:
 
