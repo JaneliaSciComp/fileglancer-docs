@@ -1,6 +1,6 @@
 ---
 title: Server Configuration
-description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH and configuring the container cache directory.
+description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH — plus where container images are cached.
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -30,6 +30,6 @@ These paths are:
 
 ## Container Cache Directory
 
-By default, Apptainer container images (SIF files) are cached at `~/.fileglancer/apptainer_cache/`. Users can override this per-user in the Preferences page under "Container cache directory".
+By default, Apptainer container images (SIF files) are cached at `~/.fileglancer/apptainer_cache/`. There is no server-level setting for this; users override it individually in the Preferences page under "Container cache directory".
 
 See [Containers (Apptainer)](/authoring/execution/#containers-apptainer) for how the cache is used during a job.

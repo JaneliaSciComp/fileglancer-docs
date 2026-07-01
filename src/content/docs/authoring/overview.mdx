@@ -81,15 +81,16 @@ python greet.py --message 'Hello!' --repeat '3'
 
 ## Manifest Discovery
 
-When a user adds a GitHub repository, Fileglancer clones it and walks the directory tree looking for manifest files. These are resolved in the following precedence order:
+When a user adds a GitHub repository, Fileglancer clones it and discovers apps in two passes:
 
-- **`runnables.yaml`** — an explicit Fileglancer manifest that always takes priority.
-- **`nextflow_schema.json`** — a Nextflow pipeline. Fileglancer auto-generates a runnable for the pipeline. 
-- **`pixi.toml`** (or `pyproject.toml` with `[tool.pixi.tasks]`) — a Pixi project. Each task becomes a runnable.
+1. **Walk the tree for `runnables.yaml`.** Fileglancer scans the entire repository (skipping the directories listed below) and registers a separate app for every `runnables.yaml` it finds. This is the explicit, hand-written manifest format.
+2. **Fall back to auto-detection — only if no `runnables.yaml` exists anywhere.** If the walk turns up no `runnables.yaml` at all, Fileglancer tries its auto-detection adapters against the **repository root**:
+   - **`nextflow_schema.json`** — a Nextflow pipeline. Fileglancer auto-generates a runnable for the pipeline.
+   - **`pixi.toml`** (or `pyproject.toml` with a `[tool.pixi.tasks]` table) — a Pixi project. Each task becomes a runnable.
 
-See [Auto-Detected Projects](/authoring/auto-detection/) for how Nextflow and Pixi repositories are converted, and how to override the result.
+In other words, a single `runnables.yaml` anywhere in the repository disables auto-detection for the whole repository, and auto-detection only ever inspects the repository root (not subdirectories). See [Auto-Detected Projects](/authoring/auto-detection/) for how Nextflow and Pixi repositories are converted, and how to override the result.
 
-The following directories are skipped during discovery: `.git`, `node_modules`, `__pycache__`, `.pixi`, `.venv`, `venv`.
+The following directories are skipped during the walk: `.git`, `node_modules`, `__pycache__`, `.pixi`, `.venv`, `venv`.
 
 ### Multi-App Repositories
 

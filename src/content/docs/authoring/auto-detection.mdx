@@ -5,10 +5,10 @@ description: How Fileglancer automatically turns Nextflow pipelines and Pixi pro
 
 import { Aside } from '@astrojs/starlight/components';
 
-You don't always have to write a `runnables.yaml` by hand. If a directory doesn't contain one, Fileglancer looks for recognized project formats and generates a manifest automatically. This means many existing Nextflow pipelines and Pixi projects work as Fileglancer apps with no extra files.
+You don't always have to write a `runnables.yaml` by hand. If a repository contains no `runnables.yaml` at all, Fileglancer looks for recognized project formats at the repository root and generates a manifest automatically. This means many existing Nextflow pipelines and Pixi projects work as Fileglancer apps with no extra files.
 
 <Aside type="tip" title="A hand-written manifest always wins">
-If a directory contains a `runnables.yaml`, it takes priority and auto-detection is skipped for that directory. To customize an auto-detected app — change the command, add resources, or reorganize parameters — drop a `runnables.yaml` next to the project file and it will be used instead.
+Auto-detection runs only when the repository contains **no `runnables.yaml` anywhere**, and it inspects the repository root only. Adding a single `runnables.yaml` — even in a subdirectory — disables auto-detection for the whole repository. To customize an auto-detected app — change the command, add resources, or reorganize parameters — commit a `runnables.yaml` at the repository root and it will be used instead.
 </Aside>
 
 ## Nextflow Pipelines
@@ -16,7 +16,7 @@ If a directory contains a `runnables.yaml`, it takes priority and auto-detection
 If a directory contains a `nextflow_schema.json` (and no `runnables.yaml`), Fileglancer generates a manifest from the Nextflow schema. The generated app:
 
 - Sets `requirements` to `["nextflow"]`.
-- Defines a single entry point named **"Run pipeline"** with the command `nextflow run . -ansi-log false`.
+- Defines a single entry point named **"Run pipeline"** with the command `nextflow run repo -ansi-log false` and [`working_dir: work`](/authoring/execution/#working-directory), so it launches from the job's work directory. Running there (rather than inside the cloned repo) keeps Nextflow's `.nextflow.log`, `.nextflow/` cache, and `work/` directory in the per-job work directory instead of the shared repo cache. `repo` is a symlink to the clone, and the directory form lets Nextflow resolve the pipeline's main script from its `main.nf` or manifest.
 - Derives the app **name** from the repository as `owner/repo`, and takes the **description** from the schema's top-level `description`.
 - Converts each JSON Schema parameter into a Fileglancer parameter, preserving types, defaults, descriptions, required flags, `enum` options, and `hidden` status.
 - Groups parameters into [sections](/authoring/parameters/#parameter-sections) based on the schema's `definitions`/`$defs`, ordered by the schema's `allOf` list. Section titles and descriptions come from each definition's `title`, `description`, and `help_text`. All sections start expanded.
@@ -27,7 +27,7 @@ If a directory contains a `nextflow_schema.json` (and no `runnables.yaml`), File
 These tool-level flags are emitted *before* the pipeline parameters, so the generated command is well-formed:
 
 ```bash
-nextflow run . -ansi-log false \
+nextflow run repo -ansi-log false \
   -profile 'standard,docker' \
   -resume \
   --input '/data/input'
@@ -43,9 +43,9 @@ If a directory contains a `pixi.toml`, or a `pyproject.toml` with a `[tool.pixi.
 - Uses `pixi run <task_name>` as the command for each runnable, with the task name as both the `id` and display name.
 - Takes each runnable's description from the task's `description` field.
 - Converts task arguments (`args`) into parameters: an arg with `choices` becomes an `enum`, an arg with a `default` carries it over, and an arg with neither is marked required.
-- Exposes each task `env` variable as a **hidden** parameter (with a flag of the form `--env:VARNAME`) so the configured value is visible in the UI without cluttering the form.
+- Carries over each task's `env` variables as the runnable's default environment variables. They are exported in the generated job script and appear on the launch form's **Environment** tab, where users can override them.
 - Prepends `export PATH="$HOME/.pixi/bin:$PATH"` as a `pre_run` step so the `pixi` binary is on `$PATH`.
-- Reads the project `name` and `description` from the project metadata.
+- Derives the app **name** from the repository as `repo/branch` when added from a Git clone (falling back to the project metadata `name` otherwise), and takes the **description** from the project metadata.
 - Collects tasks from both the top-level task table and feature-specific task sections.
 
 Tasks are skipped when they are:
@@ -71,4 +71,4 @@ args = [
 ]
 ```
 
-Fileglancer generates an app named "demo" with a single **greet** runnable that runs `pixi run greet`, offering a free-text **message** parameter and a **style** dropdown (`plain` / `fancy`).
+Fileglancer generates an app with a single **greet** runnable that runs `pixi run greet`, offering a free-text **message** parameter and a **style** dropdown (`plain` / `fancy`). 
