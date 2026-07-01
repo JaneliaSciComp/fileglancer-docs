@@ -39,6 +39,7 @@ Each runnable defines a single command that users can launch. If a manifest has 
 | `bind_paths` | list of strings | no | Additional paths to bind-mount into the container (requires `container`) |
 | `container_args` | string | no | Default extra arguments for container exec (e.g. `--nv`), overridable at launch time |
 | `working_dir` | string | no | Where the command runs: `repo` (the cloned project, optionally the manifest's subdirectory) or `work` (the job's work directory). Defaults to `work` for container runnables and `repo` otherwise (see [Execution Environment](/authoring/execution/#working-directory)) |
+| `auto_url` | boolean | no | Service runnables only. When `true`, Fileglancer writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` for you — bind your service to `$FG_SERVICE_PORT` and you don't need any URL-writing code (see [Services](/authoring/services/)) |
 | `requirements` | list of strings | no | Additional tool requirements specific to this runnable, merged with manifest-level requirements |
 
 A manifest with two runnables:
