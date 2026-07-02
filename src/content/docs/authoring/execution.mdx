@@ -193,7 +193,7 @@ APPTAINER_CACHE_DIR=$HOME/.fileglancer/apptainer_cache
 mkdir -p "$APPTAINER_CACHE_DIR"
 SIF_PATH="$APPTAINER_CACHE_DIR/godlovedc_lolcow.sif"
 if [ ! -f "$SIF_PATH" ]; then
-  apptainer pull "$SIF_PATH" 'docker://godlovedc/lolcow'
+  apptainer pull --disable-cache "$SIF_PATH" 'docker://godlovedc/lolcow'
 fi
 apptainer exec --bind /home/user/.fileglancer/jobs/1-lolcow-say "$SIF_PATH" \
   cowsay \
@@ -220,7 +220,7 @@ container_args: "--nv"
 `conda_env` and `container` cannot both be set on the same entry point.
 </Aside>
 
-The SIF cache directory defaults to `~/.fileglancer/apptainer_cache/` and can be overridden per-user in Preferences (see [Server Configuration](/authoring/server-config/#container-cache-directory)).
+The SIF cache directory defaults to `~/.fileglancer/apptainer_cache/` and can be overridden per-user in Preferences (see [Server Configuration](/authoring/server-config/#container-cache-directory)). The pull uses `--disable-cache`, so the `.sif` in this directory is the only cached copy — Apptainer's own layer/SIF cache (`~/.apptainer/cache`) is not populated, avoiding a second multi-gigabyte copy of every image. The image is re-pulled only if its `.sif` is deleted.
 
 ## Job Lifecycle
 
