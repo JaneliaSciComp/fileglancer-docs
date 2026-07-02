@@ -38,7 +38,7 @@ For most services you don't need to write any port-discovery or URL-writing code
 - `FG_HOSTNAME` — the compute node's hostname.
 - `FG_SERVICE_TOKEN` — a URL-safe random secret you can use for auth.
 
-Bind your service to `$FG_SERVICE_PORT` and set `auto_url: true`. Fileglancer then **waits until that port is accepting connections** and only then writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` — so the **Open Service** link never appears before your service (or a still-pulling container image) is ready.
+Bind your service to `$FG_SERVICE_PORT` and set `auto_url: true`. Fileglancer then **waits until that port is accepting connections** and only then writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` — so the **Open Service** link never appears before your service (or a still-pulling container image) is ready. While a first-launch container image is still downloading, the job page shows a **"Downloading container image…"** message so the wait is explained rather than mysterious.
 
 Because the port is chosen before your command runs and substituted straight into the command line, this works even for container runnables — no wrapper script inside the image is needed:
 
