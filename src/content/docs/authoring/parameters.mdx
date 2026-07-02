@@ -25,6 +25,7 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `pattern` | string | no | Regex validation pattern (only for `string` type, uses full match) |
 | `hidden` | boolean | no | Whether the parameter is hidden by default in the UI. Default: `false` |
 | `raw` | boolean | no | If `true`, the value is appended to the command without shell quoting. Validated against shell metacharacters for safety. Default: `false` |
+| `create_if_missing` | boolean | no | Only valid on `directory` parameters. If `true`, Fileglancer creates the directory (as the user, within an allowed file share) before the existence check, so a home default like `~/.fileglancer/logs` works on first launch. Default: `false` |
 
 ## Parameter Types
 
@@ -44,6 +45,7 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 - Paths are validated server-side before job submission (must exist and be accessible).
 - Both absolute paths (`/data/images`) and home-relative paths (`~/output`) are accepted.
 - Shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, `(`, `)`, etc.) are rejected for safety.
+- `directory` parameters can set `create_if_missing: true`. Fileglancer then creates the resolved directory (as the user, within an allowed file share) just before the existence check, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. Useful for a default output or logs directory.
 
 ## Flag Forms
 
