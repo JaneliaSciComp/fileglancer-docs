@@ -58,7 +58,7 @@ Apps are added by providing a GitHub repository URL. The repository must contain
 4. **Click "Continue"**<br/>
    Fileglancer clones the repository and searches for manifest files. If found, the app appears as a card on the Apps page. A single repository can contain multiple apps if it has manifests in different subdirectories — in that case you are shown the discovered apps and can choose which ones to add.
 
-   The revision is **fixed when the app is added**: the exact tag, branch, or default branch resolved at add time is recorded, so future launches keep using that same version even if the repository's default branch later moves. To track a different revision, re-add the app. See [Updating an App](#updating-an-app) for how to pull newer commits on the pinned revision.
+   The revision is **fixed when the app is added**: the exact tag, branch, or default branch resolved at add time is recorded, and the app is **pinned to the exact commit** at the tip of that revision. Every launch runs that same commit — even if new commits land upstream later — until you explicitly update the app. To track a different revision, re-add the app. See [Updating an App](#updating-an-app) for how to move an app to newer commits on its pinned revision.
 </Steps>
 
 <StyledImage
@@ -126,7 +126,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 
 ### Tips for Launching
 
-- **Running the latest code**: Each launch uses the revision that was pinned when the app was added. If the app's code is actively developed, use the **Update** button on the app's detail page to pull the newest commits on that revision before launching (see [Updating an App](#updating-an-app)).
+- **Running the latest code**: Each launch runs the exact commit the app is pinned to, so repeated runs are reproducible. If the app's code is actively developed, watch for the amber **Update available** tag on the app's card and use the **Update** button to move to the newest commit before launching (see [Updating an App](#updating-an-app)).
 - **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
 - **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
 
@@ -160,7 +160,7 @@ The Jobs page displays a table with the following columns:
 Click an entry point name in the jobs table (or select **View Details** from the actions menu) to open the detail view. This page shows:
 
 - **Header** — app name, entry point, and status badge, with a back arrow that returns to the jobs list
-- **Overview tab** — a summary of the job: its app (linked to the app's detail page), entry point, status, timestamps (submitted, started, finished, exit code), and resource requests
+- **Overview tab** — a summary of the job: its app (linked to the app's detail page), entry point, the exact commit the job executed (**Version**, linked to GitHub), status, timestamps (submitted, started, finished, exit code), and resource requests
 - **Parameters tab** — the parameter values that were used for this job
 - **Script tab** — the generated shell script that was submitted to the cluster, with a link to the script file on disk
 - **Output Log tab** — the job's stdout, streamed in near-real-time while the job is running. Includes a download button
@@ -180,17 +180,19 @@ Some apps define **service** entry points — long-running processes like Jupyte
 
 ### The App Detail Page
 
-Click anywhere on an app card to open the app's detail page. It shows the app's source repository, pinned revision, and description; a card for each entry point with its own **Launch** button; and the app's most recent jobs, linking to their detail pages. The page header has buttons for sharing and updating the app, and a back arrow that returns to My Apps.
+Click anywhere on an app card to open the app's detail page. It shows the app's source repository, pinned revision, current **Version** (the exact commit the app is pinned to, linked to GitHub), and description; a card for each entry point with its own **Launch** button; and the app's most recent jobs, linking to their detail pages. The page header has buttons for sharing and updating the app, and a back arrow that returns to My Apps.
 
 Each app card also has an actions menu (the vertical "⋮" button in the card's banner) with quick access to **Launch**, **View** (the detail page), **Share to Catalog**/**Unshare**, **Update**, and **Remove**.
 
 ### Updating an App
 
-If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app with the **Update** button on its detail page, or **Update** in the app card's actions menu. This pulls the newest commits on the app's **pinned revision** and re-reads the manifest. Updating does not change which revision the app tracks — for a branch pin it fetches new commits on that branch, while a tag or commit pin has nothing newer to pull. To move an app to a different revision, re-add it from the new URL.
+If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app with the **Update** button on its detail page, or **Update** in the app card's actions menu. This pulls the newest commits on the app's **pinned revision**, re-reads the manifest, and pins the app to the new tip commit — the toast reports the new version (e.g. "Updated to a1b2c3d") or "Already up to date". Fileglancer periodically compares your pinned commits against the source repositories and shows an amber **Update available** tag on the app's card and detail page when newer commits exist.
+
+Updates are **per-app**. Every app is pinned to an exact commit, and jobs run from a private checkout of that commit, so updating one app never changes the code that other apps from the same repository run — and never affects jobs that are already queued or running; they keep executing the version they were submitted with. Updating also does not change which revision the app tracks — for a branch pin it moves to the newest commit on that branch, while a tag or commit pin has nothing newer to pull. To move an app to a different revision, re-add it from the new URL.
 
 ### Removing an App
 
-Select **Remove** from the app card's actions menu (or from the "⋮" menu on the app's detail page) to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing — unshare it first if you want to take it down.
+Select **Remove** from the app card's actions menu (or from the "⋮" menu on the app's detail page) to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. Code checkouts that no app or recent job references are cleaned up automatically in the background. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing — unshare it first if you want to take it down.
 
 ## Sharing Apps
 
@@ -202,7 +204,7 @@ The Apps area has three tabs: **My Apps** (the apps in your library), **App Cata
 
 To share one of your apps, click **Share to Catalog** on its detail page (or select it from the app card's actions menu). You can give the listing a custom **name** and **description** for the catalog — these only affect the catalog entry, not your own copy of the app. Once shared, the app is visible to every Fileglancer user in the **App Catalog** tab, and the card shows a green **Shared** tag.
 
-To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card. Clicking the card opens the listing's detail page, which shows who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Adding copies the app — pinned to the same revision the publisher shared — into your own library, where it behaves like any other app you added.
+To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card. Clicking the card opens the listing's detail page, which shows who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Adding copies the app into your own library — it tracks the same revision the publisher shared, pinned to that revision's newest commit at install time — where it behaves like any other app you added.
 
 The publisher can select **Unshare** from the listing's actions menu to remove it from the catalog. Unsharing only removes the catalog listing; it does not affect copies that others have already added to their own libraries.
 

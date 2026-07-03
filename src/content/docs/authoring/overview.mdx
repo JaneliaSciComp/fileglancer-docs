@@ -109,6 +109,8 @@ my-repo/
 
 Each manifest is discovered and registered as a separate app. When a job runs, the working directory is set to the subdirectory containing the manifest, so relative paths in commands resolve correctly.
 
+Each app in a multi-app repository is versioned independently: it is pinned to an exact commit when added, and updating one app moves only that app's pin — the others keep running the commit they were pinned to.
+
 ### Separate Tool Repo
 
 By default, the job runs inside the cloned repository that contains the manifest. If your tool code lives in a *different* repository, use the top-level `repo_url` field:
@@ -128,7 +130,7 @@ When `repo_url` is set:
 - The discovery repo (containing `runnables.yaml`) is used only for manifest metadata.
 - The tool repo (`repo_url`) is cloned separately and used as the working directory for the job.
 
-Repos are cloned into a per-user cache on first use and reused across runs; jobs never pull automatically. To get the newest code, use the **Update** action for the app in the UI, which pulls the latest code and re-reads the manifest.
+Repos are cloned into a per-user cache, and every app is **pinned to an exact commit** when it is added. Jobs run from an immutable per-commit checkout of the pinned code — they never pull automatically, and nothing can change a job's code while it runs. To get the newest code, use the **Update** action for the app in the UI, which pulls the latest commits on the app's revision, re-reads the manifest, and re-pins the app (both the manifest repo and the `repo_url` tool repo, when one is declared). Updates are per-app: other apps sharing the same repository keep their own pinned commits.
 
 ## Where to Go Next
 
