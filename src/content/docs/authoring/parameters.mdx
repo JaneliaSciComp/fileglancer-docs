@@ -25,7 +25,7 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `pattern` | string | no | Regex validation pattern (only for `string` type, uses full match) |
 | `hidden` | boolean | no | Whether the parameter is hidden by default in the UI. Default: `false` |
 | `raw` | boolean | no | If `true`, the value is appended to the command without shell quoting. Validated against shell metacharacters for safety. Default: `false` |
-| `create_if_missing` | boolean | no | Only valid on `directory` parameters. If `true`, Fileglancer creates the directory (as the user, within an allowed file share) before the existence check, so a home default like `~/.fileglancer/logs` works on first launch. Default: `false` |
+| `exists` | boolean | no | Only valid on `file` and `directory` parameters. When `true` (the default), the path must exist and be readable before launch. Set `false` for outputs the job creates: the existence check is skipped, and `directory` parameters are created (as the user, within an allowed file share) before launch, so a home default like `~/.fileglancer/logs` works on first launch. Default: `true` |
 
 ## Parameter Types
 
@@ -35,17 +35,18 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `integer` | Number input (step=1) | `--flag 42` | `42` | Must be a whole number. Optional `min`/`max` bounds |
 | `number` | Number input | `--flag 3.14` | `3.14` | Must be numeric. Optional `min`/`max` bounds |
 | `boolean` | Checkbox | `--flag` (if true, omitted if false) | N/A | Must be true/false |
-| `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists and is readable on the server |
-| `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists and is readable on the server |
+| `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
+| `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
 | `enum` | Dropdown select | `--flag 'chosen_value'` | `'chosen_value'` | Value must be one of the `options` list |
 
 **Notes on `file` and `directory` types:**
 
 - The UI provides a browse button alongside the text input, so users can pick paths from the Fileglancer file browser instead of typing them.
-- Paths are validated server-side before job submission (must exist and be accessible).
+- Paths are validated server-side before job submission (must exist and be accessible, unless `exists: false`).
 - Both absolute paths (`/data/images`) and home-relative paths (`~/output`) are accepted.
 - Shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, `(`, `)`, etc.) are rejected for safety.
-- `directory` parameters can set `create_if_missing: true`. Fileglancer then creates the resolved directory (as the user, within an allowed file share) just before the existence check, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. Useful for a default output or logs directory.
+- Set `exists: false` on paths the job creates, such as an output or logs directory. The path is still validated for file-share containment, but not for existence. Fileglancer additionally creates `exists: false` directories (as the user, within an allowed file share) just before launch, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. `file` parameters with `exists: false` skip the existence check but nothing is created for them.
+- Apps auto-detected from a Nextflow pipeline's `nextflow_schema.json` follow the same convention as [nf-schema](https://nextflow-io.github.io/nf-schema/): a path parameter only requires existence when the schema property sets `"exists": true`.
 
 ## Flag Forms
 
