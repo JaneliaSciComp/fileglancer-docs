@@ -3,7 +3,7 @@ title: Apps and Jobs
 description: Run command-line tools on the compute cluster directly from Fileglancer. Add apps from GitHub repositories, configure parameters, and monitor job status.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import { Steps, Aside } from '@astrojs/starlight/components';
 import StyledImage from '@components/StyledImage.astro';
 
 import mascot from '@assets/mascot/fg-hurdle-03.png'
@@ -67,6 +67,10 @@ Apps are added by providing a GitHub repository URL. The repository must contain
   alt="The 'Add App' dialog with a field for the GitHub repository URL and an optional revision (tag or branch)."
 />
 
+<Aside type="caution" title="Apps run code as you">
+Launching an app runs code from its repository on the cluster **as your user**, with access to everything your account can read and write. The add dialog reminds you of this — only add repositories you trust, whether from a URL or from the shared catalog.
+</Aside>
+
 ### What Fileglancer Looks For
 
 When you add a repository, Fileglancer first walks the entire directory tree looking for:
@@ -129,6 +133,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 - **Running the latest code**: Each launch runs the exact commit the app is pinned to, so repeated runs are reproducible. If the app's code is actively developed, watch for the amber **Update available** tag on the app's card and use the **Update** button to move to the newest commit before launching (see [Updating an App](#updating-an-app)).
 - **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
 - **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
+- **Extra scheduler arguments**: The Cluster tab's extra arguments field is split like a shell command line, so you can pass several flags at once and quote values that contain spaces or brackets — e.g. `-P myproject -R "select[mem>8000]"` for LSF.
 
 ## Monitoring Jobs
 
@@ -142,7 +147,7 @@ The Jobs page displays a table with the following columns:
 |--------|-------------|
 | **App** | Name of the app that was launched |
 | **Entry Point** | The specific runnable that was executed (click to view details) |
-| **Status** | Current job state: PENDING, RUNNING, DONE, FAILED, or KILLED |
+| **Status** | Current job state: PENDING, RUNNING, DONE, FAILED, KILLED, or UNKNOWN |
 | **Submitted** | When the job was submitted |
 | **Duration** | How long the job has been running or ran in total |
 | **Actions** | Menu with options to view details, relaunch, cancel, or delete |
@@ -154,6 +159,7 @@ The Jobs page displays a table with the following columns:
 - **DONE** — the job completed successfully
 - **FAILED** — the job exited with a non-zero exit code
 - **KILLED** — the job was cancelled by the user or terminated by the cluster (e.g. walltime exceeded)
+- **UNKNOWN** — the scheduler cannot currently report the job's status (for example, it aged out of the scheduler's history). Unknown jobs are treated as still active: Fileglancer keeps polling them and you can still cancel them, but they cannot be deleted. A job that stays UNKNOWN past a server-configured cutoff (24 hours by default) is marked FAILED
 
 ### Job Detail View
 
@@ -166,7 +172,13 @@ Click an entry point name in the jobs table (or select **View Details** from the
 - **Output Log tab** — the job's stdout, streamed in near-real-time while the job is running. Includes a download button
 - **Error Log tab** — the job's stderr, also available for download
 
-From the detail view you can **Relaunch** the job, which opens the launch form pre-filled with the same parameters so you can re-run or adjust settings.
+Very large logs are shown truncated: only the most recent 5 MB is displayed, with a note about how much was omitted. To see the whole file, open the log from the job's working directory in the file browser.
+
+From the detail view you can **Relaunch** the job, which opens the launch form pre-filled with the same parameters — including Environment-tab settings like Nextflow profiles — so you can re-run or adjust settings.
+
+### Deleting a Job
+
+Select **Delete** from a finished job's actions menu to remove it. Deleting removes the job's record **and its entire working directory** — the generated script, logs, and any files the job wrote there. A confirmation dialog warns you before anything is removed. Files the job wrote elsewhere (e.g. an output directory you chose as a parameter) are not affected. Active jobs (including UNKNOWN ones) must be cancelled before they can be deleted.
 
 ### Services
 
@@ -204,13 +216,15 @@ The Apps area has three tabs: **My Apps** (the apps in your library), **App Cata
 
 To share one of your apps, click **Share to Catalog** on its detail page (or select it from the app card's actions menu). You can give the listing a custom **name** and **description** for the catalog — these only affect the catalog entry, not your own copy of the app. Once shared, the app is visible to every Fileglancer user in the **App Catalog** tab, and the card shows a green **Shared** tag.
 
-To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card. Clicking the card opens the listing's detail page, which shows who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Adding copies the app into your own library — it tracks the same revision the publisher shared, pinned to that revision's newest commit at install time — where it behaves like any other app you added.
+To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card. Clicking the card opens the listing's detail page, which shows who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Every add path opens a confirmation dialog showing the source repository (linked to GitHub), the revision, who shared the app and when — along with a reminder that the app's code runs as your user once launched. Adding copies the app into your own library — it tracks the same revision the publisher shared, pinned to that revision's newest commit at install time — where it behaves like any other app you added.
 
-The publisher can select **Unshare** from the listing's actions menu to remove it from the catalog. Unsharing only removes the catalog listing; it does not affect copies that others have already added to their own libraries.
+After sharing, the publisher can still **edit** the listing — its name, description, repository URL, and revision — via the **Edit** button on the listing's detail page or **Edit** in its actions menu. If the repository URL or revision changes, Fileglancer verifies that the app's manifest still exists there before accepting the edit, so the catalog never advertises an app that can't be added.
+
+The publisher can select **Unshare** from the listing's actions menu or its detail page to remove it from the catalog; a confirmation dialog is shown first. Unsharing only removes the catalog listing; it does not affect copies that others have already added to their own libraries.
 
 ### Sharing by URL
 
-Apps can also be launched directly via URL without being added to your library first. If someone shares a launch URL with you, Fileglancer loads the app manifest and shows the launch form. A banner at the top offers to **Install App** to add it to your library for quick access later.
+Apps can also be launched directly via URL without being added to your library first. If someone shares a launch URL with you, Fileglancer loads the app manifest and shows the launch form. A banner at the top offers to **Install App** to add it to your library for quick access later — for a multi-app repository, only the app you are viewing is installed, not every app in the repository.
 
 ## Troubleshooting
 
@@ -221,6 +235,11 @@ Apps can also be launched directly via URL without being added to your library f
 
 **Job stays in PENDING**
 - The cluster may be busy. Check cluster load or try requesting fewer resources
+
+**Job shows Unknown status**
+- The scheduler can no longer report the job — it may have aged out of the scheduler's history
+- The job may still be running; check its output log for recent activity
+- You can cancel the job to clear it. If left alone, a job stuck in UNKNOWN is marked FAILED after a server-configured cutoff (24 hours by default)
 
 **Job fails immediately**
 - Check the **Error Log** tab in the job detail view for error messages
