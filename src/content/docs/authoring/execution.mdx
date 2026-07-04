@@ -202,7 +202,7 @@ apptainer exec --bind /home/user/.fileglancer/jobs/1-lolcow-say "$SIF_PATH" \
   'Hello from Fileglancer!'
 ```
 
-**Bind mounts** are auto-detected from `file` and `directory` parameters, and the job's working directory is always bound. When `working_dir: repo` is set, the cached repo clone is bound too. Use `bind_paths` to add extra paths:
+**Bind mounts** are auto-detected from `file` and `directory` parameters — the effective values the command is built from, so manifest defaults and parameters declared in `env_parameters` are bound too, not just values the user typed. The job's working directory is always bound, and when `working_dir: repo` is set, the cached repo clone is bound as well. Use `bind_paths` to add extra paths:
 
 ```yaml
 container: ghcr.io/org/image:tag

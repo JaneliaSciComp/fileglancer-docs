@@ -1,6 +1,6 @@
 ---
 title: Server Configuration
-description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH — plus where container images are cached.
+description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH, worker environment passthrough, and the unknown-job cutoff — plus where container images are cached.
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -28,8 +28,34 @@ These paths are:
 1. **Appended to `$PATH` in every generated job script** — the user's own `$PATH` entries take precedence.
 2. **Visible to the runtime [requirement check](/authoring/manifest-reference/#requirements)** — so `requirements: [nextflow]` can find `/opt/nextflow/bin/nextflow` even if it isn't on the user's default `$PATH`.
 
+## Worker Environment (`worker_env_passthrough`)
+
+Fileglancer runs git operations and job submission in a per-user worker process. The worker's environment is built from an **allowlist**, so server-side secrets (API keys, tokens, database URLs) in the Fileglancer server's environment are never readable by users via the worker process. The built-in allowlist covers what jobs and schedulers legitimately need: `PATH`/`HOME`/locale/tmp variables, proxy and SSH settings, scheduler variables (`LSF_*`, `SLURM_*`, `SGE_*`, `PBS_*`), environment modules, conda/pixi, container runtimes, and `PYTHONPATH`.
+
+If your site needs additional variables in the job environment — a license server, a site-specific scheduler setting — list them in `worker_env_passthrough` as exact names or as prefixes ending in `_`:
+
+```yaml title="config.yaml"
+apps:
+  worker_env_passthrough:
+    - MYSITE_LICENSE_SERVER   # exact variable name
+    - MYSITE_                 # prefix: passes every MYSITE_* variable
+```
+
+Add only non-secret variables — anything passed through is visible to every user on the server. Fileglancer's own `FGC_*` settings variables are never passed through, even if listed here.
+
+## Unknown-Job Cutoff (`unknown_timeout_hours`)
+
+A job whose status the scheduler can no longer report (for example, it aged out of the scheduler's queue history) shows as **UNKNOWN**. Unknown jobs are treated as still active — they keep being polled and can be cancelled — but a job that stays in UNKNOWN longer than `unknown_timeout_hours` (default: 24) is marked FAILED and dropped from polling, since continued polling would never resolve it. Set it to `0` to disable the cutoff.
+
+```yaml title="config.yaml"
+apps:
+  unknown_timeout_hours: 24
+```
+
+Users can clear a stuck job sooner by cancelling it from the Jobs page.
+
 ## Container Cache Directory
 
-By default, Apptainer container images (SIF files) are cached at `~/.fileglancer/apptainer_cache/`. There is no server-level setting for this; users override it individually in the Preferences page under "Container cache directory".
+By default, Apptainer container images (SIF files) are cached at `~/.fileglancer/apptainer_cache/`. There is no server-level setting for this; users override it individually in the Preferences page under "Container cache directory". A value starting with `~/` is expanded to the user's home directory.
 
 See [Containers (Apptainer)](/authoring/execution/#containers-apptainer) for how the cache is used during a job.
