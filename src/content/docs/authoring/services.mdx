@@ -84,8 +84,6 @@ Fileglancer probes the port for a bounded time; if your service never binds it (
 
 If your service picks its own port, needs a readiness check more specific than "port is open" (e.g. an HTTP health path), or serves an `https`/otherwise non-standard URL, write `SERVICE_URL_PATH` yourself instead of using `auto_url` (the two are mutually exclusive). Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
 
-If your service picks its own port, needs a readiness check before advertising, or serves a non-trivial URL, write `SERVICE_URL_PATH` yourself instead of using `auto_url`. Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
-
 In Python:
 
 ```python
