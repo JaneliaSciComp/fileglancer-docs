@@ -13,7 +13,7 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `flag` | string | no | CLI flag syntax (e.g. `--outdir`, `-n`). Omit for positional arguments. Must start with `-` |
+| `flag` | string | no | CLI flag syntax (e.g. `--outdir`, `-n`). Omit for positional arguments. Must be one or two dashes followed by letters, digits, `_`, `.`, or `-` — flags are emitted into the job script unquoted, so shell-significant characters are rejected |
 | `name` | string | yes | Display label in the UI |
 | `type` | string | yes | Data type (see [Parameter Types](#parameter-types)) |
 | `description` | string | no | Help text shown below the input field |
@@ -25,6 +25,8 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `pattern` | string | no | Regex validation pattern (only for `string` type, uses full match) |
 | `hidden` | boolean | no | Whether the parameter is hidden by default in the UI. Default: `false` |
 | `raw` | boolean | no | If `true`, the value is appended to the command without shell quoting. Validated against shell metacharacters for safety. Default: `false` |
+| `value_separator` | string | no | How a flagged parameter is joined to its value: `"space"` emits `--flag 'value'`, `"equals"` emits `--flag='value'`. Use `equals` for tools (like Nextflow) that would otherwise misparse a value starting with `-` as another flag. Default: `"space"` |
+| `boolean_style` | string | no | Only valid on `boolean` parameters. `"flag"` emits the bare flag when true and omits it when false; `"value"` emits an explicit `--flag true` / `--flag false` (or `--flag=true` / `--flag=false` with `value_separator: equals`). Use `value` for tools where omitting a false switch would leave a default of true in effect. Default: `"flag"` |
 | `exists` | boolean | no | Only valid on `file` and `directory` parameters. When `true` (the default), the path must exist and be readable before launch. Set `false` for outputs the job creates: the existence check is skipped, and `directory` parameters are created (as the user, within an allowed file share) before launch, so a home default like `~/.fileglancer/logs` works on first launch. Default: `true` |
 
 ## Parameter Types
@@ -34,7 +36,7 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `string` | Text input | `--flag 'value'` | `'value'` | Optional `pattern` regex (full match) |
 | `integer` | Number input (step=1) | `--flag 42` | `42` | Must be a whole number. Optional `min`/`max` bounds |
 | `number` | Number input | `--flag 3.14` | `3.14` | Must be numeric. Optional `min`/`max` bounds |
-| `boolean` | Checkbox | `--flag` (if true, omitted if false) | N/A | Must be true/false |
+| `boolean` | Checkbox | `--flag` (if true, omitted if false); `--flag true` / `--flag false` with `boolean_style: value` | N/A | Must be true/false |
 | `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
 | `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
 | `enum` | Dropdown select | `--flag 'chosen_value'` | `'chosen_value'` | Value must be one of the `options` list |
@@ -121,11 +123,11 @@ Hidden parameters still participate in command building — if they have a `defa
 When a job is submitted, Fileglancer constructs the full shell command from the runnable's `command` field and the user-provided values using a two-pass approach:
 
 1. Start with the base `command` string.
-2. Merge user-provided values with defaults for any parameters the user didn't set.
-3. **Pass 1 — Flagged arguments**: emit values for parameters with a `flag`, in declaration order:
-   - Boolean `true` → append the flag (e.g. `--verbose`)
-   - Boolean `false` → omit entirely
-   - All other types → append `{flag} {shell_quoted_value}`
+2. Merge user-provided values with defaults for any parameters the user didn't set. An **optional** flagged parameter whose value is the empty string is omitted entirely rather than emitted as `--flag ''`.
+3. **Pass 1 — Flagged arguments**: emit values for parameters with a `flag`, in declaration order ([`env_parameters`](/authoring/manifest-reference/#runnables) first, then `parameters`):
+   - Boolean with `boolean_style: flag` (the default) → append the flag if true (e.g. `--verbose`), omit entirely if false
+   - Boolean with `boolean_style: value` → append `--flag true` or `--flag false`
+   - All other types → append `{flag} {shell_quoted_value}`, or `{flag}={shell_quoted_value}` with `value_separator: equals`
 4. **Pass 2 — Positional arguments**: emit values for parameters without a `flag`, in declaration order. Values are shell-quoted unless `raw: true` is set, in which case the value is appended as-is (after being validated against shell metacharacters).
 5. Join all parts with line-continuation (`\`) for readability.
 
@@ -159,4 +161,8 @@ pixi run python demo.py \
 
 <Aside type="caution" title="Shell safety">
 All values are shell-quoted with `shlex.quote()` to prevent injection. The only exception is **positional** parameters with `raw: true`, where the value is appended unquoted but first rejected if it contains shell metacharacters. The `raw` flag has no effect on flagged parameters — those are always quoted.
+</Aside>
+
+<Aside type="note" title="Nextflow commands get Nextflow-safe forms automatically">
+When a runnable's base command is `nextflow run …`, every double-dash (`--`) flagged parameter is emitted in the Nextflow-safe forms regardless of what the manifest declares: `value_separator` is forced to `equals` (so a value starting with `-` stays attached to its parameter instead of being parsed as another one) and booleans are forced to `boolean_style: value` (so unchecking a switch emits `--flag=false` and actually overrides a pipeline default of true). This matches how [auto-detected Nextflow pipelines](/authoring/auto-detection/#nextflow-pipelines) generate their parameters.
 </Aside>
