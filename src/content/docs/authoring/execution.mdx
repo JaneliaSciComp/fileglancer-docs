@@ -59,7 +59,7 @@ runnables:
     working_dir: work
 ```
 
-Containers default to `work` because the repo clone is **not** bind-mounted into the container (only the work directory and your file/directory parameters are), so a container's current directory should be the work dir. A container runnable that genuinely needs the project can set `working_dir: repo` and bind it explicitly.
+Containers default to `work` because the repo clone is **not** bind-mounted into the container (only the work directory and your file/directory parameters are), so a container's current directory should be the work dir. A container runnable that genuinely needs the project can set `working_dir: repo` — Fileglancer then bind-mounts the cached clone into the container automatically so the command can run from it and read the project's files.
 
 ## Environment Variables
 
@@ -85,6 +85,8 @@ Fileglancer exports these variables in every job script. They are available to `
 |----------|-------------|-------------|
 | `FG_WORK_DIR` | All jobs | Absolute path to the job's working directory (contains the `repo/` symlink, log files, etc.) |
 | `SERVICE_URL_PATH` | Service-type jobs only | Absolute path where the service should write its URL. Equivalent to `$FG_WORK_DIR/service_url` (see [Services](/authoring/services/)) |
+| `FG_SERVICE_PORT` | Service-type jobs only | A free TCP port picked on the compute node at job start. Bind your service to it instead of implementing port discovery yourself (see [Services](/authoring/services/)) |
+| `FG_HOSTNAME` | Service-type jobs only | The compute node's hostname (`$(hostname)`), used to build the service URL |
 
 ## Pre/Post-Run Scripts
 
@@ -197,7 +199,7 @@ apptainer exec --bind /home/user/.fileglancer/jobs/1-lolcow-say "$SIF_PATH" \
   'Hello from Fileglancer!'
 ```
 
-**Bind mounts** are auto-detected from `file` and `directory` parameters, and the job's working directory is always bound. Use `bind_paths` to add extra paths:
+**Bind mounts** are auto-detected from `file` and `directory` parameters, and the job's working directory is always bound. When `working_dir: repo` is set, the cached repo clone is bound too. Use `bind_paths` to add extra paths:
 
 ```yaml
 container: ghcr.io/org/image:tag
