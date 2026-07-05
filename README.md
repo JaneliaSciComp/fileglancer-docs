@@ -14,3 +14,8 @@ Run local server:
 npm run dev
 ```
 
+To make the dev server accessible on your network (bind to 0.0.0.0):
+```
+npm run dev -- --host
+```
+
