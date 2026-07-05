@@ -86,7 +86,7 @@ Fileglancer exports these variables in every job script. They are available to `
 | Variable | Availability | Description |
 |----------|-------------|-------------|
 | `FG_WORK_DIR` | All jobs | Absolute path to the job's working directory (contains the `repo/` symlink, log files, etc.) |
-| `SERVICE_URL_PATH` | Service-type jobs only | Absolute path where the service should write its URL. Equivalent to `$FG_WORK_DIR/service_url` (see [Services](/authoring/services/)) |
+| `SERVICE_URL_PATH` | Service-type jobs only | Absolute path of the service URL file. Manual services write their URL here; for `auto_url` services Fileglancer writes it after the port is ready. Equivalent to `$FG_WORK_DIR/service_url` (see [Services](/authoring/services/)) |
 | `FG_SERVICE_PORT` | Service-type jobs only | A free TCP port picked on the compute node at job start. Bind your service to it instead of implementing port discovery yourself (see [Services](/authoring/services/)) |
 | `FG_HOSTNAME` | Service-type jobs only | The compute node's hostname (`$(hostname)`), used to build the service URL |
 | `FG_SERVICE_TOKEN` | Service-type jobs only | A URL-safe random secret minted per job. Use it for your service's auth (e.g. `--token-password="$FG_SERVICE_TOKEN"`) and reference it from `service_url_suffix` as `${FG_SERVICE_TOKEN}` for one-click access (see [Services](/authoring/services/)) |
@@ -233,6 +233,6 @@ When a user submits a job:
 3. A working directory is created at `~/.fileglancer/jobs/{id}-{app}-{runnable}/`.
 4. A checkout of the project at the pinned commit is symlinked into the working directory as `repo`. Checkouts are immutable and shared by jobs running the same version, so an app update never changes code under a running job.
 5. The command runs on the cluster, with `stdout.log` and `stderr.log` captured. Requirements are verified at runtime in the job's execution environment; if any are unmet, the job fails early with a descriptive message in stderr.
-6. Job status is monitored and updated in real time (PENDING → RUNNING → DONE/FAILED/KILLED). The commit the job executed is recorded and shown on its detail page.
+6. Job status is monitored and updated in real time (PENDING → RUNNING → DONE/FAILED/KILLED, or UNKNOWN while the scheduler cannot report it). The commit the job executed is recorded and shown on its detail page.
 
 Users can view logs, relaunch with the same parameters, or cancel running jobs from the UI.

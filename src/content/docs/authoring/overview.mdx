@@ -76,7 +76,7 @@ runnables:
 When launched, the user fills in **Message** and **Repeat Count**, and Fileglancer runs something like:
 
 ```bash
-python greet.py --message 'Hello!' --repeat '3'
+python greet.py --message 'Hello!' --repeat 3
 ```
 
 ## Manifest Discovery
@@ -141,4 +141,4 @@ This guide is organized into focused pages:
 - **[Execution Environment](/authoring/execution/)** — conda environments, containers, pre/post-run scripts, environment variables, the generated job script, and the job lifecycle.
 - **[Services](/authoring/services/)** — long-running entry points like notebooks, viewers, and APIs.
 - **[Auto-Detected Projects](/authoring/auto-detection/)** — how Nextflow and Pixi repositories become apps automatically.
-- **[Server Configuration](/authoring/server-config/)** — settings controlled by the server administrator (`extra_paths`, container cache).
+- **[Server Configuration](/authoring/server-config/)** — settings controlled by the server administrator (`extra_paths`, worker environment passthrough, unknown-job cutoff, container cache).

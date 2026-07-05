@@ -18,7 +18,7 @@ If a directory contains a `nextflow_schema.json` (and no `runnables.yaml`), File
 - Sets `requirements` to `["nextflow"]`.
 - Defines a single entry point named **"Run pipeline"** with the command `nextflow run repo -ansi-log false` and [`working_dir: work`](/authoring/execution/#working-directory), so it launches from the job's work directory. Running there (rather than inside the project checkout) keeps Nextflow's `.nextflow.log`, `.nextflow/` cache, and `work/` directory in the per-job work directory instead of the checkout shared by jobs on the same app version. `repo` is a symlink to the checkout, and the directory form lets Nextflow resolve the pipeline's main script from its `main.nf` or manifest.
 - Derives the app **name** from the repository name (e.g. `rnaseq` for `nf-core/rnaseq`), and takes the **description** from the schema's top-level `description`.
-- Converts each JSON Schema parameter into a Fileglancer parameter, preserving types, defaults, descriptions, required flags, `enum` options, and `hidden` status. Generated parameters use Nextflow-safe emission forms: values are joined with `=` (`--input='/data'`) so a value starting with `-` stays attached to its parameter, and booleans are emitted explicitly as `--flag=true`/`--flag=false` so unchecking a switch overrides a pipeline default of true. Path parameters only require existence when the schema property sets `"exists": true`, following the [nf-schema](https://nextflow-io.github.io/nf-schema/) convention.
+- Converts each JSON Schema parameter into a Fileglancer parameter, preserving types, defaults, descriptions, required flags, `enum` options, and `hidden` status. Generated parameters use Nextflow-safe emission forms: values are joined with `=` (`--input=/data`) so a value starting with `-` stays attached to its parameter, and booleans are emitted explicitly as `--flag=true`/`--flag=false` so unchecking a switch overrides a pipeline default of true. Path parameters only require existence when the schema property sets `"exists": true`, following the [nf-schema](https://nextflow-io.github.io/nf-schema/) convention.
 - Groups parameters into [sections](/authoring/parameters/#parameter-sections) based on the schema's `definitions`/`$defs`, ordered by the schema's `allOf` list. Section titles and descriptions come from each definition's `title`, `description`, and `help_text`. All sections start expanded.
 - Surfaces Nextflow-specific options on the launch form's **Environment tab**:
   - **Profiles** (`-profile`) — comma-separated list of Nextflow profiles (e.g. `standard,docker`)
@@ -28,8 +28,8 @@ The `-profile` flag is emitted *before* the pipeline parameters, and extra argum
 
 ```bash
 nextflow run repo -ansi-log false \
-  -profile 'standard,docker' \
-  --input='/data/input' \
+  -profile standard,docker \
+  --input=/data/input \
   --skip_qc=false \
   -resume
 ```

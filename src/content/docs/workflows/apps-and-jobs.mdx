@@ -18,7 +18,6 @@ import darkMultipleEntryPoints from '@assets/task-images/apps-select-entry-point
 import lightLaunchForm from '@assets/task-images/apps-demo-launch-form-light.png'
 import darkLaunchForm from '@assets/task-images/apps-demo-launch-form-dark.png'
 
-
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
 
 Fileglancer's Apps feature lets you run command-line tools on the compute cluster without leaving the browser. An app is defined by a GitHub repository containing a manifest file that describes the tool's commands, parameters, and resource requirements. Once added, you can launch jobs, fill in parameters through a form, and monitor their progress — all from the Fileglancer UI.
@@ -37,7 +36,7 @@ Apps work with any command-line tool. Common use cases include image conversion 
 
 ## Adding an App
 
-Apps are added by providing a GitHub repository URL. The repository must contain either a `runnables.yaml` manifest file describing the tool, or a recognized project format (Nextflow pipeline with `nextflow_schema.json`, or a Pixi project) that Fileglancer can auto-detect.
+Apps are added by providing a GitHub repository URL (HTTPS or SSH). The repository must contain either a `runnables.yaml` manifest file describing the tool, or a recognized project format (Nextflow pipeline with `nextflow_schema.json`, or a Pixi project) that Fileglancer can auto-detect.
 
 <StyledImage
   lightSrc={lightAppsPageEmpty}
@@ -53,10 +52,10 @@ Apps are added by providing a GitHub repository URL. The repository must contain
    The Add App dialog opens with a field for the **GitHub Repository URL** and an optional **Revision** field (a tag or branch name).
 
 3. **Enter the repository URL**<br/>
-   Paste the full GitHub URL (e.g. `https://github.com/org/repo`). To pin the app to a specific tag or branch, fill in the **Revision** field as well. If you leave it blank, Fileglancer uses the repository's default branch.
+   Paste the full GitHub URL (e.g. `https://github.com/org/repo` or `git@github.com:org/repo.git`). To pin the app to a specific tag or branch, fill in the **Revision** field as well. If you leave it blank, Fileglancer uses the repository's default branch.
 
 4. **Click "Continue"**<br/>
-   Fileglancer clones the repository and searches for manifest files. If found, the app appears as a card on the Apps page. A single repository can contain multiple apps if it has manifests in different subdirectories — in that case you are shown the discovered apps and can choose which ones to add.
+   Fileglancer clones the repository and searches for manifest files. If found, the app appears in **My Apps**. A single repository can contain multiple apps if it has manifests in different subdirectories — in that case you are shown the discovered apps and can choose which ones to add.
 
    The revision is **fixed when the app is added**: the exact tag, branch, or default branch resolved at add time is recorded, and the app is **pinned to the exact commit** at the tip of that revision. Every launch runs that same commit — even if new commits land upstream later — until you explicitly update the app. To track a different revision, re-add the app. See [Updating an App](#updating-an-app) for how to move an app to newer commits on its pinned revision.
 </Steps>
@@ -96,7 +95,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 
 <Steps>
 1. **Click "Launch" on an app card**<br/>
-   The **Launch** button is in the banner at the top of each card. You will either be prompted to select an entry point or the launch form will open immediately. Alternatively, click anywhere on the card to open the app's detail page, which has a **Launch** button for each entry point.
+   The **Launch** button is in the banner at the top of each card. In table view, choose **Launch** from the row's actions menu. You will either be prompted to select an entry point or the launch form will open immediately. Alternatively, click anywhere on the card (or the app name in table view) to open the app's detail page, which has a **Launch** button for each entry point.
 </Steps>
 
 <StyledImage
@@ -134,6 +133,7 @@ Once an app is added, you can launch it as a job on the compute cluster.
 - **Hidden parameters**: Some apps have advanced parameters hidden by default. Toggle "Show hidden" in the Parameters tab to reveal them.
 - **Collapsible sections**: Long parameter forms may group options into collapsible sections. Click a section header to expand or collapse it.
 - **Extra scheduler arguments**: The Cluster tab's extra arguments field is split like a shell command line, so you can pass several flags at once and quote values that contain spaces or brackets — e.g. `-P myproject -R "select[mem>8000]"` for LSF.
+- **Saving launch settings**: Use **Export params** to download the current launch settings — Parameters, Environment, and Cluster tabs — as JSON. **Upload params file** restores any settings present in that file.
 
 ## Monitoring Jobs
 
@@ -172,7 +172,7 @@ Click an entry point name in the jobs table (or select **View Details** from the
 - **Output Log tab** — the job's stdout, streamed in near-real-time while the job is running. Includes a download button
 - **Error Log tab** — the job's stderr, also available for download
 
-Very large logs are shown truncated: only the most recent 5 MB is displayed, with a note about how much was omitted. To see the whole file, open the log from the job's working directory in the file browser.
+Very large script or log files are shown truncated: only the most recent 5 MB is displayed, with a note about how much was omitted. To see the whole file, open it from the job's working directory in the file browser.
 
 From the detail view you can **Relaunch** the job, which opens the launch form pre-filled with the same parameters — including Environment-tab settings like Nextflow profiles — so you can re-run or adjust settings.
 
@@ -184,7 +184,7 @@ Select **Delete** from a finished job's actions menu to remove it. Deleting remo
 
 Some apps define **service** entry points — long-running processes like JupyterLab, web viewers, or APIs. Services work like regular jobs, with a few differences:
 
-- While a service is starting, the detail view shows a "Service is starting up..." banner
+- While a service is pulling a container image or starting, the detail view shows a progress banner
 - Once the service is ready and has published its URL, a green banner appears with an **Open Service** button that opens the service in a new tab
 - To stop a service, click **Stop Service** from the detail view or select **Stop Service** from the actions menu in the jobs table
 
@@ -192,19 +192,19 @@ Some apps define **service** entry points — long-running processes like Jupyte
 
 ### The App Detail Page
 
-Click anywhere on an app card to open the app's detail page. It shows the app's source repository, pinned revision, current **Version** (the exact commit the app is pinned to, linked to GitHub), and description; a card for each entry point with its own **Launch** button; and the app's most recent jobs, linking to their detail pages. The page header has buttons for sharing and updating the app, and a back arrow that returns to My Apps.
+Click anywhere on an app card to open the app's detail page. It shows the app's source repository, pinned revision, manifest path, app commit (linked to GitHub), and description; separate code repository details when the manifest uses `repo_url`; a card for each entry point with its own **Launch** button; and the app's most recent jobs, linking to their detail pages. The page header has buttons for sharing and updating the app, and a back arrow that returns to My Apps.
 
-Each app card also has an actions menu (the vertical "⋮" button in the card's banner) with quick access to **Launch**, **View** (the detail page), **Share to Catalog**/**Unshare**, **Update**, and **Remove**.
+Each app card or table row also has an actions menu (the vertical "⋮" button) with quick access to **Launch**, **View** (the detail page), **Share to Catalog**/**Unshare**, **Update**, and **Remove**.
 
 ### Updating an App
 
-If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app with the **Update** button on its detail page, or **Update** in the app card's actions menu. This pulls the newest commits on the app's **pinned revision**, re-reads the manifest, and pins the app to the new tip commit — the toast reports the new version (e.g. "Updated to a1b2c3d") or "Already up to date". Fileglancer periodically compares your pinned commits against the source repositories and shows an amber **Update available** tag on the app's card and detail page when newer commits exist.
+If the source repository has been updated (e.g. new parameters added, commands changed), you can update the app with the **Update** button on its detail page, or **Update** in the app card or table row's actions menu. This pulls the newest commits on the app's **pinned revision**, re-reads the manifest, and pins the app to the new tip commit — the toast reports the new version (e.g. "Updated to a1b2c3d") or "Already up to date". Fileglancer periodically compares your pinned commits against the source repositories and shows an amber **Update available** tag on the app's card and detail page when newer commits exist.
 
 Updates are **per-app**. Every app is pinned to an exact commit, and jobs run from a private checkout of that commit, so updating one app never changes the code that other apps from the same repository run — and never affects jobs that are already queued or running; they keep executing the version they were submitted with. Updating also does not change which revision the app tracks — for a branch pin it moves to the newest commit on that branch, while a tag or commit pin has nothing newer to pull. To move an app to a different revision, re-add it from the new URL.
 
 ### Removing an App
 
-Select **Remove** from the app card's actions menu (or from the "⋮" menu on the app's detail page) to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. Code checkouts that no app or recent job references are cleaned up automatically in the background. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing — unshare it first if you want to take it down.
+Select **Remove** from the app card or table row's actions menu (or from the "⋮" menu on the app's detail page) to remove the app from your library. This does not affect any jobs that have already been submitted — their data and logs remain available on the Jobs page. Code checkouts that no app or recent job references are cleaned up automatically in the background. If you have shared the app to the catalog, removing it from your library does not delete the catalog listing — unshare it first if you want to take it down.
 
 ## Sharing Apps
 
@@ -212,11 +212,11 @@ There are two ways to share an app with colleagues: publishing it to the shared 
 
 ### The App Catalog
 
-The Apps area has three tabs: **My Apps** (the apps in your library), **App Catalog** (apps shared by anyone on the server), and **Jobs** (your job history).
+The Apps area has three tabs: **My Apps** (the apps in your library), **App Catalog** (apps shared by anyone on the server), and **Jobs** (your job history). **My Apps** and **App Catalog** can be viewed as cards or as a table; both views use the same actions menu.
 
-To share one of your apps, click **Share to Catalog** on its detail page (or select it from the app card's actions menu). You can give the listing a custom **name** and **description** for the catalog — these only affect the catalog entry, not your own copy of the app. Once shared, the app is visible to every Fileglancer user in the **App Catalog** tab, and the card shows a green **Shared** tag.
+To share one of your apps, click **Share to Catalog** on its detail page (or select it from the app card or table row's actions menu). You can give the listing a custom **name** and **description** for the catalog — these only affect the catalog entry, not your own copy of the app. Once shared, the app is visible to every Fileglancer user in the **App Catalog** tab, and the card shows a green **Shared** tag.
 
-To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card. Clicking the card opens the listing's detail page, which shows who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Every add path opens a confirmation dialog showing the source repository (linked to GitHub), the revision, who shared the app and when — along with a reminder that the app's code runs as your user once launched. Adding copies the app into your own library — it tracks the same revision the publisher shared, pinned to that revision's newest commit at install time — where it behaves like any other app you added.
+To use a shared app, open the **App Catalog** tab, find the app (you can search by name, description, or who shared it, and hide apps you already have), and click **Add** on its card or choose **Add to my apps** from a table row's actions menu. Clicking the card or app name opens the listing's detail page, which shows the source URL, revision, manifest path, who shared it, its entry points (each with a **Launch** button), and an **Add to my apps** button. Every add path opens a confirmation dialog showing the source URL, who shared the app and when — along with a reminder that the app's code runs as your user once launched. Adding copies the app into your own library — it tracks the same revision the publisher shared, pinned to that revision's newest commit at install time — where it behaves like any other app you added.
 
 After sharing, the publisher can still **edit** the listing — its name, description, repository URL, and revision — via the **Edit** button on the listing's detail page or **Edit** in its actions menu. If the repository URL or revision changes, Fileglancer verifies that the app's manifest still exists there before accepting the edit, so the catalog never advertises an app that can't be added.
 
@@ -249,4 +249,4 @@ Apps can also be launched directly via URL without being added to your library f
 **Service URL not appearing**
 - The service may take time to start. Wait for the status to change from PENDING to RUNNING
 - Check the output and error logs for startup errors
-- The service must write its URL to a specific file — check with the app author if the service doesn't seem to publish its URL
+- If the app does not use Fileglancer's automatic service URL support, the service must write its URL to a specific file — check with the app author if the service doesn't seem to publish its URL

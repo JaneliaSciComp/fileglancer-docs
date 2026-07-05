@@ -37,17 +37,17 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `integer` | Number input (step=1) | `--flag 42` | `42` | Must be a whole number. Optional `min`/`max` bounds |
 | `number` | Number input | `--flag 3.14` | `3.14` | Must be numeric. Optional `min`/`max` bounds |
 | `boolean` | Checkbox | `--flag` (if true, omitted if false); `--flag true` / `--flag false` with `boolean_style: value` | N/A | Must be true/false |
-| `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
-| `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`) |
+| `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists, is readable, and points to a file on the server (unless `exists: false`) |
+| `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists, is readable, and points to a directory on the server (unless `exists: false`) |
 | `enum` | Dropdown select | `--flag 'chosen_value'` | `'chosen_value'` | Value must be one of the `options` list |
 
 **Notes on `file` and `directory` types:**
 
 - The UI provides a browse button alongside the text input, so users can pick paths from the Fileglancer file browser instead of typing them.
-- Paths are validated server-side before job submission (must exist and be accessible, unless `exists: false`).
+- Paths are validated server-side before job submission (must exist, be accessible, and match the expected file/folder type, unless `exists: false`).
 - Both absolute paths (`/data/images`) and home-relative paths (`~/output`) are accepted.
 - Shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, `(`, `)`, etc.) are rejected for safety.
-- Set `exists: false` on paths the job creates, such as an output or logs directory. The path is still validated for file-share containment, but not for existence. Fileglancer additionally creates `exists: false` directories (as the user, within an allowed file share) just before launch, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. `file` parameters with `exists: false` skip the existence check but nothing is created for them.
+- Set `exists: false` on paths the job creates, such as an output or logs directory. The path is still validated for file-share containment, but not for existence. If the path already exists, Fileglancer still checks that it matches the expected file/folder type. Fileglancer additionally creates `exists: false` directories (as the user, within an allowed file share) just before launch, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. `file` parameters with `exists: false` skip the existence check but nothing is created for them.
 - Apps auto-detected from a Nextflow pipeline's `nextflow_schema.json` follow the same convention as [nf-schema](https://nextflow-io.github.io/nf-schema/): a path parameter only requires existence when the schema property sets `"exists": true`.
 
 ## Flag Forms
@@ -58,7 +58,7 @@ Parameters support three flag styles:
 - **Single-dash flags**: `flag: -n` emits `-n 5`
 - **Positional arguments**: omit `flag` entirely. The value is emitted as a bare argument (no flag prefix)
 
-An internal `key` is auto-generated from the flag: `--outdir` becomes key `outdir`, `-n` becomes key `n`. Positional parameters get keys `_arg0`, `_arg1`, etc. Keys must be unique within a runnable.
+An internal `key` is auto-generated from the flag: `--outdir` becomes key `outdir`, `-n` becomes key `n`. Positional parameters get keys `_arg0`, `_arg1`, etc. Keys must be unique within the list they belong to (`parameters` or `env_parameters`); the same key may appear once in each namespace.
 
 ## Parameter Sections
 
@@ -154,9 +154,9 @@ If the user provides `message: "Hello"`, `verbose: true`, and leaves `repeat` at
 
 ```bash
 pixi run python demo.py \
-  --message 'Hello' \
-  --verbose \
-  --repeat '3'
+  --message Hello \
+  --repeat 3 \
+  --verbose
 ```
 
 <Aside type="caution" title="Shell safety">

@@ -25,14 +25,14 @@ From the cluster's perspective, a service is just a long-running batch job. The 
 
 1. The user launches a service-type runnable → the job enters PENDING.
 2. The cluster picks it up → RUNNING.
-3. The service starts, binds a port, and writes its URL to the file at `SERVICE_URL_PATH`.
+3. The service starts and publishes its URL: either Fileglancer writes `SERVICE_URL_PATH` for `auto_url` services, or the service writes that file itself.
 4. On the next poll (every few seconds), Fileglancer reads the file and displays the URL in the UI.
 5. The user clicks **Open Service** → the service opens in a new browser tab.
 6. When done, the user clicks **Stop Service** → the job is killed and the URL disappears.
 
 ## The Easy Path: Let Fileglancer Manage the Port and URL
 
-For most services you don't need to write any port-discovery or URL-writing code. For every service-type job Fileglancer exports three variables into the job environment:
+For most services you don't need to write any port-discovery or URL-writing code. For every service-type job Fileglancer exports these helper variables into the job environment:
 
 - `FG_SERVICE_PORT` — a free TCP port picked on the compute node at job start.
 - `FG_HOSTNAME` — the compute node's hostname.
@@ -108,13 +108,13 @@ The URL must start with `http://` or `https://`. Fileglancer validates this befo
 
 ## Service Lifecycle
 
-- **Startup**: write the URL to `SERVICE_URL_PATH` as soon as the service is ready. Until the file exists, the UI shows "Service is starting up…".
+- **Startup**: with `auto_url`, Fileglancer writes `SERVICE_URL_PATH` once `$FG_SERVICE_PORT` accepts connections. Without `auto_url`, write the URL to `SERVICE_URL_PATH` yourself as soon as the service is ready. Until the file exists, the UI shows "Service is starting up…".
 - **Running**: Fileglancer reads the URL file on each poll. If the URL changes (e.g. a port rebind), the UI updates automatically.
 - **Shutdown**: when the user clicks **Stop Service**, Fileglancer sends a SIGTERM to the job. Handle this signal for graceful shutdown. Cleaning up the URL file on exit is good practice but not required — Fileglancer only reads it while the job status is RUNNING.
 
 ## Tips
 
-- **Port selection**: use port `0` or auto-detection to avoid conflicts when multiple services run on the same node.
+- **Port selection**: use `$FG_SERVICE_PORT` with `auto_url`, or port `0` if your service writes the actual chosen URL to `SERVICE_URL_PATH` itself.
 - **Walltime**: set a generous walltime — services run until stopped, but the cluster will kill them when walltime expires. Consider `"08:00"` or longer for interactive sessions.
 - **Flush output**: under a batch scheduler like LSF, Python's stdout may be buffered. Use `flush=True` on print statements or set `PYTHONUNBUFFERED=1` so logs appear in real time.
 
@@ -128,8 +128,9 @@ runnables:
   - id: view
     name: Start Viewer
     type: service
+    auto_url: true
     description: Launch an interactive viewer for browsing datasets
-    command: pixi run python start_viewer.py
+    command: pixi run python start_viewer.py --host 0.0.0.0 --port $FG_SERVICE_PORT
     parameters:
       - flag: --data-dir
         name: Data Directory
