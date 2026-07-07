@@ -25,26 +25,27 @@ From the cluster's perspective, a service is just a long-running batch job. The 
 
 1. The user launches a service-type runnable → the job enters PENDING.
 2. The cluster picks it up → RUNNING.
-3. The service starts, binds a port, and writes its URL to the file at `SERVICE_URL_PATH`.
+3. The service starts and publishes its URL: either Fileglancer writes `SERVICE_URL_PATH` for `auto_url` services, or the service writes that file itself.
 4. On the next poll (every few seconds), Fileglancer reads the file and displays the URL in the UI.
 5. The user clicks **Open Service** → the service opens in a new browser tab.
 6. When done, the user clicks **Stop Service** → the job is killed and the URL disappears.
 
 ## The Easy Path: Let Fileglancer Manage the Port and URL
 
-For most services you don't need to write any port-discovery or URL-writing code. For every service-type job Fileglancer exports two variables into the job environment:
+For most services you don't need to write any port-discovery or URL-writing code. For every service-type job Fileglancer exports these helper variables into the job environment:
 
 - `FG_SERVICE_PORT` — a free TCP port picked on the compute node at job start.
 - `FG_HOSTNAME` — the compute node's hostname.
+- `FG_SERVICE_TOKEN` — a URL-safe random secret you can use for auth.
 
-Bind your service to `$FG_SERVICE_PORT`, and set `auto_url: true` on the runnable so Fileglancer writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` for you.
+Bind your service to `$FG_SERVICE_PORT` and set `auto_url: true`. Fileglancer then **waits until that port is accepting connections** and only then writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` — so the **Open Service** link never appears before your service (or a still-pulling container image) is ready. While a first-launch container image is still downloading, the job page shows a **"Downloading container image…"** message so the wait is explained rather than mysterious.
 
 Because the port is chosen before your command runs and substituted straight into the command line, this works even for container runnables — no wrapper script inside the image is needed:
 
 ```yaml title="runnables.yaml"
 runnables:
   - id: serve
-    name: Code Server
+    name: Server
     type: service
     auto_url: true
     container: ghcr.io/coder/code-server:latest
@@ -57,26 +58,31 @@ runnables:
       walltime: "08:00"
 ```
 
-The same pattern works without a container:
+### One-click access with a token
+
+Most servers can take an auth token in the URL. Pass `$FG_SERVICE_TOKEN` to your server, and add a `service_url_suffix` that splices the token into the published URL — clicking **Open Service** then logs straight in, no password prompt, while the session stays protected by the secret:
 
 ```yaml title="runnables.yaml"
 runnables:
-  - id: notebook
-    name: JupyterLab
+  - id: serve
+    name: Server
     type: service
     auto_url: true
-    command: jupyter lab --no-browser --ip=0.0.0.0 --port=$FG_SERVICE_PORT
+    service_url_suffix: "/?access_token=${FG_SERVICE_TOKEN}"
+    command: marimo edit --headless --host 0.0.0.0 --port $FG_SERVICE_PORT --token-password="$FG_SERVICE_TOKEN"
     requirements:
       - pixi
 ```
 
-<Aside type="note" title="auto_url writes the URL before the service is listening">
-With `auto_url`, the URL file is written as soon as the job starts, so the UI may briefly show a link that isn't accepting connections yet while the service finishes binding. If you need the link to appear only once the service is truly ready, leave `auto_url` unset and write `SERVICE_URL_PATH` yourself after a readiness check (see below).
+`service_url_suffix` is a small template: literal URL text plus the placeholders `${FG_SERVICE_TOKEN}`, `${FG_SERVICE_PORT}`, and `${FG_HOSTNAME}` (braces required). It's appended to `http://$FG_HOSTNAME:$FG_SERVICE_PORT`, so it can carry a path as well as a query — e.g. JupyterLab uses `"/lab?token=${FG_SERVICE_TOKEN}"`.
+
+<Aside type="note" title="If the port never opens">
+Fileglancer probes the port for a bounded time; if your service never binds it (e.g. it crashed on startup), no URL is published and a message is written to the job's stderr log. Check **Error Log** if **Open Service** never appears.
 </Aside>
 
 ## Writing the Service URL
 
-If your service picks its own port, needs a readiness check before advertising, or serves a non-trivial URL, write `SERVICE_URL_PATH` yourself instead of using `auto_url`. Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
+If your service picks its own port, needs a readiness check more specific than "port is open" (e.g. an HTTP health path), or serves an `https`/otherwise non-standard URL, write `SERVICE_URL_PATH` yourself instead of using `auto_url` (the two are mutually exclusive). Fileglancer exports `SERVICE_URL_PATH` — the absolute path to a file where your service should write its URL once it is ready to accept connections.
 
 In Python:
 
@@ -102,13 +108,13 @@ The URL must start with `http://` or `https://`. Fileglancer validates this befo
 
 ## Service Lifecycle
 
-- **Startup**: write the URL to `SERVICE_URL_PATH` as soon as the service is ready. Until the file exists, the UI shows "Service is starting up…".
+- **Startup**: with `auto_url`, Fileglancer writes `SERVICE_URL_PATH` once `$FG_SERVICE_PORT` accepts connections. Without `auto_url`, write the URL to `SERVICE_URL_PATH` yourself as soon as the service is ready. Until the file exists, the UI shows "Service is starting up…".
 - **Running**: Fileglancer reads the URL file on each poll. If the URL changes (e.g. a port rebind), the UI updates automatically.
 - **Shutdown**: when the user clicks **Stop Service**, Fileglancer sends a SIGTERM to the job. Handle this signal for graceful shutdown. Cleaning up the URL file on exit is good practice but not required — Fileglancer only reads it while the job status is RUNNING.
 
 ## Tips
 
-- **Port selection**: use port `0` or auto-detection to avoid conflicts when multiple services run on the same node.
+- **Port selection**: use `$FG_SERVICE_PORT` with `auto_url`, or port `0` if your service writes the actual chosen URL to `SERVICE_URL_PATH` itself.
 - **Walltime**: set a generous walltime — services run until stopped, but the cluster will kill them when walltime expires. Consider `"08:00"` or longer for interactive sessions.
 - **Flush output**: under a batch scheduler like LSF, Python's stdout may be buffered. Use `flush=True` on print statements or set `PYTHONUNBUFFERED=1` so logs appear in real time.
 
@@ -122,8 +128,9 @@ runnables:
   - id: view
     name: Start Viewer
     type: service
+    auto_url: true
     description: Launch an interactive viewer for browsing datasets
-    command: pixi run python start_viewer.py
+    command: pixi run python start_viewer.py --host 0.0.0.0 --port $FG_SERVICE_PORT
     parameters:
       - flag: --data-dir
         name: Data Directory
