@@ -48,7 +48,8 @@ A requirement check (see [Requirements](/authoring/manifest-reference/#requireme
 
 Every job gets a private **work directory** (`$FG_WORK_DIR`), and a checkout of the project at the app's **pinned commit** is symlinked into it as `repo`. The `working_dir` runnable field controls which of these the command runs from:
 
-- **`repo`** (default for most runnables) — the script `cd`s into `$FG_WORK_DIR/repo` (or the manifest's subdirectory within it). Use this when the command relies on the project being the current directory — for example Pixi tasks, or scripts that reference sibling files with relative paths.
+- **`manifest`** (default for most runnables) — the script `cd`s into the manifest's directory within the checkout: `$FG_WORK_DIR/repo` when the manifest is at the repo root, or its subdirectory when the manifest lives deeper (e.g. a monorepo). Use this when the command relies on being run from beside the manifest — for example Pixi tasks, or scripts that reference sibling files with relative paths.
+- **`repo`** — the script `cd`s into the checkout root (`$FG_WORK_DIR/repo`) regardless of where the manifest lives. Use this for a manifest in a subdirectory whose command still needs to run from the top of the project.
 - **`work`** (default for **container** runnables) — the script `cd`s into `$FG_WORK_DIR`. The project is still reachable via the `repo` symlink (e.g. `nextflow run repo`). Use this for tools that should write their outputs into a clean per-job directory rather than the project checkout (which is shared by every job running the same version of the app).
 
 The checkout is per-version: jobs of an app that hasn't been updated share one checkout (so e.g. a Pixi environment builds once and is reused), and updating the app gives subsequent jobs a fresh checkout of the new commit while running jobs keep the one they started with.
@@ -61,7 +62,7 @@ runnables:
     working_dir: work
 ```
 
-Containers default to `work` because the project checkout is **not** bind-mounted into the container (only the work directory and your file/directory parameters are), so a container's current directory should be the work dir. A container runnable that genuinely needs the project can set `working_dir: repo` — Fileglancer then bind-mounts the checkout into the container automatically so the command can run from it and read the project's files.
+Containers default to `work` because the project checkout is **not** bind-mounted into the container (only the work directory and your file/directory parameters are), so a container's current directory should be the work dir. A container runnable that genuinely needs the project can set `working_dir: manifest` or `working_dir: repo` — Fileglancer then bind-mounts the checkout into the container automatically so the command can run from it and read the project's files.
 
 ## Environment Variables
 
@@ -202,7 +203,7 @@ apptainer exec --bind /home/user/.fileglancer/jobs/1-lolcow-say "$SIF_PATH" \
   'Hello from Fileglancer!'
 ```
 
-**Bind mounts** are auto-detected from `file` and `directory` parameters — the effective values the command is built from, so manifest defaults and parameters declared in `env_parameters` are bound too, not just values the user typed. The job's working directory is always bound, and when `working_dir: repo` is set, the cached repo clone is bound as well. Use `bind_paths` to add extra paths:
+**Bind mounts** are auto-detected from `file` and `directory` parameters — the effective values the command is built from, so manifest defaults and parameters declared in `env_parameters` are bound too, not just values the user typed. The job's working directory is always bound, and when `working_dir` is `manifest` or `repo`, the cached repo clone is bound as well. Use `bind_paths` to add extra paths:
 
 ```yaml
 container: ghcr.io/org/image:tag
