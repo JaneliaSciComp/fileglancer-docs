@@ -130,6 +130,8 @@ When `repo_url` is set:
 - The discovery repo (containing `runnables.yaml`) is used only for manifest metadata.
 - The tool repo (`repo_url`) is cloned separately and used as the working directory for the job.
 
+`repo_url` only triggers this separate-repo behavior when it points to a *different* repository (a different `owner/repo`); the branch is ignored in that comparison. If `repo_url` names the **same** repository the manifest lives in, it is not treated as separate — the job runs from the manifest's own branch and pinned commit. So a manifest on a non-default branch does not need `repo_url` pointing back at itself; doing so with a bare URL (no `/tree/<branch>`) would otherwise imply the repo's default branch. Omit `repo_url` unless the code genuinely lives in another repository.
+
 Repos are cloned into a per-user cache, and every app is **pinned to an exact commit** when it is added. Jobs run from an immutable per-commit checkout of the pinned code — they never pull automatically, and nothing can change a job's code while it runs. To get the newest code, use the **Update** action for the app in the UI, which pulls the latest commits on the app's revision, re-reads the manifest, and re-pins the app (both the manifest repo and the `repo_url` tool repo, when one is declared). Updates are per-app: other apps sharing the same repository keep their own pinned commits.
 
 ## Where to Go Next

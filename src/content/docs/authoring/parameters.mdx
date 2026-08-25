@@ -27,7 +27,8 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `raw` | boolean | no | If `true`, the value is appended to the command without shell quoting. Validated against shell metacharacters for safety. Default: `false` |
 | `value_separator` | string | no | How a flagged parameter is joined to its value: `"space"` emits `--flag 'value'`, `"equals"` emits `--flag='value'`. Use `equals` for tools (like Nextflow) that would otherwise misparse a value starting with `-` as another flag. Default: `"space"` |
 | `boolean_style` | string | no | Only valid on `boolean` parameters. `"flag"` emits the bare flag when true and omits it when false; `"value"` emits an explicit `--flag true` / `--flag false` (or `--flag=true` / `--flag=false` with `value_separator: equals`). Use `value` for tools where omitting a false switch would leave a default of true in effect. Default: `"flag"` |
-| `exists` | boolean | no | Only valid on `file` and `directory` parameters. When `true` (the default), the path must exist and be readable before launch. Set `false` for outputs the job creates: the existence check is skipped, and `directory` parameters are created (as the user, within an allowed file share) before launch, so a home default like `~/.fileglancer/logs` works on first launch. Default: `true` |
+| `exists` | boolean | no | Only valid on `file`, `directory`, and `path` parameters. When `true` (the default), the path must exist and be readable before launch. Set `false` for outputs the job creates: the existence check is skipped, and `directory` parameters are created (as the user, within an allowed file share) before launch, so a home default like `~/.fileglancer/logs` works on first launch. Default: `true` |
+| `associations` | object | no | Only valid on `file`, `directory`, and `path` parameters. Declares which file types this parameter accepts, so the file browser can offer the app when the user navigates to a matching file or directory. See [File Associations](#file-associations) |
 
 ## Parameter Types
 
@@ -39,16 +40,63 @@ Each parameter with a `flag` field becomes a CLI flag appended to the base comma
 | `boolean` | Checkbox | `--flag` (if true, omitted if false); `--flag true` / `--flag false` with `boolean_style: value` | N/A | Must be true/false |
 | `file` | Text input + file browser | `--flag '/path/to/file'` | `'/path/to/file'` | Must be an absolute path that exists, is readable, and points to a file on the server (unless `exists: false`) |
 | `directory` | Text input + directory browser | `--flag '/path/to/dir'` | `'/path/to/dir'` | Must be an absolute path that exists, is readable, and points to a directory on the server (unless `exists: false`) |
+| `path` | Text input + file/directory browser | `--flag '/path/to/item'` | `'/path/to/item'` | Must be an absolute path that exists and is readable on the server (unless `exists: false`). Accepts either a file or a directory — no type check. Useful for inputs that take both, e.g. TIFF files and OME-Zarr directories |
 | `enum` | Dropdown select | `--flag 'chosen_value'` | `'chosen_value'` | Value must be one of the `options` list |
 
-**Notes on `file` and `directory` types:**
+**Notes on `file`, `directory`, and `path` types:**
 
 - The UI provides a browse button alongside the text input, so users can pick paths from the Fileglancer file browser instead of typing them.
-- Paths are validated server-side before job submission (must exist, be accessible, and match the expected file/folder type, unless `exists: false`).
+- Paths are validated server-side before job submission (must exist, be accessible, and match the expected file/folder type, unless `exists: false`; `path` parameters accept either kind).
 - Both absolute paths (`/data/images`) and home-relative paths (`~/output`) are accepted.
 - Shell metacharacters (`;`, `&`, `|`, `` ` ``, `$`, `(`, `)`, etc.) are rejected for safety.
-- Set `exists: false` on paths the job creates, such as an output or logs directory. The path is still validated for file-share containment, but not for existence. If the path already exists, Fileglancer still checks that it matches the expected file/folder type. Fileglancer additionally creates `exists: false` directories (as the user, within an allowed file share) just before launch, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. `file` parameters with `exists: false` skip the existence check but nothing is created for them.
+- Set `exists: false` on paths the job creates, such as an output or logs directory. The path is still validated for file-share containment, but not for existence. If the path already exists, Fileglancer still checks that it matches the expected file/folder type. Fileglancer additionally creates `exists: false` directories (as the user, within an allowed file share) just before launch, so a default like `~/.fileglancer/logs` works out of the box and overrides that point at a new directory are created too. Overrides pointing at an existing directory are a no-op. This never creates anything outside a file share. `file` and `path` parameters with `exists: false` skip the existence check but nothing is created for them (a `path` parameter's kind is ambiguous, so Fileglancer cannot know whether to create a directory).
 - Apps auto-detected from a Nextflow pipeline's `nextflow_schema.json` follow the same convention as [nf-schema](https://nextflow-io.github.io/nf-schema/): a path parameter only requires existence when the schema property sets `"exists": true`.
+
+## File Associations
+
+`file`, `directory`, and `path` parameters can declare `associations`: the file types they accept. When a user navigates to a matching file or directory in the Fileglancer file browser, a **Compatible apps** panel appears above the listing. Clicking the app opens its launch form with the browsed path already filled into the associated parameter.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `extensions` | list of strings | no | Name suffixes to match, e.g. `[.tif, .czi]`. Case-insensitive; a missing leading dot is added automatically. Multi-part suffixes match against the end of the name, so `.ome.zarr` works |
+| `capabilities_manifest` | string | no | Repo-relative path to a [capability manifest](https://github.com/BioImageTools/capability-manifest) YAML file describing the OME-Zarr data the app supports — the same standard Fileglancer uses to pick compatible OME-Zarr web viewers. Accepts either a full manifest (`viewer:` + `capabilities:` sections) or a bare capabilities mapping. Resolved when the app manifest is loaded, so the pinned app snapshot carries its capabilities with it. Only valid on `directory` and `path` parameters |
+| `label` | string | no | Display label shown in the file browser panel, e.g. `TIFF images`. Defaults to the parameter's `name` |
+
+At least one of `extensions` or `capabilities_manifest` must be declared. Capability manifests are a separate standard and always live in their own file — they cannot be inlined in `runnables.yaml`.
+
+### Matching Rules
+
+- A `file` parameter only matches files, a `directory` parameter only matches directories, and a `path` parameter matches both.
+- For a Zarr dataset (detected by content, not by name), declared capabilities are **authoritative**: the app is offered only when the compatibility check passes, even if `.zarr` is also listed in `extensions`. Plain (non-OME) Zarr never matches a capabilities rule, since compatibility cannot be verified.
+- Everything else matches by case-insensitive name suffix.
+
+This lets one input register many file types with different handling. For example, an image converter that accepts TIFF and CZI files by extension, plus the OME-Zarr datasets it can actually read:
+
+```yaml
+# runnables.yaml
+parameters:
+  - flag: --input
+    name: Input image
+    type: path
+    required: true
+    associations:
+      extensions: [.tiff, .czi, .zarr]
+      capabilities_manifest: capabilities.yaml
+      label: Convertible images
+```
+
+```yaml
+# capabilities.yaml (next to runnables.yaml)
+capabilities:
+  ome_zarr_versions: [0.4, 0.5]
+  compression_codecs: [blosc, zstd, gzip]
+```
+
+This app appears for every `.tiff` and `.czi` file. For Zarr datasets, the capability manifest decides: an OME-Zarr 0.4 dataset compressed with blosc matches, while an unsupported version or codec hides the app — even though `.zarr` is in the extensions list.
+
+<Aside type="note" title="Existing installs">
+Installed apps cache their manifest, so associations added to an app after a user installed it take effect once the user clicks **Update** on the app.
+</Aside>
 
 ## Flag Forms
 
