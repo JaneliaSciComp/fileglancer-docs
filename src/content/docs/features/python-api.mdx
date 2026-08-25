@@ -41,6 +41,10 @@ Click **Copy** and save both lines somewhere safe, such as your shell profile or
 | `jobs:read` | List jobs and read each job's full details, parameters, environment, and log files |
 | `jobs:write` | Submit and cancel jobs |
 
+`files:write` and `jobs:write` are **not enabled by default**. Both amount to full access to your files, so each server opts into them deliberately — if they are missing from the scope list when you create a token, contact your Fileglancer administrator to ask whether they can be enabled.
+
+A server can withhold any scope, not just those two. The token creation dialog shows only the scopes your server supports, and a token that carries a scope the server has since stopped supporting loses it: requests needing it fail with a 403 saying the scope is not enabled on this server.
+
 A `:write` scope also grants the matching `:read`.
 
 `jobs:write` runs code (`pre_run`, `post_run`, and the job command itself) on your behalf, so it has the same access to your files as you do — it is not confined by `files:read` or `files:write`.
