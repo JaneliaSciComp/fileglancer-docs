@@ -43,6 +43,8 @@ Click **Copy** and save both lines somewhere safe, such as your shell profile or
 
 A `:write` scope also grants the matching `:read`.
 
+`jobs:write` runs code (`pre_run`, `post_run`, and the job command itself) on your behalf, so it has the same access to your files as you do — it is not confined by `files:read` or `files:write`.
+
 Tokens cannot reach every endpoint. SSH keys, apps and the app catalog, preferences, file-conversion tickets, and token management itself are available only in the web interface, so a leaked token cannot be used to mint another one or change your account.
 
 ## Connecting from Python
