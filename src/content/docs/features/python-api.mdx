@@ -1,0 +1,169 @@
+---
+title: Python API
+description: Use Fileglancer from Python with an API token
+---
+
+Fileglancer's HTTP API can be driven from Python using an API token. The client ships inside the same `fileglancer` package as the command-line tool, so `pip install fileglancer` is all you need on the machine running your script or notebook.
+
+## Creating a Token
+
+The API Tokens page is available from the profile menu in the upper-right corner of any Fileglancer page.
+
+Click your **username or profile icon** in the top-right corner, then select **API Tokens** from the dropdown menu.
+
+Click **New Token**, then fill in the dialog:
+
+- **Name** — a label you will recognize later, such as `laptop notebook`.
+- **Scopes** — check the boxes for what the token should be allowed to do. See [Scopes](#scopes) below.
+- **Expires in** — 30, 90, or 365 days. There is no option to create a token that never expires.
+
+Click **Create**.
+
+:::caution[Copy this now — it will not be shown again]
+The token secret is never stored by Fileglancer. A **Token created** dialog shows two lines:
+
+```bash
+export FILEGLANCER_URL=https://your-fileglancer-server
+export FILEGLANCER_TOKEN=fgt_...
+```
+
+Click **Copy** and save both lines somewhere safe, such as your shell profile or a `.env` file, before closing the dialog. If you lose the secret, revoke the token and create another.
+:::
+
+## Scopes
+
+| Scope | Grants |
+| --- | --- |
+| `files:read` | List directories and read file contents |
+| `files:write` | Create, rename, delete, and write files |
+| `links:read` | List data links and Neuroglancer links |
+| `links:write` | Create and delete data links and Neuroglancer links |
+| `jobs:read` | List jobs |
+| `jobs:write` | Submit and cancel jobs |
+
+A `:write` scope also grants the matching `:read`.
+
+Tokens cannot reach every endpoint. SSH keys, apps and the app catalog, preferences, file-conversion tickets, and token management itself are available only in the web interface, so a leaked token cannot be used to mint another one or change your account.
+
+## Connecting from Python
+
+The client reads two environment variables:
+
+```bash
+export FILEGLANCER_URL=https://your-fileglancer-server
+export FILEGLANCER_TOKEN=fgt_...
+```
+
+```python
+from fileglancer import Fileglancer
+
+fg = Fileglancer()
+```
+
+You can also pass them directly, which takes precedence over the environment:
+
+```python
+fg = Fileglancer(url="https://your-fileglancer-server", token="fgt_...")
+```
+
+`Fileglancer` also works as a context manager, which closes its connection pool automatically:
+
+```python
+with Fileglancer() as fg:
+    fg.ls("/nearline/alice")
+```
+
+Otherwise, call `fg.close()` when you are done with it.
+
+## Working with Paths
+
+Every method takes an absolute filesystem path, the same path you would use on the command line.
+
+```python
+fg.ls("/nearline/alice")
+fg.stat("/nearline/alice/notes.txt")
+fg.mkdir("/nearline/alice/analysis")
+fg.write("/nearline/alice/notes.txt", b"hello")
+fg.read("/nearline/alice/notes.txt")
+fg.rename("/nearline/alice/a.zarr", "/nearline/alice/b.zarr")
+fg.delete("/nearline/alice/tmp")
+```
+
+`ls` raises `FileglancerError` if the path is not a directory, rather than returning an empty list. `stat` returns metadata for a single file or directory without listing its contents.
+
+Paths in Mac (`smb://...`) and Windows (`\\server\share\...`) form are accepted too. Paths returned by the client are always in Linux form.
+
+`fg.file_share_paths()` lists the shares available to you. If a path matches no share, the error names the ones that exist.
+
+## Data Links
+
+A data link serves a folder over HTTP so that a viewer can read it.
+
+```python
+link = fg.create_data_link("/nearline/alice/sample.zarr")
+print(link.url)
+
+fg.data_links()
+fg.delete_data_link(link.sharing_key)
+```
+
+## Neuroglancer Links
+
+`create_ng_link` takes a Neuroglancer state as a plain dictionary, which is what `neuroglancer.ViewerState.to_json()` produces.
+
+```python
+import neuroglancer
+from fileglancer import Fileglancer
+
+fg = Fileglancer()
+link = fg.create_data_link("/nearline/alice/sample.zarr")
+
+state = neuroglancer.ViewerState()
+state.layers["sample"] = neuroglancer.ImageLayer(source=f"zarr://{link.url}")
+
+print(fg.create_ng_link(state.to_json(), title="sample"))
+```
+
+This needs `links:write` on the token, and `neuroglancer` installed separately — the Fileglancer client does not depend on it.
+
+Pass `url_base` to open the link in a different Neuroglancer instance.
+
+## Jobs
+
+```python
+fg.jobs()
+fg.jobs(status="RUNNING")
+fg.job(job_id)
+fg.cancel_job(job_id)
+```
+
+`submit_job` requires the app's URL and an entry point id. The server requires a `parameters` field even when the entry point takes no arguments, so the client defaults it to an empty dict:
+
+```python
+job = fg.submit_job(
+    "https://github.com/owner/repo",
+    "entry-point-id",
+    parameters={"threshold": 0.5},
+)
+```
+
+Any other field the `/api/jobs` endpoint accepts — `resources`, `name`, `env`, `container`, and so on — can be passed as an extra keyword argument.
+
+## Handling Errors
+
+Anything the server rejects raises `FileglancerError`, carrying the server's message and its HTTP status code.
+
+```python
+from fileglancer import FileglancerError
+
+try:
+    fg.mkdir("/nearline/alice/new")
+except FileglancerError as error:
+    print(error, error.status_code)
+```
+
+A 403 usually means the token is missing a scope; the message names the one it needs.
+
+## Revoking a Token
+
+Open the API Tokens page from the profile menu and click **Revoke** on the token you want to remove. A confirmation dialog asks you to confirm, since any script or notebook using that token will stop working immediately. Click **Revoke Token** to confirm, or **Keep token** to back out. This cannot be undone — create a new token if you need one again.
