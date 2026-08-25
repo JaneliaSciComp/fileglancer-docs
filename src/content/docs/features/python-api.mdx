@@ -97,7 +97,7 @@ fg.delete("/data/alice/tmp")
 
 Paths in Mac (`smb://...`) and Windows (`\\server\share\...`) form are accepted too. Paths returned by the client are always in Linux form.
 
-`fg.file_share_paths()` lists the shares available to you. If a path matches no share, the error names the ones that exist.
+`fg.file_share_paths()` lists the shares available to you. A path that matches no share raises `FileglancerError` naming the path; call `file_share_paths()` to see what is available.
 
 ## Data Links
 
