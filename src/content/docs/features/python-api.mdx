@@ -70,7 +70,7 @@ fg = Fileglancer(url="https://your-fileglancer-server", token="fgt_...")
 
 ```python
 with Fileglancer() as fg:
-    fg.ls("/nearline/alice")
+    fg.ls("/data/alice")
 ```
 
 Otherwise, call `fg.close()` when you are done with it.
@@ -80,16 +80,18 @@ Otherwise, call `fg.close()` when you are done with it.
 Every method takes an absolute filesystem path, the same path you would use on the command line.
 
 ```python
-fg.ls("/nearline/alice")
-fg.stat("/nearline/alice/notes.txt")
-fg.mkdir("/nearline/alice/analysis")
-fg.write("/nearline/alice/notes.txt", b"hello")
-fg.read("/nearline/alice/notes.txt")
-fg.rename("/nearline/alice/a.zarr", "/nearline/alice/b.zarr")
-fg.delete("/nearline/alice/tmp")
+fg.ls("/data/alice")
+fg.stat("/data/alice/notes.txt")
+fg.mkdir("/data/alice/analysis")
+fg.write("/data/alice/notes.txt", b"hello")
+fg.read("/data/alice/notes.txt")
+fg.rename("/data/alice/a.zarr", "/data/alice/b.zarr")
+fg.delete("/data/alice/tmp")
 ```
 
 `ls` raises `FileglancerError` if the path is not a directory, rather than returning an empty list. `stat` returns metadata for a single file or directory without listing its contents.
+
+`mkdir` and `write` both require the parent directory to already exist.
 
 Paths in Mac (`smb://...`) and Windows (`\\server\share\...`) form are accepted too. Paths returned by the client are always in Linux form.
 
@@ -100,7 +102,7 @@ Paths in Mac (`smb://...`) and Windows (`\\server\share\...`) form are accepted 
 A data link serves a folder over HTTP so that a viewer can read it.
 
 ```python
-link = fg.create_data_link("/nearline/alice/sample.zarr")
+link = fg.create_data_link("/data/alice/sample.zarr")
 print(link.url)
 
 fg.data_links()
@@ -116,7 +118,7 @@ import neuroglancer
 from fileglancer import Fileglancer
 
 fg = Fileglancer()
-link = fg.create_data_link("/nearline/alice/sample.zarr")
+link = fg.create_data_link("/data/alice/sample.zarr")
 
 state = neuroglancer.ViewerState()
 state.layers["sample"] = neuroglancer.ImageLayer(source=f"zarr://{link.url}")
@@ -157,12 +159,14 @@ Anything the server rejects raises `FileglancerError`, carrying the server's mes
 from fileglancer import FileglancerError
 
 try:
-    fg.mkdir("/nearline/alice/new")
+    fg.mkdir("/data/alice/new")
 except FileglancerError as error:
     print(error, error.status_code)
 ```
 
 A 403 usually means the token is missing a scope; the message names the one it needs.
+
+A 401 with a message like `API token expired on 2026-08-24` means the token's expiry has passed. Expired tokens are not deleted — the API Tokens page still lists them, marked with an **Expired** badge, so you can tell which one lapsed. Tokens cannot be renewed or extended; create a new one and revoke the expired one.
 
 ## Revoking a Token
 
