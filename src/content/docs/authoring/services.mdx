@@ -26,7 +26,7 @@ From the cluster's perspective, a service is just a long-running batch job. The 
 1. The user launches a service-type runnable → the job enters PENDING.
 2. The cluster picks it up → RUNNING.
 3. The service starts and publishes its URL: either Fileglancer writes `SERVICE_URL_PATH` for `auto_url` services, or the service writes that file itself.
-4. On the next poll (every few seconds), Fileglancer reads the file and displays the URL in the UI.
+4. On the next poll (every few seconds), Fileglancer reads the file and displays the URL in the UI — rewritten to an HTTPS address if the server has a service proxy configured (see [Access Over HTTPS](#access-over-https)).
 5. The user clicks **Open Service** → the service opens in a new browser tab.
 6. When done, the user clicks **Stop Service** → the job is killed and the URL disappears.
 
@@ -104,6 +104,40 @@ echo "http://$(hostname):${PORT}" > "$SERVICE_URL_PATH"
 
 <Aside type="caution" title="URL scheme is validated">
 The URL must start with `http://` or `https://`. Fileglancer validates this before displaying it. If the file doesn't exist or contains an invalid URL, no link is shown.
+</Aside>
+
+## Access Over HTTPS
+
+Your service publishes a plain `http://host:port` URL, but that is not always what the user's browser opens. When the Fileglancer server has a service proxy configured, it republishes each running service at a per-job HTTPS subdomain:
+
+```
+https://job-42-k7m2qhxr.services.example.org/lab?token=abc123
+```
+
+The path, query, and fragment of the URL you published are carried across unchanged, so a `service_url_suffix` that splices in `${FG_SERVICE_TOKEN}` keeps working exactly as written. Nothing in your manifest needs to change, and your job cannot tell whether the server does this — always publish the direct URL and let Fileglancer rewrite it.
+
+Two things are worth knowing when you test an app on a server with the proxy enabled:
+
+- **Your service sees the proxy subdomain in the `Host` header**, not the compute node's name. Servers that check the request origin on WebSocket connections generally accept this, because the proxy passes `Host` and `Origin` through as the same value. If yours rejects it, look for an allowed-origin or base-URL option rather than turning the check off.
+- **A service that pins an absolute URL** — an OAuth callback registered against one fixed host and port, say — may not work at a rewritten address at all.
+
+### Opting out of the proxy
+
+If your service genuinely cannot work at a rewritten URL, set `service_proxy: false` on the runnable:
+
+```yaml title="runnables.yaml"
+runnables:
+  - id: serve
+    name: Start Server
+    type: service
+    service_proxy: false
+    command: ./serve.sh
+```
+
+Fileglancer then publishes that runnable's direct `http://host:port` URL even on a server where every other service is republished, and the proxy refuses to serve it.
+
+<Aside type="caution" title="Opting out gives up encryption">
+The direct URL is plain HTTP on every hop, including the one between the user's browser and the compute node. Anything typed into the service — a password, an API token, a passphrase in a terminal — crosses the network in the clear. Use this only when the service cannot work behind the proxy, and never for a service that handles credentials.
 </Aside>
 
 ## Service Lifecycle

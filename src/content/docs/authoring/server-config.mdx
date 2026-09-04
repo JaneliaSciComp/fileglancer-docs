@@ -1,6 +1,6 @@
 ---
 title: Server Configuration
-description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH, worker environment passthrough, and the unknown-job cutoff — plus where container images are cached.
+description: App execution settings controlled by the Fileglancer server administrator — adding tools to $PATH, worker environment passthrough, the unknown-job cutoff, and the HTTPS service proxy — plus where container images are cached.
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -53,6 +53,22 @@ apps:
 ```
 
 Users can clear a stuck job sooner by cancelling it from the Jobs page.
+
+## Service Proxy (`service_proxy_domain`)
+
+A service job binds a port on a compute node and publishes `http://host:port`. Reaching that address means plain HTTP, and it only works from a network that can route to the compute nodes directly. Setting `service_proxy_domain` makes Fileglancer republish every running service at a per-job HTTPS subdomain of that zone instead:
+
+```yaml title="config.yaml"
+session_secret_key: "<a long random string>"
+apps:
+  service_proxy_domain: "services.example.org"
+```
+
+Users then open `https://job-42-k7m2qhxr.services.example.org/...`, and the path and query of the service's own URL — including any access token — are carried across unchanged. The subdomain label is signed with `session_secret_key`, which is required whenever the proxy domain is set, so the per-job addresses cannot be guessed or enumerated.
+
+Leave `service_proxy_domain` empty to disable it; each service's direct URL is then published unchanged. Turning it on also needs a wildcard DNS record, a wildcard TLS certificate for the zone, and a matching reverse-proxy server block. Those steps are described in `docs/ServiceProxy.md` in the Fileglancer repository.
+
+Individual apps can decline to be republished with `service_proxy: false` on the runnable — see [Opting out of the proxy](/authoring/services/#opting-out-of-the-proxy).
 
 ## Container Cache Directory
 
