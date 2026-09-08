@@ -70,6 +70,7 @@ export default defineConfig({
               label: "Modern Imaging Format Support",
               slug: "features/image-support",
             },
+            { label: "Python API", slug: "features/python-api" },
           ],
         },
         {
