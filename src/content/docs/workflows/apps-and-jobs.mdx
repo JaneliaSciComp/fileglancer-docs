@@ -191,6 +191,9 @@ Some apps define **service** entry points — long-running processes like Jupyte
 - While a service is pulling a container image or starting, the detail view shows a progress banner
 - Once the service is ready and has published its URL, a green banner appears with an **Open Service** button that opens the service in a new tab
 - To stop a service, click **Stop Service** from the detail view or select **Stop Service** from the actions menu in the jobs table
+- The address behind **Open Service** is only valid while the service is running. Once you stop it, or its walltime expires, the page reports that the service is no longer available
+
+On servers configured for it, services open over HTTPS at a per-job address like `https://job-42-k7m2qhxr.services.example.org/`, rather than at the compute node's own hostname. The address is unique to that launch and stops working when the service stops. Ask your administrator whether your server is set up this way; on one that is not, services open over plain HTTP at the compute node instead, which requires a network connection that can reach cluster nodes directly.
 
 ## Managing Apps
 
