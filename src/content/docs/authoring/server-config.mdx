@@ -68,6 +68,16 @@ Users then open `https://job-42-k7m2qhxr.services.example.org/...`, and the path
 
 Leave `service_proxy_domain` empty to disable it; each service's direct URL is then published unchanged. Turning it on also needs a wildcard DNS record, a wildcard TLS certificate for the zone, and a matching reverse-proxy server block. Those steps are described in `docs/ServiceProxy.md` in the Fileglancer repository.
 
+Optionally set `service_proxy_address` to the address the reverse proxy connects from, as the compute nodes see it (an IP address, a CIDR network, or a comma-separated list):
+
+```yaml
+apps:
+  service_proxy_domain: "services.example.org"
+  service_proxy_address: "10.1.2.3"
+```
+
+Proxied service jobs then receive it as `FG_SERVICE_PROXY_ADDRESS`, so an app can accept connections from the proxy only — see [Restricting a service to the proxy](/authoring/services/#restricting-a-service-to-the-proxy). It is ignored unless `service_proxy_domain` is set.
+
 Individual apps can decline to be republished with `service_proxy: false` on the runnable — see [Opting out of the proxy](/authoring/services/#opting-out-of-the-proxy).
 
 ## Container Cache Directory
