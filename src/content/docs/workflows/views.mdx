@@ -4,7 +4,14 @@ description: Build Views from your datasets, edit them in the embedded Neuroglan
 ---
 
 import { Steps } from "@astrojs/starlight/components";
+import StyledImage from '@components/StyledImage.astro';
 import mascot from "@assets/mascot/fg-point-self.png";
+import createViewLight from "@assets/task-images/create-view-light.png";
+import createViewDark from "@assets/task-images/create-view-dark.png"
+import openViewLight from "@assets/task-images/open-view-light.png"
+import openViewDark from "@assets/task-images/open-view-dark.png"
+import viewsPageLight from "@assets/base-images/views-page-light.png"
+import viewsPageDark from "@assets/base-images/views-page-dark.png"
 
 <img
   src={mascot.src}
@@ -37,12 +44,18 @@ The Layer Cart is a panel on the right side of the Browse page. To open it, clic
 
 Add datasets to the cart in any of these ways:
 
-- **One folder**: Right-click a folder in the file list and select **Add to cart**.
-- **Several folders**: Check the boxes next to the folders, then click **Add N to cart** in the selection bar at the bottom of the screen.
+- **One folder**: Right-click a folder in the file list, or click the icon in its Actions column, and select **Add to cart** from the context menu.
+- **Several folders**: Check the boxes next to the folders, then click **Add N to cart** in the selection bar that appears at the bottom of the screen.
 - **The dataset you're viewing**: Under the image thumbnail of a Zarr or N5 dataset, click **Add to cart**.
 - **From the cart panel**: Navigate to a dataset folder and click **Add current dataset**.
 
 The cart keeps its contents until you create a View or clear it, so you can collect datasets from several folders and file shares.
+
+<StyledImage
+lightSrc={createViewLight}
+darkSrc={createViewDark}
+alt="Screenshot of the Fileglancer file browser with an OME-Zarr dataset open. On the right side of the screen, the properties panel is open and displaying the contents of the Layer Cart tab. A red arrow points to the cart icon button that opens the panel to the Layer Cart tab. Another red arrow points to the 'Create View' button at the bottom of the Layer Cart tab that creates a View from the collected datasets."
+/>
 
 ### Step 2: Review the cart
 
@@ -87,6 +100,12 @@ The viewer toolbar has these buttons:
 - **Fullscreen**: Expands the viewer to fill your screen.
 
 To return to your list of Views, click **Views** in the toolbar.
+
+<StyledImage
+lightSrc={openViewLight}
+darkSrc={openViewDark}
+alt="Screenshot of the embedded Neuroglancer in Fileglancer. At the top of the screen, on the right side, are the toolbar buttons to add data, copy the View link, download the Neuroglancer JSON, open the data in the Neuroglancer configured in Preferences, and make the embedded Neuroglancer fullscreen."
+/>
 
 ## Edit a View
 
@@ -182,6 +201,12 @@ The Views page lists the Views you own. The table shows:
 - **Actions**: Open View, Copy View link to share, Download JSON state, Rename, Remove datasets, and Delete.
 
 To delete a View, select **Delete** from the actions menu and confirm. The View's link stops working. Its Data Links and data aren't affected.
+
+<StyledImage
+lightSrc={viewsPageLight}
+darkSrc={viewsPageDark}
+alt="A screenshot of the Views page in Fileglancer. The page features a table showing information about each created View."
+/>
 
 ## Fix broken sources
 
