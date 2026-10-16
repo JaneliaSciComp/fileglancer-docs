@@ -48,8 +48,8 @@ export default defineConfig({
             { label: "Navigating Files", slug: "workflows/navigation" },
             { label: "Creating Data Links", slug: "workflows/data-links" },
             {
-              label: "Neuroglancer Short Links",
-              slug: "workflows/ng-links",
+              label: "Creating Views",
+              slug: "workflows/views",
             },
             {
               label: "Apps and Jobs",
