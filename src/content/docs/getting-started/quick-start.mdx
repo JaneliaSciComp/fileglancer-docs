@@ -13,10 +13,10 @@ import lightSaveFavorite from '@assets/task-images/light-save-favorite.png'
 import darkSaveFavorite from '@assets/task-images/dark-save-favorite.png'
 import lightZarrDataLink from '@assets/task-images/light-quick-start-zarr-data-link.png'
 import darkZarrDataLink from '@assets/task-images/dark-quick-start-zarr-data-link.png'
+import createViewLight from "@assets/task-images/create-view-light.png";
+import createViewDark from "@assets/task-images/create-view-dark.png"
 import lightZarrConversion from '@assets/task-images/light-zarr-conversion-request.png'
 import darkZarrConversion from '@assets/task-images/dark-zarr-conversion-request.png'
-import createNgLinkDark from '@assets/task-images/create-ng-link-dark.png'
-import createNgLinkLight from '@assets/task-images/create-ng-link-light.png'
 import mascot from '@assets/mascot/fg-starting-line.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
@@ -106,35 +106,32 @@ darkSrc={darkZarrDataLink}
 alt="Screenshot of the Fileglancer interface, with an arrow pointing to the 'navigate to path' button in the toolbar and to the Zarr viewer buttons under a Zarr thumbnail."
 />
 
-## Share a configured Neuroglancer view
+## Create and share a View
 
-Once you have your image open in Neuroglancer (via a data link), you can save and share the exact viewer state (including layer visibility, colors, zoom level, and camera position) using Neuroglancer Short Links. This allows collaborators to see not just the image data, but your specific configuration of how to view it.
+A View saves a Neuroglancer scene: the datasets it shows, plus the layer colors, visibility, zoom level, and camera position. Collaborators who open the View's link see exactly what you configured.
 
 <Steps>
-1. **Configure your view**<br/>
-With your image open in Neuroglancer, adjust the layers, colors, and camera position exactly how you want collaborators to see it.
+1. **Add datasets to the Layer Cart**<br/>
+In the file browser, right-click any directory and select **Add to cart**. For Zarr, OME-Zarr, and N5 data, you can also click the "Add to Cart" button in the metadata panel for the dataset. To add several folders at once, check their boxes in the file browser and click **Add N to cart** in the selection bar that appears at the bottom of the screen.
 
-2. **Copy the Neuroglancer URL**<br/>
-From your Neuroglancer browser tab, copy the full URL from the address bar.
+2. **Create the View**<br/>
+In the Layer Cart panel, click **Create View**, name the View, and click **Create**. If Fileglancer needs to create Data Links for your datasets and automatic Data Links aren't enabled, it asks you to confirm first. The View opens in the Neuroglancer viewer.
 
-3. **Navigate to NG Links page**<br/>
-In Fileglancer, click "NG Links" in the top navigation bar.
+3. **Configure the View**<br/>
+Adjust the layers, colors, and camera position exactly how you want collaborators to see them, then click **Save** in the viewer toolbar.
 
-4. **Create a new link**<br/>
-Click "+ New Link" button, select "URL Mode", paste your Neuroglancer URL, and optionally add a name and title.
-
-5. **Share the short link**<br/>
-Copy the generated short link and share it with your collaborators. They'll see exactly what you configured, and you can update the Neuroglancer state associated with the link later without changing the short link URL.
+4. **Share the link**<br/>
+Click **Copy link to share** in the viewer toolbar and send the link to your collaborators.
 </Steps>
 
-:::tip[Why use Neuroglancer short links?]
-Neuroglancer URLs can be very long and complex. The Neuroglancer short links created in Fileglancer are stable, shareable URLs that are easier to work with and can be updated without breaking existing links shared with collaborators.
+:::tip[Why use Views?]
+A View's link stays the same when you edit and save the View, so collaborators always see your latest version. You can also add datasets to a View or remove them later, right from the viewer.
 :::
 
 <StyledImage
-lightSrc={createNgLinkLight}
-darkSrc={createNgLinkDark}
-alt="Screenshot of the Fileglancer NG Links page, with an arrow pointing to the '+ New Link' button."
+lightSrc={createViewLight}
+darkSrc={createViewDark}
+alt="Screenshot of the Fileglancer file browser with an OME-Zarr dataset open. On the right side of the screen, the properties panel is open and displaying the contents of the Layer Cart tab. A red arrow points to the cart icon button that opens the panel to the Layer Cart tab. Another red arrow points to the 'Create View' button at the bottom of the Layer Cart tab that creates a View from the collected datasets."
 />
 
 ## Request a file conversion
@@ -193,10 +190,10 @@ alt="Screenshot of the Fileglancer interface, with an arrow pointing to the Conv
 4. Once complete, create a data link for the converted data
 
 ### Scenario 3: Collaborating on Image Analysis
-1. Open your OME-Zarr image in Neuroglancer
-2. Configure the viewer to highlight specific features or regions
-3. Create a Neuroglancer Short Link on the NG Links page
-4. Share the short link with collaborators so they see exactly what you configured
+1. Add your OME-Zarr datasets to the Layer Cart
+2. Create a View from the Layer Cart
+3. Configure the viewer to highlight specific features or regions, then save the View
+4. Share the View's link with collaborators so they see exactly what you configured
 
 ### Scenario 4: Organizing Your Workflow
 1. Use search to find all your project directories
@@ -210,7 +207,7 @@ Now that you've completed the basics, explore these guides for more detailed wor
 
 - **[Navigation Guide](../../workflows/navigation/)**: Master all navigation features
 - **[Data Links Guide](../../workflows/data-links/)**: Learn advanced sharing options
-- **[Neuroglancer Short Links Guide](../../workflows/ng-links/)**: Deep dive into creating and managing viewer state links
+- **[Neuroglancer Views Guide](../../workflows/views/)**: Deep dive into creating, editing, and sharing Views
 - **[File Conversion Guide](../../workflows/file-conversion/)**: Understand the complete conversion process
 
 ## Quick Reference
@@ -221,9 +218,9 @@ Now that you've completed the basics, explore these guides for more detailed wor
 | Navigate to specific path | Toolbar widget | Paste path and navigate |
 | Save favorite | Toolbar | Click star icon |
 | Create data link | Properties Panel | Toggle switch in Overview |
-| Create Neuroglancer Short Link | NG Links page | Click "+ New Link" button |
+| Create View | Layer Cart panel | Click "Create View" button |
 | Request conversion | Properties Panel | Use Conversion tab |
 | View all data links | URL | Navigate to the **Data Links** page |
-| View all Neuroglancer Short Links | URL | Navigate to the **NG Links** page |
+| Browse all Views | URL | Navigate to the **Views** page |
 | Check data conversion task status | URL | Navigate to the **Tasks** page |
 | Go to home directory | Toolbar | Click home icon |
