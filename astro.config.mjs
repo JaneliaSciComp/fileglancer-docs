@@ -55,10 +55,6 @@ export default defineConfig({
               label: "Apps and Jobs",
               slug: "workflows/apps-and-jobs",
             },
-            {
-              label: "File Conversion Requests",
-              slug: "workflows/file-conversion",
-            },
           ],
         },
         {
