@@ -90,6 +90,7 @@ Fileglancer exports these variables in every job script. They are available to `
 | `SERVICE_URL_PATH` | Service-type jobs only | Absolute path of the service URL file. Manual services write their URL here; for `auto_url` services Fileglancer writes it after the port is ready. Equivalent to `$FG_WORK_DIR/service_url` (see [Services](/authoring/services/)) |
 | `FG_SERVICE_PORT` | Service-type jobs only | A free TCP port picked on the compute node at job start. Bind your service to it instead of implementing port discovery yourself (see [Services](/authoring/services/)) |
 | `FG_HOSTNAME` | Service-type jobs only | The compute node's hostname (`$(hostname)`), used to build the service URL |
+| `FG_SERVICE_PROXY_ADDRESS` | Service-type jobs, only when the server's HTTPS proxy is used for the job and its address is configured | The address the proxy connects from, as the compute node sees it: an IP address, a CIDR network, or a comma-separated list. Use it to accept connections from the proxy only (see [Restricting a service to the proxy](/authoring/services/#restricting-a-service-to-the-proxy)) |
 | `FG_SERVICE_TOKEN` | Service-type jobs only | A URL-safe random secret minted per job. Use it for your service's auth (e.g. `--token-password="$FG_SERVICE_TOKEN"`) and reference it from `service_url_suffix` as `${FG_SERVICE_TOKEN}` for one-click access (see [Services](/authoring/services/)) |
 
 ## Pre/Post-Run Scripts
