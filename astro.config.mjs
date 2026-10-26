@@ -25,7 +25,7 @@ export default defineConfig({
     starlight({
       title: "Fileglancer User Guide",
       description:
-        "Comprehensive documentation for the Fileglancer scientific imaging file browser and sharing platform at Janelia Research Campus.",
+        "Documentation for Fileglancer, an open-source web application for browsing, viewing, and sharing large scientific imaging data on network file systems.",
       logo: {
         src: "./src/assets/logo.svg",
       },
@@ -40,6 +40,10 @@ export default defineConfig({
               slug: "getting-started/introduction",
             },
             { label: "Quick Start Guide", slug: "getting-started/quick-start" },
+            {
+              label: "Using Fileglancer at Janelia",
+              slug: "getting-started/janelia",
+            },
           ],
         },
         {
