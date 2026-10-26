@@ -12,6 +12,8 @@ import openViewLight from "@assets/task-images/open-view-light.png"
 import openViewDark from "@assets/task-images/open-view-dark.png"
 import viewsPageLight from "@assets/base-images/views-page-light.png"
 import viewsPageDark from "@assets/base-images/views-page-dark.png"
+import externalSharingPrefsLight from "@assets/base-images/neuroglancer-external-sharing-prefs-light.png"
+import externalSharingPrefsDark from "@assets/base-images/neuroglancer-external-sharing-prefs-dark.png"
 
 <img
   src={mascot.src}
@@ -192,12 +194,33 @@ In the viewer, click **Copy link to share**. On the Views page, you can also sel
 Collaborators who open the link see the View in the Fileglancer viewer. They need to sign in to Fileglancer.
 </Steps>
 
-To share a View with someone who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL.
+To share a View with someone on the Janelia network who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL. For collaborators outside the Janelia network, see [Share with external collaborators](#share-with-external-collaborators).
 
-:::note[Sharing with external collaborators]
-Anyone with access to the Janelia network can load the data in a View. If your image data is located in a `data_external` folder on a Janelia file share, it can also be loaded outside the Janelia network. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org). In addition, ensure your preference for the Neuroglancer viewer is set to the external appspot deployment on the **Preferences** page before you copy the Neuroglancer link.
+### Share with external collaborators
 
-:::
+Anyone with access to the Janelia network can load the data in a View. Collaborators outside the Janelia network can load data only from a `data_external` folder on a Janelia file share. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org).
+
+To open and share a dataset in Neuroglancer with someone outside the Janelia network:
+
+<Steps>
+1. **Set your Neuroglancer preferences**<br/>
+In the **Neuroglancer** section of the **Preferences** page, select exactly these settings:
+    - **The Neuroglancer button on Zarr/OME-Zarr metadata panels opens the dataset in**: **Standalone Neuroglancer**
+    - **Views** > **"Open in Neuroglancer" base URL**: **Public**
+    - **Standalone Neuroglancer** > **Base URL**: **Public**
+
+2. **Open the dataset in a viewer**<br/>
+Browse to a dataset in a `data_external` folder and click the Neuroglancer button under the image thumbnail. You can also open the dataset in other external viewers to share the same way.
+
+3. **Share the Neuroglancer URL**<br/>
+Copy the URL from the browser's address bar and send it to your collaborator.
+</Steps>
+
+<StyledImage
+lightSrc={externalSharingPrefsLight}
+darkSrc={externalSharingPrefsDark}
+alt="Screenshot of the Neuroglancer section of the Fileglancer Preferences page. 'Standalone Neuroglancer' is selected for the Neuroglancer button, and 'Public — neuroglancer-demo.appspot.com' is selected for both the Views 'Open in Neuroglancer' base URL and the Standalone Neuroglancer base URL."
+/>
 
 ## Neuroglancer preferences
 
