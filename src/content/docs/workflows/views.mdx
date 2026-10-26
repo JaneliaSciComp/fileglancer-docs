@@ -23,7 +23,7 @@ A View is a saved Neuroglancer scene: the datasets it shows, plus the layer colo
 
 ## What are Views?
 
-- **Built from your files**: Pick datasets in the file browser. Fileglancer creates the Data Links and the Neuroglancer layers for you.
+- **Built from your files**: Pick datasets in the file browser, including datasets in public cloud buckets. Fileglancer creates the Data Links and the Neuroglancer layers for you.
 - **Opened in Fileglancer**: Views open in a Neuroglancer viewer embedded in Fileglancer.
 - **Editable**: Change the View in the viewer, add or remove datasets, and save. The link stays the same.
 - **Shareable**: Each View has a link that you can send to collaborators.
@@ -96,7 +96,7 @@ The viewer toolbar has these buttons:
 - **Add data**: Opens the sidebar for adding and removing datasets. Only the View's owner sees this button.
 - **Copy link to share**: Copies the View's link to your clipboard.
 - **Download JSON**: Downloads the View's Neuroglancer state as a JSON file.
-- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can configure whether this is the internal Janelia Neuroglancer deployment or the external appspot deployment on the **Preferences** page.
+- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. If your deployment serves its own Neuroglancer, you can choose between it and the public appspot deployment on the **Preferences** page.
 - **Fullscreen**: Expands the viewer to fill your screen.
 
 To return to your list of Views, click **Views** in the toolbar.
@@ -186,7 +186,7 @@ Collaborators who open the link see the View in the Fileglancer viewer. They nee
 To share a View with someone who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL.
 
 :::note[Sharing with external collaborators]
-Anyone with access to the Janelia network can load the data in a View. If your image data is located in a `data_external` folder on a Janelia file share, it can also be loaded outside the Janelia network. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org). In addition, ensure your preference for the Neuroglancer viewer is set to the external appspot deployment on the **Preferences** page before you copy the Neuroglancer link.
+Anyone who can reach your Fileglancer server can load the data in a View. Data that is already public can be loaded from anywhere: datasets in public S3 buckets added through **Cloud Storage** are referenced by their public URL, and a deployment can publish selected folders through an S3-compatible proxy. At Janelia, files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org). For public data, set your Neuroglancer preference to the public appspot deployment on the **Preferences** page before you copy the Neuroglancer link.
 
 :::
 
@@ -238,7 +238,7 @@ The View takes its dimensions from its first dataset. Datasets with different di
 
 ### Collaborators can't load the data
 
-- Confirm that they're on the Janelia network, or that the data is in a `data_external` folder.
+- Confirm that they can reach your Fileglancer server, or that the data is public (a cloud storage bucket, or at Janelia a `data_external` folder).
 - Check the **Sources** column on the Views page for broken sources.
 
 ## Neuroglancer Short Links

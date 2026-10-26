@@ -136,7 +136,7 @@ A shared deployment adds a few pieces around the Fileglancer server:
 - **Single sign-on.** Users authenticate with your institution's OAuth/OIDC provider (Janelia uses Okta).
 - **A reverse proxy.** Nginx terminates TLS, serves the static frontend, and can serve a Neuroglancer instance from the same origin so that Views can be edited in place.
 - **A database.** SQLite works for small deployments; PostgreSQL is recommended for larger ones.
-- **Optional integrations.** A compute cluster for the [Apps](../../workflows/apps-and-jobs/) feature, and the [x2s3](https://github.com/JaneliaSciComp/x2s3) proxy for sharing data on the public internet.
+- **Optional integrations.** A compute cluster for the [Apps](../../workflows/apps-and-jobs/) feature, the [x2s3](https://github.com/JaneliaSciComp/x2s3) proxy for publishing data on the internet, and control over which public S3 endpoints users may add as cloud storage.
 
 Janelia's production deployment is published as a template that you can adapt:
 

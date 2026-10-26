@@ -55,11 +55,11 @@ For the dataset to be recognized as OME-Zarr and show the full preview panel wit
 
 ### Zarr data links for Neuroglancer
 
-For Neuroglancer to open a Zarr dataset, the dataset must be:s
+For Neuroglancer to open a Zarr dataset, the dataset must be:
 1. organized in the way Neuroglancer expects (e.g., OME-Zarr or plain Zarr array with appropriate metadata), and
 2. accessible via an HTTP URL. 
 
-In Fileglancer, this means [creating a data link](/workflows/data-links) for the directory that shows a Zarr or N5 preview panel. A data link is a proxied URL that makes the dataset accessible over the network.
+In Fileglancer, this means [creating a data link](/workflows/data-links) for the directory that shows a Zarr or N5 preview panel. A data link is a proxied URL that makes the dataset accessible over the network. Datasets in public S3 buckets added through the **Cloud Storage** section are already reachable by URL, so no data link is needed for them.
 
 - If a data link already exists, the Neuroglancer button is immediately active.
 - If no data link exists, clicking the Neuroglancer button prompts you to create one.
@@ -163,7 +163,7 @@ Navigate to your dataset directory. The dataset will be recognized automatically
 Each viewer opens in a new browser tab once a data link is available.
 
 2. **Share viewer URLs**
-Copy the URL from the opened viewer tab. Share with internal collaborators. URLs remain valid as long as data links are active.
+Copy the URL from the opened viewer tab. Share it with collaborators who can reach your Fileglancer server. URLs remain valid as long as data links are active.
 </Steps>
 
 ## Troubleshooting
@@ -201,4 +201,4 @@ Copy the URL from the opened viewer tab. Share with internal collaborators. URLs
 **Problem**: Shared URLs don't work for collaborators
 
 - Check the data link is still active
-- Ensure collaborators are on correct network
+- Ensure collaborators can reach your Fileglancer server (same network or VPN)
