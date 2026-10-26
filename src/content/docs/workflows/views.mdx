@@ -12,6 +12,8 @@ import openViewLight from "@assets/task-images/open-view-light.png"
 import openViewDark from "@assets/task-images/open-view-dark.png"
 import viewsPageLight from "@assets/base-images/views-page-light.png"
 import viewsPageDark from "@assets/base-images/views-page-dark.png"
+import externalSharingPrefsLight from "@assets/base-images/neuroglancer-external-sharing-prefs-light.png"
+import externalSharingPrefsDark from "@assets/base-images/neuroglancer-external-sharing-prefs-dark.png"
 
 <img
   src={mascot.src}
@@ -36,7 +38,7 @@ Each dataset in a View is served through a Data Link. If a dataset doesn't have 
 
 ## Create a View
 
-You create a View in two stages. First you collect datasets in the **Layer Cart**, then you create the View from the cart.
+You create a View in two stages. First you collect datasets in the **Layer Cart**, then you create the View from the cart. To create a View from a single Zarr or OME-Zarr dataset, you can skip the cart (see [Create a View from one dataset](#create-a-view-from-one-dataset)).
 
 ### Step 1: Add datasets to the Layer Cart
 
@@ -61,7 +63,7 @@ alt="Screenshot of the Fileglancer file browser with an OME-Zarr dataset open. O
 
 Each dataset in the cart shows an icon that tells you whether it will load as a Neuroglancer layer. In the cart you can:
 
-- **Pick channels**: Expand a multichannel OME-Zarr dataset and select channels to create a layer for each channel. This is optional. If you don't select channels, the whole dataset becomes one layer.
+- **Pick channels**: Expand a multichannel OME-Zarr dataset and select channels to create a layer for each channel. To select every channel at once, check **All channels**. This is optional. If you don't select channels, the whole dataset becomes one layer.
 - **Check dimensions**: A warning icon marks a dataset whose dimensions differ from the first dataset in the cart. The View takes its dimensions from the first dataset, so a mismatched dataset might not line up with the others. To see a dataset's full dimensions, expand it. To expand every dataset at once, click **Expand all**.
 - **Remove a dataset**: Click the trash icon on the dataset's row.
 
@@ -82,8 +84,14 @@ The View opens in the Neuroglancer viewer, and the cart is emptied.
 </Steps>
 
 :::note
-If a View has more than four layers, the layers after the fourth start archived, so that the View loads quickly. To show an archived channel of a multichannel dataset, check it in the **Sources** tab of the viewer sidebar (see [Remove datasets or channels](#remove-datasets-or-channels)). To show any other archived layer, open it from the layer list in Neuroglancer.
+If a View has more than four layers, the layers after the fourth start archived, so that the View loads quickly. To show an archived channel of a multichannel dataset, check it in the **Sources** tab of the viewer sidebar (see [Show, hide, or remove datasets and channels](#show-hide-or-remove-datasets-and-channels)). To show any other archived layer, open it from the layer list in Neuroglancer.
 :::
+
+### Create a View from one dataset
+
+On the preview panel of a Zarr or OME-Zarr dataset, click **Neuroglancer View** under the image thumbnail. Name the View, confirm any Data Link prompt, and click **Create**. The View opens in the Neuroglancer viewer.
+
+To make this button open the dataset in a standalone Neuroglancer tab instead, change the **Neuroglancer** setting on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
 
 ## Open a View
 
@@ -93,10 +101,11 @@ You can also open a View from the **Properties** panel on the Browse page. When 
 
 The viewer toolbar has these buttons:
 
-- **Add data**: Opens the sidebar for adding and removing datasets. Only the View's owner sees this button.
+- **Add data**: Opens the sidebar on the **Add data** tab, for adding datasets. Only the View's owner sees this button.
+- **View and edit data sources** (info icon): Opens the sidebar on the **Sources** tab, for showing, hiding, and removing datasets and channels. Only the View's owner sees this button.
 - **Copy link to share**: Copies the View's link to your clipboard.
 - **Download JSON**: Downloads the View's Neuroglancer state as a JSON file.
-- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can configure whether this is the internal Janelia Neuroglancer deployment or the external appspot deployment on the **Preferences** page.
+- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can choose whether this opens the internal Janelia Neuroglancer deployment or the public deployment on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
 - **Fullscreen**: Expands the viewer to fill your screen.
 
 To return to your list of Views, click **Views** in the toolbar.
@@ -104,7 +113,7 @@ To return to your list of Views, click **Views** in the toolbar.
 <StyledImage
 lightSrc={openViewLight}
 darkSrc={openViewDark}
-alt="Screenshot of the embedded Neuroglancer in Fileglancer. At the top of the screen, on the right side, are the toolbar buttons to add data, copy the View link, download the Neuroglancer JSON, open the data in the Neuroglancer configured in Preferences, and make the embedded Neuroglancer fullscreen."
+alt="Screenshot of the embedded Neuroglancer in Fileglancer. At the top of the screen, on the right side, are the toolbar buttons to add data, view and edit data sources, copy the View link, download the Neuroglancer JSON, open the data in the Neuroglancer configured in Preferences, and make the embedded Neuroglancer fullscreen."
 />
 
 ## Edit a View
@@ -150,11 +159,13 @@ If Fileglancer needs to create Data Links, confirm the prompt. The new layers ap
 Added datasets aren't part of the View until you save.
 </Steps>
 
-### Remove datasets or channels
+### Show, hide, or remove datasets and channels
 
-To remove a dataset in the viewer, open the **Sources** tab in the sidebar and click the remove icon next to the dataset. Then click **Save**.
+To open the **Sources** tab, click the info icon (**View and edit data sources**) in the viewer toolbar. You can also switch to it from the **Add data** tab of the sidebar.
 
-To remove a single channel of a multichannel dataset, expand the dataset on the **Sources** tab and uncheck the channel. To add the channel back with its settings, check it again. Then click **Save**. To expand every dataset at once, click **Expand all**.
+To remove a dataset in the viewer, click the remove icon next to the dataset on the **Sources** tab. Then click **Save**.
+
+To show or hide a channel of a multichannel dataset, expand the dataset on the **Sources** tab. The list includes every channel in the dataset, including channels that aren't in the View yet. Check a channel to show it, or to add it to the View. Uncheck a channel to hide it; checking it again brings it back with its settings. Then click **Save**. To expand every dataset at once, click **Expand all**.
 
 To remove datasets from the Views page:
 
@@ -183,12 +194,43 @@ In the viewer, click **Copy link to share**. On the Views page, you can also sel
 Collaborators who open the link see the View in the Fileglancer viewer. They need to sign in to Fileglancer.
 </Steps>
 
-To share a View with someone who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL.
+To share a View with someone on the Janelia network who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL. For collaborators outside the Janelia network, see [Share with external collaborators](#share-with-external-collaborators).
 
-:::note[Sharing with external collaborators]
-Anyone with access to the Janelia network can load the data in a View. If your image data is located in a `data_external` folder on a Janelia file share, it can also be loaded outside the Janelia network. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org). In addition, ensure your preference for the Neuroglancer viewer is set to the external appspot deployment on the **Preferences** page before you copy the Neuroglancer link.
+### Share with external collaborators
 
-:::
+Anyone with access to the Janelia network can load the data in a View. Collaborators outside the Janelia network can load data only from a `data_external` folder on a Janelia file share. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org).
+
+To open and share a dataset in Neuroglancer with someone outside the Janelia network:
+
+<Steps>
+1. **Set your Neuroglancer preferences**<br/>
+In the **Neuroglancer** section of the **Preferences** page, select exactly these settings:
+    - **The Neuroglancer button on Zarr/OME-Zarr metadata panels opens the dataset in**: **Standalone Neuroglancer**
+    - **Views** > **"Open in Neuroglancer" base URL**: **Public**
+    - **Standalone Neuroglancer** > **Base URL**: **Public**
+
+2. **Open the dataset in a viewer**<br/>
+Browse to a dataset in a `data_external` folder and click the Neuroglancer button under the image thumbnail. You can also open the dataset in other external viewers to share the same way.
+
+3. **Share the Neuroglancer URL**<br/>
+Copy the URL from the browser's address bar and send it to your collaborator.
+</Steps>
+
+<StyledImage
+lightSrc={externalSharingPrefsLight}
+darkSrc={externalSharingPrefsDark}
+alt="Screenshot of the Neuroglancer section of the Fileglancer Preferences page. 'Standalone Neuroglancer' is selected for the Neuroglancer button, and 'Public — neuroglancer-demo.appspot.com' is selected for both the Views 'Open in Neuroglancer' base URL and the Standalone Neuroglancer base URL."
+/>
+
+## Neuroglancer preferences
+
+The **Neuroglancer** section of the **Preferences** page controls where Fileglancer opens Neuroglancer:
+
+- **The Neuroglancer button on Zarr/OME-Zarr metadata panels opens the dataset in**: Choose **Views** (the default) to create a View from the dataset, or **Standalone Neuroglancer** to open the dataset in a standalone Neuroglancer tab.
+- **Views** > **"Open in Neuroglancer" base URL**: The Neuroglancer deployment that the viewer's **Open in Neuroglancer** button opens: the internal deployment hosted by your institution, or the public deployment.
+- **Standalone Neuroglancer** > **Base URL**: The Neuroglancer deployment used when the Neuroglancer button opens a standalone Neuroglancer, and the default for new Neuroglancer links.
+
+The base URL settings appear only when your Fileglancer deployment offers both an internal and a public Neuroglancer.
 
 ## Manage your Views
 

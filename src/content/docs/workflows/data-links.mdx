@@ -6,10 +6,10 @@ description: Learn how to create, manage, and share links to your data on Janeli
 import { Steps } from '@astrojs/starlight/components';
 import StyledImage from '@components/StyledImage.astro';
 
-import lightZarrDataLink from '@assets/task-images/light-zarr-data-link.png'
-import darkZarrDataLink from '@assets/task-images/dark-zarr-data-link.png'
-import lightAutomaticLinks from '@assets/task-images/light-automatic-links-pref-page.png'
-import darkAutomaticLinks from '@assets/task-images/dark-automatic-links-pref-page.png'
+import lightZarrDataLink from '@assets/task-images/zarr-data-link-light.png'
+import darkZarrDataLink from '@assets/task-images/zarr-data-link-dark.png'
+import lightAutomaticLinks from '@assets/task-images/automatic-links-pref-page-light.png'
+import darkAutomaticLinks from '@assets/task-images/automatic-links-pref-page-dark.png'
 import lightDataLinksPage from '@assets/base-images/light-data-links-page.png'
 import darkDataLinksPage from '@assets/base-images/dark-data-links-page.png'
 import mascot from '@assets/mascot/fg-engineer.png'
@@ -33,7 +33,7 @@ Zarr and OME-Zarr data sets have special integration features for data links:
 Browse to the target Zarr or OME-Zarr directory.
 
 2. **Click one of the tool icons under the image thumbnail**<br/>
-Select one of the available tools, including Neuroglancer, Vol-E, Avivator, OME-Zarr Validator, or copy link. If you don't have automatic data links enabled, this will open the data link creation dialog.
+Select one of the available tools, including Neuroglancer, Vol-E, Avivator, OME-Zarr Validator, or copy link. If you don't have automatic data links enabled, this will open the data link creation dialog. By default, the Neuroglancer button creates a [View](/workflows/views/#create-a-view-from-one-dataset), so its dialog also asks you to name the View.
 
 3. **Review the data link creation dialog**<br/>
 The dialog shows information about the link being created. Review the access settings.
