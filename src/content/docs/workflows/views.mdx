@@ -36,7 +36,7 @@ Each dataset in a View is served through a Data Link. If a dataset doesn't have 
 
 ## Create a View
 
-You create a View in two stages. First you collect datasets in the **Layer Cart**, then you create the View from the cart.
+You create a View in two stages. First you collect datasets in the **Layer Cart**, then you create the View from the cart. To create a View from a single Zarr or OME-Zarr dataset, you can skip the cart (see [Create a View from one dataset](#create-a-view-from-one-dataset)).
 
 ### Step 1: Add datasets to the Layer Cart
 
@@ -85,6 +85,12 @@ The View opens in the Neuroglancer viewer, and the cart is emptied.
 If a View has more than four layers, the layers after the fourth start archived, so that the View loads quickly. To show an archived channel of a multichannel dataset, check it in the **Sources** tab of the viewer sidebar (see [Show, hide, or remove datasets and channels](#show-hide-or-remove-datasets-and-channels)). To show any other archived layer, open it from the layer list in Neuroglancer.
 :::
 
+### Create a View from one dataset
+
+On the preview panel of a Zarr or OME-Zarr dataset, click **Neuroglancer View** under the image thumbnail. Name the View, confirm any Data Link prompt, and click **Create**. The View opens in the Neuroglancer viewer.
+
+To make this button open the dataset in a standalone Neuroglancer tab instead, change the **Neuroglancer** setting on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
+
 ## Open a View
 
 Click **Views** in the top navigation bar to see the Views you own. To open one, select **Open View** from the row's actions menu.
@@ -97,7 +103,7 @@ The viewer toolbar has these buttons:
 - **View and edit data sources** (info icon): Opens the sidebar on the **Sources** tab, for showing, hiding, and removing datasets and channels. Only the View's owner sees this button.
 - **Copy link to share**: Copies the View's link to your clipboard.
 - **Download JSON**: Downloads the View's Neuroglancer state as a JSON file.
-- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can configure whether this is the internal Janelia Neuroglancer deployment or the external appspot deployment on the **Preferences** page.
+- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can choose whether this opens the internal Janelia Neuroglancer deployment or the public deployment on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
 - **Fullscreen**: Expands the viewer to fill your screen.
 
 To return to your list of Views, click **Views** in the toolbar.
@@ -192,6 +198,16 @@ To share a View with someone who doesn't use Fileglancer, download its JSON stat
 Anyone with access to the Janelia network can load the data in a View. If your image data is located in a `data_external` folder on a Janelia file share, it can also be loaded outside the Janelia network. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org). In addition, ensure your preference for the Neuroglancer viewer is set to the external appspot deployment on the **Preferences** page before you copy the Neuroglancer link.
 
 :::
+
+## Neuroglancer preferences
+
+The **Neuroglancer** section of the **Preferences** page controls where Fileglancer opens Neuroglancer:
+
+- **The Neuroglancer button on Zarr/OME-Zarr metadata panels opens the dataset in**: Choose **Views** (the default) to create a View from the dataset, or **Standalone Neuroglancer** to open the dataset in a standalone Neuroglancer tab.
+- **Views** > **"Open in Neuroglancer" base URL**: The Neuroglancer deployment that the viewer's **Open in Neuroglancer** button opens: the internal deployment hosted by your institution, or the public deployment.
+- **Standalone Neuroglancer** > **Base URL**: The Neuroglancer deployment used when the Neuroglancer button opens a standalone Neuroglancer, and the default for new Neuroglancer links.
+
+The base URL settings appear only when your Fileglancer deployment offers both an internal and a public Neuroglancer.
 
 ## Manage your Views
 
