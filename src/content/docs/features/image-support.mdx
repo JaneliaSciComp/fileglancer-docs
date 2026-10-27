@@ -5,12 +5,12 @@ description: Learn how Fileglancer detects and previews OME-Zarr and N5 datasets
 
 import { Steps } from "@astrojs/starlight/components";
 import StyledImage from "@components/StyledImage.astro";
-import lightZarrPreview from "@assets/base-images/light-zarr-with-overview-tab.png";
-import darkZarrPreview from "@assets/base-images/dark-zarr-with-overview-tab.png";
+import lightZarrPreview from "@assets/base-images/zarr-with-properties-panel-light.png";
+import darkZarrPreview from "@assets/base-images/zarr-with-properties-panel-dark.png";
 import lightN5Preview from "@assets/base-images/n5-preview-light.png";
 import darkN5Preview from "@assets/base-images/n5-preview-dark.png";
-import lightDataTools from "@assets/task-images/light-features-data-tools.png";
-import darkDataTools from "@assets/task-images/dark-features-data-tools.png";
+import lightDataTools from "@assets/task-images/features-data-tools-light.png";
+import darkDataTools from "@assets/task-images/features-data-tools-dark.png";
 import mascot from "@assets/mascot/fg-microscope.png";
 
 <img
@@ -63,6 +63,8 @@ In Fileglancer, this means [creating a data link](/workflows/data-links) for the
 
 - If a data link already exists, the Neuroglancer button is immediately active.
 - If no data link exists, clicking the Neuroglancer button prompts you to create one.
+
+By default, the Neuroglancer button on Zarr and OME-Zarr preview panels is labeled **Neuroglancer View** and creates a [View](/workflows/views/#create-a-view-from-one-dataset) from the dataset. To open the dataset in a standalone Neuroglancer tab instead, choose **Standalone Neuroglancer** in the **Neuroglancer** section of the **Preferences** page.
 
 **OME-Zarr datasets** (with `multiscales`) support all available viewers: Neuroglancer, Vol-E, Avivator (v2 only), and the OME-ZARR Validator.
 
