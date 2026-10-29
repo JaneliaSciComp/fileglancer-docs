@@ -201,7 +201,15 @@ On servers configured for it, services open over HTTPS at a per-job address like
 
 Click anywhere on an app card to open the app's detail page. It shows the app's source repository, pinned revision, manifest path, app commit (linked to GitHub), and description; separate code repository details when the manifest uses `repo_url`; a card for each entry point with its own **Launch** button; and the app's most recent jobs, linking to their detail pages. The page header has buttons for sharing and updating the app, and a back arrow that returns to My Apps.
 
-Each app card or table row also has an actions menu (the vertical "⋮" button) with quick access to **Launch**, **View** (the detail page), **Share to Catalog**/**Unshare**, **Update**, and **Remove**.
+Each app card or table row also has an actions menu (the vertical "⋮" button) with quick access to **Launch**, **View** (the detail page), **Rename**, **Share to Catalog**/**Unshare**, **Update**, and **Remove**.
+
+Both views show the app's pinned revision next to its name: under the name on a card, and in the **Revision** column of the table. This is how you tell apart two copies of the same repository added from different branches, since both start out with the same name.
+
+### Renaming an App
+
+App names come from the manifest, so two copies of a repository added from different branches look identical until you rename one. Click the pencil next to the name at the top of the app's detail page, or select **Rename** from the app card or table row's actions menu, and enter a new name.
+
+The name you choose is yours alone: it is kept when you update the app, even if the manifest's name changes upstream, and it has no effect on a catalog listing you published from the app (listings have their own name, set when sharing). To go back to the manifest's name, rename the app again and clear the field.
 
 ### Updating an App
 
