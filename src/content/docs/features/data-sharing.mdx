@@ -11,7 +11,7 @@ import mascot from '@assets/mascot/fg-gift.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 200px; float: right; margin: 0 0 1rem 1rem;" />
 
-Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with internal colleagues and collaborators.
+Fileglancer provides powerful data sharing capabilities designed specifically for scientific collaboration. The platform allows you to easily share imaging datasets with colleagues and collaborators.
 
 ## Understanding Data Sharing in Fileglancer
 
@@ -32,6 +32,10 @@ Fileglancer provides powerful data sharing capabilities designed specifically fo
 - Collaborators can browse the full directory structure
 - Use the data in visualization and analysis tools
 
+#### Public Cloud Data
+- Public S3 buckets added through the **Cloud Storage** section are shared by their public URL
+- No data link is needed, and the data can be opened from anywhere on the internet
+
 ## Creating Shareable Data Links
 
 ### Basic Sharing Workflow
@@ -43,8 +47,8 @@ Use any navigation method to reach the target directory. Ensure you have appropr
 2. **Enable sharing**
 Open the Properties Panel. Use the Overview tab to toggle data link creation. Copy the generated shareable URL.
 
-3. **Share with internal collaborators**
-Send the URL via email or messaging. Collaborators must be on the Janelia internal network to view data
+3. **Share with collaborators**
+Send the URL via email or messaging. Collaborators need to be able to reach your Fileglancer server, typically by being on your institution's network or VPN.
 </Steps>
 
 <StyledImage
@@ -61,11 +65,11 @@ alt="Screenshot of the Fileglancer interface, with one arrow pointing to the 'Cr
 
 ### Understanding Access Controls
 
-Fileglancer data links allow anyone with the link to view the data on Janelia's internal network:
+Fileglancer data links allow anyone with the link who can reach your Fileglancer server to view the data:
 
 #### Network Access
-- **Internal network**: Full access from Janelia internal network
-- **VPN access**: Remote access through Janelia VPN
+- **Institutional network**: Full access from the network where Fileglancer is deployed
+- **VPN access**: Remote access through your institution's VPN, where available
 
 #### Data Sensitivity
 1. **Review data content**: Ensure shared data is appropriate for the intended audience

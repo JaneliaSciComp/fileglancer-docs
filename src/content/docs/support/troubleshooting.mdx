@@ -21,19 +21,19 @@ import mascot from "@assets/mascot/fg-network-issue.png";
 
 **Network connectivity**
 
-- **Check**: Verify you're connected to the Janelia internal network
-- **Solution**: Connect to Janelia VPN if working remotely
-- **Test**: Try accessing other internal Janelia resources
+- **Check**: Verify you're connected to the network where your Fileglancer server runs
+- **Solution**: Connect to your institution's VPN if working remotely
+- **Test**: Try accessing other resources on that network
 
 **Site maintenance or server down**
 
 - **Check**: A maintenance or server down warning will appear
 - **Solution**: Try accessing the site later
-- **Contact**: Reach out on the #fileglancer-support Slack channel if not resolved
+- **Contact**: Reach out to your Fileglancer administrator if not resolved (at Janelia, the #fileglancer-support Slack channel)
 
 **Authentication issues**
 
-- **Check**: Ensure your Janelia credentials are current
+- **Check**: Ensure your institutional credentials are current
 - **Solution**: Log out and log back in to refresh authentication
 - **Contact**: Reach out to IT if password reset is needed
 
@@ -100,9 +100,9 @@ import mascot from "@assets/mascot/fg-network-issue.png";
 
 **Network access**
 
-- **Issue**: Collaborators not on Janelia network
-- **Solution**: Ensure they're connected to VPN or internal network
-- **Alternative**: Consider setting up a `data_external` folder to share the data
+- **Issue**: Collaborators can't reach your Fileglancer server
+- **Solution**: Ensure they're connected to your institution's network or VPN
+- **Alternative**: Share data that is already public, such as a dataset in a public S3 bucket or, at Janelia, a `data_external` folder
 
 ## Scientific Imaging Format Issues
 
@@ -167,5 +167,5 @@ import mascot from "@assets/mascot/fg-network-issue.png";
 
 To get additional support:
 
-- Reach out on the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) Slack channel
-- Fill out the [Clickup issue form](https://forms.clickup.com/10502797/f/a0gmd-713/NBUCBCIN78SI2BE71G)
+- Open an issue on the [Fileglancer GitHub repository](https://github.com/JaneliaSciComp/fileglancer/issues)
+- Janelia users can also reach out on the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) Slack channel or fill out the [Clickup issue form](https://forms.clickup.com/10502797/f/a0gmd-713/NBUCBCIN78SI2BE71G)

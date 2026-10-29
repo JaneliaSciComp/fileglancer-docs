@@ -17,7 +17,7 @@ import darkSshKeysGenerated from "@assets/task-images/ssh-keys-copy-dark.png";
 import lightSshKeysList from "@assets/base-images/ssh-keys-list-light.png";
 import darkSshKeysList from "@assets/base-images/ssh-keys-list-dark.png";
 
-Fileglancer's SSH key manager lets you generate authorized SSH keys from the browser. Keys are automatically added to your `~/.ssh/authorized_keys` file on the Janelia filesystem. The main purpose of this feature is to streamline onboarding for new users of Janelia's [Seqera Platform instance](https://hhmi.atlassian.net/wiki/x/yllNCQ).
+Fileglancer's SSH key manager lets you generate authorized SSH keys from the browser. Keys are automatically added to the `~/.ssh/authorized_keys` file in your home directory on the file system. At Janelia, the main purpose of this feature is to streamline onboarding for new users of the campus [Seqera Platform instance](https://hhmi.atlassian.net/wiki/x/yllNCQ).
 
 ## Accessing the SSH Key Manager
 
@@ -96,7 +96,7 @@ Keys are tagged with the comment `fileglancer` so you can identify them in your 
 
 ## Using SSH Keys with Seqera Platform
 
-The primary use case for Fileglancer-generated SSH keys is onboarding to Janelia's Seqera Platform instance. Seqera Platform uses SSH keys to authenticate pipeline jobs running on cluster nodes. 
+At Janelia, the primary use case for Fileglancer-generated SSH keys is onboarding to the campus Seqera Platform instance. Seqera Platform uses SSH keys to authenticate pipeline jobs running on cluster nodes. 
 
 The [Janelia wiki](https://hhmi.atlassian.net/wiki/spaces/SCSW/pages/156064202/Using+Seqera+Platform+formerly+Nextflow+Tower) provides more information about the Janelia Seqera Platform instance and detailed instructions for adding SSH keys.
 
@@ -111,7 +111,7 @@ Once configured, Seqera Platform can authenticate as you when launching jobs acr
 
 ## Removing SSH Keys
 
-The SSH Keys page in Fileglancer does not provide a way to delete keys. This must be done manually by editing your `~/.ssh/authorized_keys` file, found in your home directory on the Janelia filesystem.
+The SSH Keys page in Fileglancer does not provide a way to delete keys. This must be done manually by editing the `~/.ssh/authorized_keys` file in your home directory on the file system.
 
 ## Troubleshooting
 

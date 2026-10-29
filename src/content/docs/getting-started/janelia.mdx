@@ -1,0 +1,193 @@
+---
+title: Using Fileglancer at Janelia
+description: A hands-on guide for Janelia researchers using the shared Fileglancer deployment at fileglancer.int.janelia.org.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import StyledImage from '@components/StyledImage.astro';
+import lightHomeNavigation from '@assets/task-images/light-home-button.png'
+import darkHomeNavigation from '@assets/task-images/dark-home-button.png'
+import lightSearchAndZones from '@assets/task-images/light-search-and-zones.png'
+import darkSearchAndZones from '@assets/task-images/dark-search-and-zones.png'
+import lightSaveFavorite from '@assets/task-images/light-save-favorite.png'
+import darkSaveFavorite from '@assets/task-images/dark-save-favorite.png'
+import lightZarrDataLink from '@assets/task-images/zarr-data-link-quick-start-light.png'
+import darkZarrDataLink from '@assets/task-images/zarr-data-link-quick-start-dark.png'
+import createViewLight from "@assets/task-images/create-view-light.png";
+import createViewDark from "@assets/task-images/create-view-dark.png"
+
+This guide is for researchers at [Janelia Research Campus](https://www.janelia.org) who are either directly connected to the internal network or using the VPN. Janelia runs a shared Fileglancer deployment connected to the campus file systems (PRFS, NRS, Nearline). The sections below walk through the essentials: logging in, finding your group's data, viewing OME-Zarr images, and sharing Views with collaborators.
+
+:::note[Not at Janelia?]
+Everything below applies to Janelia's deployment, including the example paths and the Okta login. To run Fileglancer on your own computer or set up a deployment at your institution, see the [Quick Start Guide](../quick-start/).
+:::
+
+## Access Fileglancer
+
+1. **Connect to Janelia network**: Ensure you're on the Janelia internal network or using the VPN
+2. **Open your browser**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org)
+3. **Authenticate**: Log in via Okta with your Janelia credentials
+
+## Navigate to your file share
+
+### Open your home folder
+**Home button**: In the toolbar, click the home icon to view the contents of your home folder.
+
+<StyledImage
+lightSrc={lightHomeNavigation}
+darkSrc={darkHomeNavigation}
+alt="Screenshot of the top of the Fileglancer homepage, with an arrow pointing to the home directory icon."
+/>
+
+### Find your group's data
+<Steps>
+1. **Use the search**<br/> 
+In the left sidebar, search for a group or team project
+
+2. **Expand zones**<br/>
+Click on a Zone to expand it and see the file share paths it contains
+
+3. **Browse file share path**<br/>
+Click on a file share path to view its contents in the file browser
+</Steps>
+
+<StyledImage
+lightSrc={lightSearchAndZones}
+darkSrc={darkSearchAndZones}
+alt="Screenshot of the Fileglancer interface, with one arrow pointing to the search box in the left sidebar and another arrow pointing to an expanded zone."
+/>
+
+### Save a favorite
+<Steps>
+1. **Navigate to a frequently-used folder**<br/>
+Use the file browser to reach an important directory
+
+2. **Click the favorites icon**<br/>
+Use the star icon in the toolbar to save the current location
+
+3. **Access later**<br/>
+Your saved favorites will appear in the left sidebar for quick access
+</Steps>
+
+<StyledImage
+lightSrc={lightSaveFavorite}
+darkSrc={darkSaveFavorite}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the star icon for favoriting the current directory in the toolbar."
+/>
+
+## View OME-Zarr data
+
+We'll use an example data set to get familiar with the interface. 
+<Steps>
+1. **Copy path**<br/>
+Copy this path into your clipboard:<br/>
+    ```/nrs/opendata/ome-zarr-examples/fused-timeseries.zarr```
+
+2. **Navigate**<br/> 
+Click the "Navigate to path" button in the toolbar, paste the path and click "Go".
+
+3. **See metadata**<br/> 
+Since this is an OME-Zarr image, you can view all of its metadata along with a thumbnail image.
+
+3. **View image**<br/> 
+Click on the "Neuroglancer View" button under the thumbnail.
+
+4. **Create the View**<br/> 
+Viewing an image requires a data link. In the dialog that appears, name the View, confirm the data link, and click "Create".
+
+5. **Visualize**<br/> 
+Your image will open as a View in Fileglancer's embedded Neuroglancer viewer.
+</Steps>
+
+<StyledImage
+lightSrc={lightZarrDataLink}
+darkSrc={darkZarrDataLink}
+alt="Screenshot of the Fileglancer interface, with an arrow pointing to the 'navigate to path' button in the toolbar and to the Zarr viewer buttons under a Zarr thumbnail."
+/>
+
+## Create and share a View
+
+A View saves a Neuroglancer scene: the datasets it shows, plus the layer colors, visibility, zoom level, and camera position. Collaborators who open the View's link see exactly what you configured.
+
+<Steps>
+1. **Add datasets to the Layer Cart**<br/>
+In the file browser, right-click any directory and select **Add to cart**. For Zarr, OME-Zarr, and N5 data, you can also click the "Add to Cart" button in the metadata panel for the dataset. To add several folders at once, check their boxes in the file browser and click **Add N to cart** in the selection bar that appears at the bottom of the screen.
+
+2. **Create the View**<br/>
+In the Layer Cart panel, click **Create View**, name the View, and click **Create**. If Fileglancer needs to create Data Links for your datasets and automatic Data Links aren't enabled, it asks you to confirm first. The View opens in the Neuroglancer viewer.
+
+3. **Configure the View**<br/>
+Adjust the layers, colors, and camera position exactly how you want collaborators to see them, then click **Save** in the viewer toolbar.
+
+4. **Share the link**<br/>
+Click **Copy link to share** in the viewer toolbar and send the link to your collaborators.
+</Steps>
+
+:::tip[Why use Views?]
+A View's link stays the same when you edit and save the View, so collaborators always see your latest version. You can also add datasets to a View or remove them later, right from the viewer.
+:::
+
+<StyledImage
+lightSrc={createViewLight}
+darkSrc={createViewDark}
+alt="Screenshot of the Fileglancer file browser with an OME-Zarr dataset open. On the right side of the screen, the properties panel is open and displaying the contents of the Layer Cart tab. A red arrow points to the cart icon button that opens the panel to the Layer Cart tab. Another red arrow points to the 'Create View' button at the bottom of the Layer Cart tab that creates a View from the collected datasets."
+/>
+
+## Essential Tips
+
+### Navigation Shortcuts
+- **Breadcrumbs**: Use the breadcrumb trail to quickly move up directory levels.
+- **Copy path**: Hover over the breadcrumbs to reveal a copy button that copies the current path into your clipboard.
+- **Paste onto page**: Power users can take advantage of a special hidden feature: if you have a path in your clipboard, simply click anywhere in the file browser and paste using your usual keyboard shortcut. The "Navigate" dialog will come up automatically, prefilled with your path.
+
+### Data Link Management
+- **View all data links**: Visit the *Data Links* page to see all your current data links
+- **Enable automatic data links**: When creating data links, you can choose to enable automatic link creation for future similar actions
+
+### Getting Help
+- **Built-in help**: Look for help icons and tooltips throughout the interface
+- **Technical support**: Use the integrated help desk system for complex issues
+
+## Common First Tasks
+
+### Scenario 1: Sharing Lab Data with an Internal Collaborator
+1. Navigate to your lab's shared data directory
+2. Find the specific dataset you want to share
+3. Create a data link using the Properties Panel
+4. Send the data link to your collaborator
+
+### Scenario 2: Collaborating on Image Analysis
+1. Add your OME-Zarr datasets to the Layer Cart
+2. Create a View from the Layer Cart
+3. Configure the viewer to highlight specific features or regions, then save the View
+4. Share the View's link with collaborators so they see exactly what you configured
+
+### Scenario 3: Organizing Your Workflow
+1. Use search to find all your project directories
+2. Save frequently-accessed folders as favorites
+3. Create data links for datasets you reference often
+4. Set up automatic data link creation for common sharing patterns
+
+## What's Next?
+
+Now that you've completed the basics, explore these guides for more detailed workflows:
+
+- **[Navigation Guide](../../workflows/navigation/)**: Master all navigation features
+- **[Data Links Guide](../../workflows/data-links/)**: Learn advanced sharing options
+- **[Neuroglancer Views Guide](../../workflows/views/)**: Deep dive into creating, editing, and sharing Views
+- **[Apps and Jobs Guide](../../workflows/apps-and-jobs/)**: Run tools on the Janelia compute cluster from Fileglancer
+
+If you run into trouble, chat with us in the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) channel in the Janelia-Software Slack workspace.
+
+## Quick Reference
+
+| Task | Location | Action |
+|------|----------|---------|
+| Search for data | Left sidebar | Type group/team name |
+| Navigate to specific path | Toolbar widget | Paste path and navigate |
+| Save favorite | Toolbar | Click star icon |
+| Create data link | Properties Panel | Toggle switch in Overview |
+| Create View | Layer Cart panel | Click "Create View" button |
+| View all data links | URL | Navigate to the **Data Links** page |
+| Browse all Views | URL | Navigate to the **Views** page |
+| Go to home directory | Toolbar | Click home icon |

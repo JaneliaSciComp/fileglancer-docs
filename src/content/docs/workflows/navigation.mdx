@@ -15,7 +15,7 @@ import mascot from '@assets/mascot/fg-point-right.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
 
-Fileglancer provides multiple methods to navigate Janelia's file systems. This guide covers all navigation features.
+Fileglancer provides multiple methods to navigate the file systems connected to your Fileglancer deployment, as well as public cloud storage buckets you add yourself. This guide covers all navigation features.
 
 ## Primary Navigation Methods
 
@@ -43,6 +43,9 @@ darkSrc={darkSearchAndZones}
 alt="Screenshot of the Fileglancer interface, with one arrow pointing to the search box in the left sidebar and another arrow pointing to an expanded zone."
 />
 <br/>
+
+Below the zones, the **Cloud Storage** section of the sidebar lists public S3 buckets you have added. Click **Add bucket** and paste a bucket URL (`s3://` or `https://`), or enter the bucket name, an optional prefix, and the endpoint, to browse a public bucket read-only alongside your file shares. Buckets you add are visible only to you, and you can remove them from the sidebar at any time.
+
 ### 2. Direct Path Navigation
 
 For when you know exactly where you want to go:
@@ -51,10 +54,10 @@ For when you know exactly where you want to go:
 Found on the Fileglancer home page, at the top of the central panel. OR click the "Navigate to path" button in the toolbar.
 
 2. **Enter your complete file path**<br/>
-Paste or type the full path to your target directory. Any style of path will work (Mac, Windows, Linux), for example:<br/>
-`/misc/public`<br/>
-`smb://prfs.hhmi.org/public`<br/>
-`\\prfs.hhmi.org\public\`<br/>
+Paste or type the full path to your target directory. Any style of path will work (Mac, Windows, Linux), as long as it points to a file share your deployment knows about. For example:<br/>
+`/groups/mylab/data`<br/>
+`smb://fileserver.example.org/mylab/data`<br/>
+`\\fileserver.example.org\mylab\data\`<br/>
 
 3. **Navigate to the path**<br/>
 Press Enter or click the navigation button. Fileglancer will take you directly to that location.
@@ -74,7 +77,7 @@ Quick access to your personal directory:
 Located in the toolbar at the top of the central navigation panel.
 
 2. **Access your home directory**<br/>
-Takes you directly to your personal home directory on the Janelia file system.
+Takes you directly to your personal home directory on the file system.
 </Steps>
 
 <StyledImage
@@ -113,7 +116,7 @@ For frequently accessed zones, file shares, and folders:
 **Search returns no results**
 - Try broader search terms
 - Verify the zone or share name spelling 
-- Ensure that your file share is listed on the [Lab and Project File Share Paths](https://hhmi.atlassian.net/wiki/spaces/SCS/pages/152469629/Lab+and+Project+File+Share+Paths) wiki page.
+- Ensure that your file share is one your Fileglancer administrator has configured. At Janelia, configured shares are listed on the [Lab and Project File Share Paths](https://hhmi.atlassian.net/wiki/spaces/SCS/pages/152469629/Lab+and+Project+File+Share+Paths) wiki page.
 
 **Slow loading**
 - Large directories with many files may take time to populate

@@ -1,6 +1,6 @@
 ---
 title: Fileglancer User Guide
-description: Your complete guide to using Fileglancer for browsing, sharing, and managing scientific imaging data at Janelia Research Campus.
+description: Documentation for Fileglancer, an open-source web application for browsing, viewing, and sharing large scientific imaging data stored on network file systems.
 template: splash
 hero:
   tagline: Browse and share large scientific imaging data with ease
@@ -8,23 +8,25 @@ hero:
     file: ../../assets/mascot/fg-stand.png
     alt: Fileglancer mascot
   actions:
-    - text: Get Started
-      link: ./getting-started/introduction/
-      icon: right-arrow
+    - text: Quick Start
+      link: ./getting-started/quick-start/
+      icon: rocket
     - text: Core Workflows
       link: ./workflows/navigation/
       icon: document
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 import StyledImage from '@components/StyledImage.astro';
 import lightFileglancer from '@assets/base-images/light-fileglancer.png'
 import darkFileglancer from '@assets/base-images/dark-fileglancer.png'
 
 ## What is Fileglancer?
 
-Fileglancer is a web application designed to allow researchers at Janelia to easily browse, share, and manage large scientific imaging data. It leverages emerging [next generation file format standards](https://www.nature.com/articles/s41592-021-01326-w) (e.g. OME-Zarr) to allow for efficient visualization and sharing of image data via compatible tools such as Neuroglancer, Fiji, and Avivator. It connects to data on Janelia's network filesystems without requiring data movement, making it simple to work with large imaging datasets. 
+Fileglancer is an open-source web application for browsing, viewing, and sharing large scientific imaging data. It works directly with data where it already lives on your network file systems, so there is nothing to upload or copy. It embraces [next-generation file formats](https://www.nature.com/articles/s41592-021-01326-w) such as OME-Zarr, letting you inspect metadata, preview images, and open datasets in viewers like Neuroglancer, Avivator, and Fiji with a click.
+
+Fileglancer was created at [Janelia Research Campus](https://www.janelia.org), where it serves as the shared data browser for the whole campus. It is built to be deployed anywhere: on your laptop, in your lab, or across your institution.
 
 <StyledImage
 lightSrc={lightFileglancer}
@@ -32,17 +34,30 @@ darkSrc={darkFileglancer}
 alt="Screenshot of the Fileglancer interface showing a directory of OME-Zarr datasets."
 />
 
+## Try it in one command
+
+If you have [uv](https://docs.astral.sh/uv/) installed, you can run a personal Fileglancer server right now. Nothing else to install.
+
+```bash
+uvx fileglancer start
+```
+
+Your browser opens with your home directory ready to browse. The [Quick Start Guide](./getting-started/quick-start/) walks through this step by step, and explains how to run Fileglancer from source or deploy a shared server for your institution.
+
 ## Key Features
 
 <CardGrid stagger>
 	<Card title="Easy File Navigation" icon="open-book">
-		Browse your scientific imaging data using an intuitive web interface connected directly to Janelia's file systems.
+		Browse your scientific imaging data in an intuitive web interface connected directly to your file systems, alongside public S3 buckets you add yourself. No command line required.
 	</Card>
 	<Card title="Seamless Data Sharing" icon="external">
-		Create views of your data, sharable either internally or externally (for data in `data_external` folders) 
+		Create Data Links and Views that collaborators can open in their browser, without moving or copying any data.
 	</Card>
 	<Card title="Data Viewer Integration" icon="puzzle">
-		Open OME-Zarr data sets directly in Neuroglancer and other tools for visualization and analysis with one-click integration.
+		Open OME-Zarr datasets in Neuroglancer and other viewers with one click, and save the exact scene you configured as a shareable View.
+	</Card>
+	<Card title="Run Tools on Your Data" icon="setting">
+		Launch command-line tools and services on a compute cluster from the browser. Fill in parameters, submit, and monitor jobs.
 	</Card>
 </CardGrid>
 
@@ -71,10 +86,25 @@ alt="Screenshot of the Fileglancer interface showing a directory of OME-Zarr dat
 	</Card>
 </CardGrid>
 
-## Getting Help
+## Using Fileglancer at Janelia
 
-If you encounter issues or need assistance, chat with us in the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) channel in the Janelia-Software Slack workspace. You can also report a bug or request a new feature using the online request form link on the Fileglancer Help page.
+Janelia researchers can use the shared campus deployment at [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) without installing anything. The [Using Fileglancer at Janelia](./getting-started/janelia/) guide covers logging in, finding your group's file shares, and the campus-specific details of sharing data.
 
-## Interested in using Fileglancer outside of Janelia?
+## Getting Help and Contributing
 
-We welcome interest from other institutions and are excited to collaborate on making Fileglancer more broadly accessible! While the application was initially developed for use at Janelia, we're eager to help adapt it for different environments. If you'd like to use Fileglancer at your organization, or have ideas for improvements, we encourage you to [open an issue](https://github.com/JaneliaSciComp/fileglancer/issues) or [submit a pull request](https://github.com/JaneliaSciComp/fileglancer/pulls). Your feedback and contributions are greatly appreciated and will help to make Fileglancer even better for the scientific community!
+Fileglancer is developed in the open by the Scientific Computing Software team at Janelia, and we welcome questions, bug reports, feature requests, and pull requests from anyone.
+
+<CardGrid>
+	<LinkCard
+		title="Report an issue or ask a question"
+		description="Open an issue on GitHub for bugs, feature ideas, or help adapting Fileglancer to your environment."
+		href="https://github.com/JaneliaSciComp/fileglancer/issues"
+	/>
+	<LinkCard
+		title="Contribute"
+		description="Browse the source, run it locally, and submit a pull request."
+		href="https://github.com/JaneliaSciComp/fileglancer"
+	/>
+</CardGrid>
+
+Janelia users can also chat with us in the [#fileglancer-support](https://hhmi.enterprise.slack.com/archives/C0938N06YN8) channel in the Janelia-Software Slack workspace. See [Getting Help](./support/getting-help/) for more options.

@@ -1,189 +1,169 @@
 ---
 title: Quick Start Guide
-description: Get up and running with Fileglancer in minutes with this step-by-step quick start guide.
+description: Run Fileglancer on your own computer with a single command and no installation, then learn how to run it from source or deploy a shared server for your institution.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
-import StyledImage from '@components/StyledImage.astro';
-import lightHomeNavigation from '@assets/task-images/light-home-button.png'
-import darkHomeNavigation from '@assets/task-images/dark-home-button.png'
-import lightSearchAndZones from '@assets/task-images/light-search-and-zones.png'
-import darkSearchAndZones from '@assets/task-images/dark-search-and-zones.png'
-import lightSaveFavorite from '@assets/task-images/light-save-favorite.png'
-import darkSaveFavorite from '@assets/task-images/dark-save-favorite.png'
-import lightZarrDataLink from '@assets/task-images/zarr-data-link-quick-start-light.png'
-import darkZarrDataLink from '@assets/task-images/zarr-data-link-quick-start-dark.png'
-import createViewLight from "@assets/task-images/create-view-light.png";
-import createViewDark from "@assets/task-images/create-view-dark.png"
+import { Steps, Tabs, TabItem, Aside, LinkCard, CardGrid } from '@astrojs/starlight/components';
 import mascot from '@assets/mascot/fg-starting-line.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
 
-This quick start guide will help you get up and running with Fileglancer in just a few minutes. We'll cover the essential steps to navigate the interface, access your data, and view OME-Zarr images.
+The fastest way to try Fileglancer is to run a personal server on your own computer. It takes one command, there is nothing to install, and nothing is left behind except a small cache. Fileglancer opens in your browser with your home directory ready to browse.
 
-## Access Fileglancer
+This page covers that path first, then two other ways to run Fileglancer: from a checkout of the source code, and as a shared server for your lab or institution.
 
-1. **Connect to Janelia network**: Ensure you're on the Janelia internal network or using the VPN
-2. **Open your browser**: Navigate to [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org)
-3. **Authenticate**: Log in via Okta with your Janelia credentials
+## Run Fileglancer with uv
 
-## Navigate to your file share
-
-### Open your home folder
-**Home button**: In the toolbar, click the home icon to view the contents of your home folder.
-
-<StyledImage
-lightSrc={lightHomeNavigation}
-darkSrc={darkHomeNavigation}
-alt="Screenshot of the top of the Fileglancer homepage, with an arrow pointing to the home directory icon."
-/>
-
-### Find your group's data
-<Steps>
-1. **Use the search**<br/> 
-In the left sidebar, search for a group or team project
-
-2. **Expand zones**<br/>
-Click on a Zone to expand it and see the file share paths it contains
-
-3. **Browse file share path**<br/>
-Click on a file share path to view its contents in the file browser
-</Steps>
-
-<StyledImage
-lightSrc={lightSearchAndZones}
-darkSrc={darkSearchAndZones}
-alt="Screenshot of the Fileglancer interface, with one arrow pointing to the search box in the left sidebar and another arrow pointing to an expanded zone."
-/>
-
-### Save a favorite
-<Steps>
-1. **Navigate to a frequently-used folder**<br/>
-Use the file browser to reach an important directory
-
-2. **Click the favorites icon**<br/>
-Use the star icon in the toolbar to save the current location
-
-3. **Access later**<br/>
-Your saved favorites will appear in the left sidebar for quick access
-</Steps>
-
-<StyledImage
-lightSrc={lightSaveFavorite}
-darkSrc={darkSaveFavorite}
-alt="Screenshot of the Fileglancer interface, with an arrow pointing to the star icon for favoriting the current directory in the toolbar."
-/>
-
-## View OME-Zarr data
-
-We'll use an example data set to get familiar with the interface. 
-<Steps>
-1. **Copy path**<br/>
-Copy this path into your clipboard:<br/>
-    ```/nrs/opendata/ome-zarr-examples/fused-timeseries.zarr```
-
-2. **Navigate**<br/> 
-Click the "Navigate to path" button in the toolbar, paste the path and click "Go".
-
-3. **See metadata**<br/> 
-Since this is an OME-Zarr image, you can view all of its metadata along with a thumbnail image.
-
-3. **View image**<br/> 
-Click on the "Neuroglancer View" button under the thumbnail.
-
-4. **Create the View**<br/> 
-Viewing an image requires a data link. In the dialog that appears, name the View, confirm the data link, and click "Create".
-
-5. **Visualize**<br/> 
-Your image will open as a View in Fileglancer's embedded Neuroglancer viewer.
-</Steps>
-
-<StyledImage
-lightSrc={lightZarrDataLink}
-darkSrc={darkZarrDataLink}
-alt="Screenshot of the Fileglancer interface, with an arrow pointing to the 'navigate to path' button in the toolbar and to the Zarr viewer buttons under a Zarr thumbnail."
-/>
-
-## Create and share a View
-
-A View saves a Neuroglancer scene: the datasets it shows, plus the layer colors, visibility, zoom level, and camera position. Collaborators who open the View's link see exactly what you configured.
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager. Its `uvx` command downloads a Python tool into a cache and runs it, so you don't need to set up Python or a virtual environment yourself. Fileglancer runs on macOS and Linux.
 
 <Steps>
-1. **Add datasets to the Layer Cart**<br/>
-In the file browser, right-click any directory and select **Add to cart**. For Zarr, OME-Zarr, and N5 data, you can also click the "Add to Cart" button in the metadata panel for the dataset. To add several folders at once, check their boxes in the file browser and click **Add N to cart** in the selection bar that appears at the bottom of the screen.
+1. **Install uv**
 
-2. **Create the View**<br/>
-In the Layer Cart panel, click **Create View**, name the View, and click **Create**. If Fileglancer needs to create Data Links for your datasets and automatic Data Links aren't enabled, it asks you to confirm first. The View opens in the Neuroglancer viewer.
+   <Tabs>
+     <TabItem label="macOS / Linux">
+       ```bash
+       curl -LsSf https://astral.sh/uv/install.sh | sh
+       ```
+     </TabItem>
+     <TabItem label="Homebrew">
+       ```bash
+       brew install uv
+       ```
+     </TabItem>
+     <TabItem label="pip">
+       ```bash
+       pip install uv
+       ```
+     </TabItem>
+   </Tabs>
 
-3. **Configure the View**<br/>
-Adjust the layers, colors, and camera position exactly how you want collaborators to see them, then click **Save** in the viewer toolbar.
+   Other installation options are listed in the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/). Open a new terminal after installing so that `uvx` is on your `PATH`.
 
-4. **Share the link**<br/>
-Click **Copy link to share** in the viewer toolbar and send the link to your collaborators.
+2. **Start Fileglancer**
+
+   ```bash
+   uvx fileglancer start
+   ```
+
+   The first run takes a minute or two while uv fetches Python (if needed) and the Fileglancer package. After that, starting is nearly instant. When the server is ready, your browser opens to Fileglancer and you are logged in automatically as your system user.
+
+3. **Browse your data**
+
+   Your home directory is available under the **home** file share path in the left sidebar. Navigate into folders, inspect files, and open any Zarr or OME-Zarr dataset to see its metadata and a thumbnail. The [Core Workflows](../../workflows/navigation/) guides cover the interface in detail.
+
+4. **Stop the server**
+
+   Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal and confirm when prompted.
 </Steps>
 
-:::tip[Why use Views?]
-A View's link stays the same when you edit and save the View, so collaborators always see your latest version. You can also add datasets to a View or remove them later, right from the viewer.
-:::
+### Browse more than your home directory
 
-<StyledImage
-lightSrc={createViewLight}
-darkSrc={createViewDark}
-alt="Screenshot of the Fileglancer file browser with an OME-Zarr dataset open. On the right side of the screen, the properties panel is open and displaying the contents of the Layer Cart tab. A red arrow points to the cart icon button that opens the panel to the Layer Cart tab. Another red arrow points to the 'Create View' button at the bottom of the Layer Cart tab that creates a View from the collected datasets."
-/>
+Pass one or more file share paths with `-f` to make other directories browsable. The special prefix `~/` expands to your home directory.
 
-## Essential Tips
+```bash
+uvx fileglancer start -f ~/ -f /data/microscopy -f /mnt/shared
+```
 
-### Navigation Shortcuts
-- **Breadcrumbs**: Use the breadcrumb trail to quickly move up directory levels.
-- **Copy path**: Hover over the breadcrumbs to reveal a copy button that copies the current path into your clipboard.
-- **Paste onto page**: Power users can take advantage of a special hidden feature: if you have a path in your clipboard, simply click anywhere in the file browser and paste using your usual keyboard shortcut. The "Navigate" dialog will come up automatically, prefilled with your path.
+Useful options:
 
-### Data Link Management
-- **View all data links**: Visit the *Data Links* page to see all your current data links
-- **Enable automatic data links**: When creating data links, you can choose to enable automatic link creation for future similar actions
+| Option | Effect |
+|--------|--------|
+| `-f PATH`, `--file-share-mounts PATH` | Add a browsable file share path. Repeat for each path. |
+| `--port N` | Listen on a specific port (default 8000). If the port is busy, the next free port is used. |
+| `--no-browser` | Start the server without opening a browser. |
+| `--help` | Show every option. |
 
-### Getting Help
-- **Built-in help**: Look for help icons and tooltips throughout the interface
-- **Technical support**: Use the integrated help desk system for complex issues
+<Aside type="tip" title="Picking up new releases">
+uv caches the version it downloaded. To make sure you run the newest release, use `uvx fileglancer@latest start`.
+</Aside>
 
-## Common First Tasks
+### What a personal server can and can't do
 
-### Scenario 1: Sharing Lab Data with an Internal Collaborator
-1. Navigate to your lab's shared data directory
-2. Find the specific dataset you want to share
-3. Create a data link using the Properties Panel
-4. Send the data link to your collaborator
+A personal server is great for exploring your own data, checking OME-Zarr metadata, and opening images in a viewer. It has limits that come from running on your machine:
 
-### Scenario 2: Collaborating on Image Analysis
-1. Add your OME-Zarr datasets to the Layer Cart
-2. Create a View from the Layer Cart
-3. Configure the viewer to highlight specific features or regions, then save the View
-4. Share the View's link with collaborators so they see exactly what you configured
+- **Links only work while the server is running.** Data links and View links point at your computer, so they stop working when you stop the server.
+- **Only you can use it.** The server listens on `127.0.0.1` and logs in your system user, so it is not reachable by others.
+- **Viewers are external.** Images open in public viewer instances such as the Neuroglancer demo site. Editing a View in the embedded viewer requires a shared deployment that serves its own Neuroglancer.
 
-### Scenario 3: Organizing Your Workflow
-1. Use search to find all your project directories
-2. Save frequently-accessed folders as favorites
-3. Create data links for datasets you reference often
-4. Set up automatic data link creation for common sharing patterns
+To share data reliably with colleagues, you need a shared deployment. See [Deploy a shared server](#deploy-a-shared-server) below.
 
-## What's Next?
+## Run from source with Pixi
 
-Now that you've completed the basics, explore these guides for more detailed workflows:
+If you want to modify Fileglancer or contribute to it, run it from a clone of the repository. Fileglancer uses [Pixi](https://pixi.sh) to manage its Python and Node.js environments, so Pixi is the only tool you need to install first.
 
-- **[Navigation Guide](../../workflows/navigation/)**: Master all navigation features
-- **[Data Links Guide](../../workflows/data-links/)**: Learn advanced sharing options
-- **[Neuroglancer Views Guide](../../workflows/views/)**: Deep dive into creating, editing, and sharing Views
+<Steps>
+1. **Clone the repository**
 
-## Quick Reference
+   ```bash
+   git clone https://github.com/JaneliaSciComp/fileglancer.git
+   cd fileglancer
+   ```
 
-| Task | Location | Action |
-|------|----------|---------|
-| Search for data | Left sidebar | Type group/team name |
-| Navigate to specific path | Toolbar widget | Paste path and navigate |
-| Save favorite | Toolbar | Click star icon |
-| Create data link | Properties Panel | Toggle switch in Overview |
-| Create View | Layer Cart panel | Click "Create View" button |
-| View all data links | URL | Navigate to the **Data Links** page |
-| Browse all Views | URL | Navigate to the **Views** page |
-| Go to home directory | Toolbar | Click home icon |
+2. **Install the package in development mode**
+
+   This installs the backend dependencies and builds the React frontend.
+
+   ```bash
+   pixi run dev-install
+   ```
+
+3. **Create a configuration file**
+
+   ```bash
+   cp docs/config.yaml.template config.yaml
+   ```
+
+   Edit `config.yaml` to set `file_share_mounts` and any other settings you want to change.
+
+4. **Launch the server**
+
+   ```bash
+   pixi run dev-launch
+   ```
+
+   Open [localhost:7878](http://localhost:7878) in your browser. The backend reloads automatically when you change Python files. To rebuild the frontend on change as well, run `pixi run dev-watch` in a second terminal.
+</Steps>
+
+The [development guide](https://github.com/JaneliaSciComp/fileglancer/blob/main/docs/Development.md) in the repository covers configuration options, running the tests, HTTPS, viewer configuration, and the cluster settings used by the Apps feature.
+
+## Deploy a shared server
+
+Fileglancer is designed for a persistent, shared deployment on your institution's network. In this mode a single server runs on a machine that can see your network file systems, users log in through your identity provider, and the Data Links and Views they create keep working as long as the server is up.
+
+A shared deployment adds a few pieces around the Fileglancer server:
+
+- **Per-user file access.** The server runs as root and accesses files as the logged-in user, so everyone sees exactly the files they have permission to read on the file system.
+- **Single sign-on.** Users authenticate with your institution's OAuth/OIDC provider (Janelia uses Okta).
+- **A reverse proxy.** Nginx terminates TLS, serves the static frontend, and can serve a Neuroglancer instance from the same origin so that Views can be edited in place.
+- **A database.** SQLite works for small deployments; PostgreSQL is recommended for larger ones.
+- **Optional integrations.** A compute cluster for the [Apps](../../workflows/apps-and-jobs/) feature, the [x2s3](https://github.com/JaneliaSciComp/x2s3) proxy for publishing data on the internet, and control over which public S3 endpoints users may add as cloud storage.
+
+Janelia's production deployment is published as a template that you can adapt:
+
+<CardGrid>
+  <LinkCard
+    title="fileglancer-hub"
+    description="Janelia's production deployment: a Pixi environment, systemd service, Nginx reverse proxy configuration, and step-by-step installation instructions."
+    href="https://github.com/JaneliaSciComp/fileglancer-hub"
+  />
+  <LinkCard
+    title="fileglancer-janelia"
+    description="An example of site-specific customization: scripts that populate file share paths from an internal wiki and run integration tests against the deployment."
+    href="https://github.com/JaneliaSciComp/fileglancer-janelia"
+  />
+</CardGrid>
+
+The deployment is configured with `FGC_*` environment variables or a `config.yaml` file. The key settings are the file share paths to expose, the database URL, the public URL of the server, and the OAuth client details. Follow the installation steps in the fileglancer-hub README, substituting your hostname, certificates, and identity provider.
+
+<Aside type="note">
+Setting up a shared deployment is a job for a system administrator. If you'd like help adapting Fileglancer to your environment, [open an issue](https://github.com/JaneliaSciComp/fileglancer/issues) on GitHub. We're glad to collaborate.
+</Aside>
+
+## Next steps
+
+- **[Navigating Files](../../workflows/navigation/)**: Browse directories, save favorites, and jump to paths.
+- **[Creating Data Links](../../workflows/data-links/)**: Create shareable URLs for datasets.
+- **[Creating Views](../../workflows/views/)**: Build and share Neuroglancer scenes.
+- **[Modern Imaging Format Support](../../features/image-support/)**: Learn which formats Fileglancer understands.
+
+Janelia researchers using the shared campus deployment should continue with [Using Fileglancer at Janelia](../janelia/).

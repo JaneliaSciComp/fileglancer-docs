@@ -25,7 +25,7 @@ A View is a saved Neuroglancer scene: the datasets it shows, plus the layer colo
 
 ## What are Views?
 
-- **Built from your files**: Pick datasets in the file browser. Fileglancer creates the Data Links and the Neuroglancer layers for you.
+- **Built from your files**: Pick datasets in the file browser, including datasets in public cloud buckets. Fileglancer creates the Data Links and the Neuroglancer layers for you.
 - **Opened in Fileglancer**: Views open in a Neuroglancer viewer embedded in Fileglancer.
 - **Editable**: Change the View in the viewer, add or remove datasets, and save. The link stays the same.
 - **Shareable**: Each View has a link that you can send to collaborators.
@@ -105,7 +105,7 @@ The viewer toolbar has these buttons:
 - **View and edit data sources** (info icon): Opens the sidebar on the **Sources** tab, for showing, hiding, and removing datasets and channels. Only the View's owner sees this button.
 - **Copy link to share**: Copies the View's link to your clipboard.
 - **Download JSON**: Downloads the View's Neuroglancer state as a JSON file.
-- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. You can choose whether this opens the internal Janelia Neuroglancer deployment or the public deployment on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
+- **Open in Neuroglancer**: Opens the View in a standalone Neuroglancer tab. If your deployment serves its own Neuroglancer, you can choose between it and the public deployment on the **Preferences** page (see [Neuroglancer preferences](#neuroglancer-preferences)).
 - **Fullscreen**: Expands the viewer to fill your screen.
 
 To return to your list of Views, click **Views** in the toolbar.
@@ -194,13 +194,13 @@ In the viewer, click **Copy link to share**. On the Views page, you can also sel
 Collaborators who open the link see the View in the Fileglancer viewer. They need to sign in to Fileglancer.
 </Steps>
 
-To share a View with someone on the Janelia network who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL. For collaborators outside the Janelia network, see [Share with external collaborators](#share-with-external-collaborators).
+To share a View with someone on your network who doesn't use Fileglancer, download its JSON state with **Download JSON**, or open it with **Open in Neuroglancer** and share that Neuroglancer URL. For collaborators outside your network, see [Share with external collaborators](#share-with-external-collaborators).
 
 ### Share with external collaborators
 
-Anyone with access to the Janelia network can load the data in a View. Collaborators outside the Janelia network can load data only from a `data_external` folder on a Janelia file share. Files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org).
+Anyone who can reach your Fileglancer server can load the data in a View. Collaborators outside your network can load only data that is already public: datasets in public S3 buckets added through **Cloud Storage** are referenced by their public URL, and a deployment can publish selected folders through an S3-compatible proxy. At Janelia, files in `data_external` folders are automatically made public on [s3.janelia.org](https://s3.janelia.org).
 
-To open and share a dataset in Neuroglancer with someone outside the Janelia network:
+To open and share a dataset in Neuroglancer with someone outside your network:
 
 <Steps>
 1. **Set your Neuroglancer preferences**<br/>
@@ -210,7 +210,7 @@ In the **Neuroglancer** section of the **Preferences** page, select exactly thes
     - **Standalone Neuroglancer** > **Base URL**: **Public**
 
 2. **Open the dataset in a viewer**<br/>
-Browse to a dataset in a `data_external` folder and click the Neuroglancer button under the image thumbnail. You can also open the dataset in other external viewers to share the same way.
+Browse to a public dataset (at Janelia, one in a `data_external` folder) and click the Neuroglancer button under the image thumbnail. You can also open the dataset in other external viewers to share the same way.
 
 3. **Share the Neuroglancer URL**<br/>
 Copy the URL from the browser's address bar and send it to your collaborator.
@@ -280,7 +280,7 @@ The View takes its dimensions from its first dataset. Datasets with different di
 
 ### Collaborators can't load the data
 
-- Confirm that they're on the Janelia network, or that the data is in a `data_external` folder.
+- Confirm that they can reach your Fileglancer server, or that the data is public (a cloud storage bucket, or at Janelia a `data_external` folder).
 - Check the **Sources** column on the Views page for broken sources.
 
 ## Neuroglancer Short Links
