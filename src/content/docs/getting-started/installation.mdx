@@ -45,11 +45,42 @@ No simple_auth_password configured. Log in with this password for the lifetime o
         k3vN8q-Zt1XwYb0a
 ```
 
-To use a fixed password instead, set `FGC_SIMPLE_AUTH_PASSWORD` in the environment, or put `simple_auth_password: your-password` in a `config.yaml` in the directory you start the server from.
+To use a fixed password instead, uncomment `simple_auth_password` in your [config file](#configuration) and restart the server.
+
+Logins survive server restarts: the key that signs the session cookie is generated once and kept with the server's data, so a browser that was logged in stays logged in.
 
 :::note
 The password is what stands between anyone who can reach the server and your files, so it is always required, even on a server bound to `127.0.0.1`. Serving other people from one Fileglancer server requires Okta login, which is how [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) runs; a password-only server cannot tell users apart.
 :::
+
+## Configuration
+
+The first time you run `fileglancer start`, it writes a config file to `~/.config/fileglancer/config.yaml` and prints the path. Every start logs the file it read:
+
+```
+Reading config from /home/you/.config/fileglancer/config.yaml
+```
+
+The file lists every setting a personal server might need, all commented out with a short explanation, so you only uncomment what you want to change. Common ones:
+
+```yaml title="~/.config/fileglancer/config.yaml"
+# Password for the login page
+simple_auth_password: your-password
+
+# Directories to browse
+file_share_mounts:
+  - ~/
+  - /data/shared
+
+# Send apps to the cluster instead of running them on this machine
+cluster:
+  executor: lsf
+  queue: normal
+```
+
+Edit the file and restart the server to apply changes. To read a different file, pass `--config PATH` or set `FGC_CONFIG_FILE`. Any setting can also be given as an environment variable prefixed with `FGC_`, which takes precedence over the file; a `.env` file next to the config is read for these too.
+
+The server's database and session key live in `~/.local/share/fileglancer/`.
 
 ## Upgrade
 

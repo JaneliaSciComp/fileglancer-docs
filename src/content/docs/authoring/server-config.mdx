@@ -5,7 +5,7 @@ description: App execution settings controlled by the Fileglancer server adminis
 
 import { Aside } from '@astrojs/starlight/components';
 
-Some aspects of app execution are controlled by the Fileglancer server's `config.yaml`, not by individual app manifests. These settings are managed by the **system administrator** and apply to every job on the server.
+Some aspects of app execution are controlled by the Fileglancer server's `config.yaml`, not by individual app manifests. These settings are managed by the **system administrator** and apply to every job on the server. A server started with uvicorn reads `config.yaml` from its working directory, or the file named by `FGC_CONFIG_FILE`; a [personal server](/getting-started/installation/#configuration) reads `~/.config/fileglancer/config.yaml`.
 
 <Aside type="note">
 As a tool author you generally don't set these — but knowing they exist explains why a tool like `nextflow` or `pixi` might be available on the cluster without you installing it, and where container images are cached.
