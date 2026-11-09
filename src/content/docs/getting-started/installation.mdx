@@ -31,6 +31,26 @@ fileglancer start
 
 This starts a server on `http://127.0.0.1:8000`, opens your browser, and serves your home directory by default. Run `fileglancer start --help` to see options such as `--port` and the directories to serve.
 
+Apps you run from this server inherit your shell environment, so tools on your `PATH` and variables from your login scripts are available to jobs without further setup.
+
+## Logging in
+
+A server you start this way is yours alone: everything it does, it does as the user who started it, and there is no username to enter. The browser tab that `fileglancer start` opens is logged in automatically.
+
+Any other browser, or the same browser after its session expires, is asked for a password. If you have not set one, the server generates a new password at every start and prints it in the terminal:
+
+```
+No simple_auth_password configured. Log in with this password for the lifetime of this process:
+
+        k3vN8q-Zt1XwYb0a
+```
+
+To use a fixed password instead, set `FGC_SIMPLE_AUTH_PASSWORD` in the environment, or put `simple_auth_password: your-password` in a `config.yaml` in the directory you start the server from.
+
+:::note
+The password is what stands between anyone who can reach the server and your files, so it is always required, even on a server bound to `127.0.0.1`. Serving other people from one Fileglancer server requires Okta login, which is how [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) runs; a password-only server cannot tell users apart.
+:::
+
 ## Upgrade
 
 ```bash
