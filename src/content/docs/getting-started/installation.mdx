@@ -1,0 +1,42 @@
+---
+title: Running Fileglancer Locally
+description: Install the fileglancer command-line tool to browse files on your own machine, and keep it up to date.
+---
+
+You don't need to install anything to use Fileglancer at Janelia: open [fileglancer.int.janelia.org](https://fileglancer.int.janelia.org) in your browser. Install the command-line tool only if you want to run your own Fileglancer server, for example to browse files on your laptop, or to use the [Python API](/features/python-api/).
+
+## Install
+
+Install Fileglancer as a standalone command-line tool. This creates an isolated environment for it and puts the `fileglancer` command on your PATH, the same way JupyterLab is installed.
+
+With [uv](https://docs.astral.sh/uv/getting-started/installation/) (0.3 or newer):
+
+```bash
+uv tool install fileglancer
+```
+
+Or with [pipx](https://pipx.pypa.io/):
+
+```bash
+pipx install fileglancer
+```
+
+If you already manage Python environments yourself, you can instead `pip install fileglancer` into a virtual environment, or `pixi add fileglancer` to a Pixi project, and run `fileglancer` from inside that environment.
+
+## Start the server
+
+```bash
+fileglancer start
+```
+
+This starts a server on `http://127.0.0.1:8000`, opens your browser, and serves your home directory by default. Run `fileglancer start --help` to see options such as `--port` and the directories to serve.
+
+## Upgrade
+
+```bash
+uv tool upgrade fileglancer   # or: pipx upgrade fileglancer
+```
+
+:::caution[Avoid `uvx fileglancer`]
+`uvx` runs a tool from a disposable cached environment. If that environment was interrupted while being built, or is shared between machines or uv versions, later runs fail with `Package fileglancer does not provide any executables`. Running `uv cache clean fileglancer` clears the bad cache, but a persistent `uv tool install` avoids the problem entirely.
+:::

@@ -40,6 +40,10 @@ export default defineConfig({
               slug: "getting-started/introduction",
             },
             { label: "Quick Start Guide", slug: "getting-started/quick-start" },
+            {
+              label: "Running Fileglancer Locally",
+              slug: "getting-started/installation",
+            },
           ],
         },
         {
