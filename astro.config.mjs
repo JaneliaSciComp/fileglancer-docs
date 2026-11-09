@@ -44,6 +44,10 @@ export default defineConfig({
               label: "Using Fileglancer at Janelia",
               slug: "getting-started/janelia",
             },
+            {
+              label: "Running Fileglancer Locally",
+              slug: "getting-started/installation",
+            },
           ],
         },
         {
