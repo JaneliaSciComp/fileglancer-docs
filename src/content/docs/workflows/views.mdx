@@ -32,7 +32,7 @@ A View is a saved Neuroglancer scene: the datasets it shows, plus the layer colo
 
 ## Before you start
 
-Views work with Zarr, OME-Zarr, and N5 datasets. You can add other folders to a View, but Neuroglancer can't load them as layers. Fileglancer lists them as sources only.
+Views work with Zarr, OME-Zarr, N5, and Neuroglancer precomputed datasets. You can add other folders to a View, but Neuroglancer can't load them as layers. Fileglancer lists them as sources only.
 
 Each dataset in a View is served through a Data Link. If a dataset doesn't have one yet, Fileglancer creates it when you create the View. Unless you turned on automatic Data Links in your preferences, Fileglancer asks first. For more about Data Links, see [Creating Data Links](/workflows/data-links/).
 
@@ -48,7 +48,7 @@ Add datasets to the cart in any of these ways:
 
 - **One folder**: Right-click a folder in the file list, or click the icon in its Actions column, and select **Add to cart** from the context menu.
 - **Several folders**: Check the boxes next to the folders, then click **Add N to cart** in the selection bar that appears at the bottom of the screen.
-- **The dataset you're viewing**: Under the image thumbnail of a Zarr or N5 dataset, click **Add to cart**.
+- **The dataset you're viewing**: Under the preview image of a Zarr, N5, or Neuroglancer precomputed dataset, click **Add to cart**.
 - **From the cart panel**: Navigate to a dataset folder and click **Add current dataset**.
 
 The cart keeps its contents until you create a View or clear it, so you can collect datasets from several folders and file shares.
