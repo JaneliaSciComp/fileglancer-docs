@@ -45,7 +45,7 @@ This page covers that path first, then two other ways to run Fileglancer: from a
    uv tool install fileglancer
    ```
 
-   This takes a minute or two while uv fetches Python (if needed) and the Fileglancer package. [Running Fileglancer Locally](/getting-started/installation/) covers other ways to install.
+   This takes a minute or two while uv fetches Python (if needed) and the Fileglancer package. [Running a Personal Server](/getting-started/personal-server/) covers other ways to install.
 
 3. **Start Fileglancer**
 
@@ -64,36 +64,7 @@ This page covers that path first, then two other ways to run Fileglancer: from a
    Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal and confirm when prompted.
 </Steps>
 
-### Browse more than your home directory
-
-Pass one or more file share paths with `-f` to make other directories browsable. The special prefix `~/` expands to your home directory.
-
-```bash
-fileglancer start -f ~/ -f /data/microscopy -f /mnt/shared
-```
-
-Useful options:
-
-| Option | Effect |
-|--------|--------|
-| `-f PATH`, `--file-share-mounts PATH` | Add a browsable file share path. Repeat for each path. |
-| `--port N` | Listen on a specific port (default 8000). If the port is busy, the next free port is used. |
-| `--no-browser` | Start the server without opening a browser. |
-| `--help` | Show every option. |
-
-<Aside type="tip" title="Picking up new releases">
-An installed Fileglancer stays at the version you installed. To get the newest release, run `uv tool upgrade fileglancer`.
-</Aside>
-
-### What a personal server can and can't do
-
-A personal server is great for exploring your own data, checking OME-Zarr metadata, and opening images in a viewer. It has limits that come from running on your machine:
-
-- **Links only work while the server is running.** Data links and View links point at your computer, so they stop working when you stop the server.
-- **Only you can use it.** The server listens on `127.0.0.1` and logs in your system user, so it is not reachable by others.
-- **Viewers are external.** Images open in public viewer instances such as the Neuroglancer demo site. Editing a View in the embedded viewer requires a shared deployment that serves its own Neuroglancer.
-
-To share data reliably with colleagues, you need a shared deployment. See [Deploy a shared server](#deploy-a-shared-server) below.
+A personal server is reachable only by you, and the links you create work only while it runs. [Running a Personal Server](/getting-started/personal-server/) covers serving other directories, logging in, these limits, and upgrading.
 
 ## Run from source with Pixi
 

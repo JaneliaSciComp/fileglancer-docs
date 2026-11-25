@@ -1,0 +1,93 @@
+---
+title: Running a Personal Server
+description: Install the fileglancer command-line tool, start a personal server on your own machine, choose what it serves, log in, and keep it up to date.
+---
+
+A personal server is a Fileglancer server you run yourself, for example to browse files on your laptop. This page covers installing the `fileglancer` command-line tool, starting the server, logging in, and upgrading. The same install gives you the [Python API](/features/python-api/). For a first run, start with the [Quick Start Guide](/getting-started/quick-start/).
+
+If your institution runs a shared Fileglancer server, you don't need to install anything: open that server in your browser. At Janelia, see [Using Fileglancer at Janelia](/getting-started/janelia/).
+
+## Install
+
+Install Fileglancer as a standalone command-line tool. This creates an isolated environment for it and puts the `fileglancer` command on your PATH, the same way JupyterLab is installed.
+
+With [uv](https://docs.astral.sh/uv/getting-started/installation/) (0.3 or newer):
+
+```bash
+uv tool install fileglancer
+```
+
+Or with [pipx](https://pipx.pypa.io/):
+
+```bash
+pipx install fileglancer
+```
+
+If you already manage Python environments yourself, you can instead `pip install fileglancer` into a virtual environment, or `pixi add fileglancer` to a Pixi project, and run `fileglancer` from inside that environment.
+
+## Start the server
+
+```bash
+fileglancer start
+```
+
+This starts a server on `http://127.0.0.1:8000`, opens your browser, and serves your home directory by default. To stop the server, press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal and confirm when prompted.
+
+Apps you run from this server inherit your shell environment, so tools on your `PATH` and variables from your login scripts are available to jobs without further setup.
+
+### Browse more than your home directory
+
+Pass one or more file share paths with `-f` to make other directories browsable. The special prefix `~/` expands to your home directory.
+
+```bash
+fileglancer start -f ~/ -f /data/microscopy -f /mnt/shared
+```
+
+Useful options:
+
+| Option | Effect |
+|--------|--------|
+| `-f PATH`, `--file-share-mounts PATH` | Add a browsable file share path. Repeat for each path. |
+| `--port N` | Listen on a specific port (default 8000). If the port is busy, the next free port is used. |
+| `--no-browser` | Start the server without opening a browser. |
+| `--help` | Show every option. |
+
+## Logging in
+
+A server you start this way is yours alone: everything it does, it does as the user who started it, and there is no username to enter. The browser tab that `fileglancer start` opens is logged in automatically.
+
+Any other browser, or the same browser after its session expires, is asked for a password. If you have not set one, the server generates a new password at every start and prints it in the terminal:
+
+```
+No simple_auth_password configured. Log in with this password for the lifetime of this process:
+
+        k3vN8q-Zt1XwYb0a
+```
+
+To use a fixed password instead, set `FGC_SIMPLE_AUTH_PASSWORD` in the environment, or put `simple_auth_password: your-password` in a `config.yaml` in the directory you start the server from.
+
+:::note
+The password is what stands between anyone who can reach the server and your files, so it is always required, even on a server bound to `127.0.0.1`. Serving other people from one Fileglancer server requires Okta login, as in a [shared deployment](/getting-started/quick-start/#deploy-a-shared-server); a password-only server cannot tell users apart.
+:::
+
+## What a personal server can and can't do
+
+A personal server is great for exploring your own data, checking OME-Zarr metadata, and opening images in a viewer. It has limits that come from running on your machine:
+
+- **Links only work while the server is running.** Data links and View links point at your computer, so they stop working when you stop the server.
+- **Only you can use it.** The server listens on `127.0.0.1` and logs in your system user, so it is not reachable by others.
+- **Viewers are external.** Images open in public viewer instances such as the Neuroglancer demo site. Editing a View in the embedded viewer requires a shared deployment that serves its own Neuroglancer.
+
+To share data reliably with colleagues, you need a shared deployment. See [Deploy a shared server](/getting-started/quick-start/#deploy-a-shared-server).
+
+## Upgrade
+
+An installed Fileglancer stays at the version you installed. To get the newest release:
+
+```bash
+uv tool upgrade fileglancer   # or: pipx upgrade fileglancer
+```
+
+:::caution[Avoid `uvx fileglancer`]
+`uvx` runs a tool from a disposable cached environment. If that environment was interrupted while being built, or is shared between machines or uv versions, later runs fail with `Package fileglancer does not provide any executables`. Running `uv cache clean fileglancer` clears the bad cache, but a persistent `uv tool install` avoids the problem entirely.
+:::
