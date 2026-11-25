@@ -1,6 +1,6 @@
 ---
 title: Quick Start Guide
-description: Run Fileglancer on your own computer with a single command and no installation, then learn how to run it from source or deploy a shared server for your institution.
+description: Install Fileglancer on your own computer with uv and start it with one command, then learn how to run it from source or deploy a shared server for your institution.
 ---
 
 import { Steps, Tabs, TabItem, Aside, LinkCard, CardGrid } from '@astrojs/starlight/components';
@@ -8,13 +8,13 @@ import mascot from '@assets/mascot/fg-starting-line.png'
 
 <img src={mascot.src} alt="Fileglancer mascot" style="width: 150px; float: right; margin: 0 0 1rem 1rem;" />
 
-The fastest way to try Fileglancer is to run a personal server on your own computer. It takes one command, there is nothing to install, and nothing is left behind except a small cache. Fileglancer opens in your browser with your home directory ready to browse.
+The fastest way to try Fileglancer is to run a personal server on your own computer. It takes two commands, and you don't need to set up Python yourself. Fileglancer opens in your browser with your home directory ready to browse.
 
 This page covers that path first, then two other ways to run Fileglancer: from a checkout of the source code, and as a shared server for your lab or institution.
 
 ## Run Fileglancer with uv
 
-[uv](https://docs.astral.sh/uv/) is a fast Python package manager. Its `uvx` command downloads a Python tool into a cache and runs it, so you don't need to set up Python or a virtual environment yourself. Fileglancer runs on macOS and Linux.
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager. Its `uv tool install` command installs a Python tool into its own environment and puts it on your `PATH`, so you don't need to set up Python or a virtual environment yourself. Fileglancer runs on macOS and Linux.
 
 <Steps>
 1. **Install uv**
@@ -37,21 +37,29 @@ This page covers that path first, then two other ways to run Fileglancer: from a
      </TabItem>
    </Tabs>
 
-   Other installation options are listed in the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/). Open a new terminal after installing so that `uvx` is on your `PATH`.
+   Other installation options are listed in the [uv documentation](https://docs.astral.sh/uv/getting-started/installation/). Open a new terminal after installing so that `uv` is on your `PATH`.
 
-2. **Start Fileglancer**
+2. **Install Fileglancer**
 
    ```bash
-   uvx fileglancer start
+   uv tool install fileglancer
    ```
 
-   The first run takes a minute or two while uv fetches Python (if needed) and the Fileglancer package. After that, starting is nearly instant. When the server is ready, your browser opens to Fileglancer and you are logged in automatically as your system user.
+   This takes a minute or two while uv fetches Python (if needed) and the Fileglancer package. [Running Fileglancer Locally](/getting-started/installation/) covers other ways to install.
 
-3. **Browse your data**
+3. **Start Fileglancer**
+
+   ```bash
+   fileglancer start
+   ```
+
+   When the server is ready, your browser opens to Fileglancer and you are logged in automatically as your system user.
+
+4. **Browse your data**
 
    Your home directory is available under the **home** file share path in the left sidebar. Navigate into folders, inspect files, and open any Zarr or OME-Zarr dataset to see its metadata and a thumbnail. The [Core Workflows](../../workflows/navigation/) guides cover the interface in detail.
 
-4. **Stop the server**
+5. **Stop the server**
 
    Press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal and confirm when prompted.
 </Steps>
@@ -61,7 +69,7 @@ This page covers that path first, then two other ways to run Fileglancer: from a
 Pass one or more file share paths with `-f` to make other directories browsable. The special prefix `~/` expands to your home directory.
 
 ```bash
-uvx fileglancer start -f ~/ -f /data/microscopy -f /mnt/shared
+fileglancer start -f ~/ -f /data/microscopy -f /mnt/shared
 ```
 
 Useful options:
@@ -74,7 +82,7 @@ Useful options:
 | `--help` | Show every option. |
 
 <Aside type="tip" title="Picking up new releases">
-uv caches the version it downloaded. To make sure you run the newest release, use `uvx fileglancer@latest start`.
+An installed Fileglancer stays at the version you installed. To get the newest release, run `uv tool upgrade fileglancer`.
 </Aside>
 
 ### What a personal server can and can't do
