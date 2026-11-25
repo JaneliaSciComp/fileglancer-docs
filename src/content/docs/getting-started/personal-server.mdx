@@ -66,7 +66,7 @@ No simple_auth_password configured. Log in with this password for the lifetime o
 
 To use a fixed password instead, uncomment `simple_auth_password` in your [config file](#configuration) and restart the server.
 
-Logins survive server restarts: the key that signs the session cookie is generated once and kept with the server's data, so a browser that was logged in stays logged in.
+Password logins survive server restarts: the key that signs the session cookie is generated once and kept with the server's data, so a browser where you entered the password stays logged in. The tab that `fileglancer start` opened is logged out when the server stops, and the next start opens a new one.
 
 :::note
 The password is what stands between anyone who can reach the server and your files, so it is always required, even on a server bound to `127.0.0.1`. Serving other people from one Fileglancer server requires Okta login, as in a [shared deployment](/getting-started/quick-start/#deploy-a-shared-server); a password-only server cannot tell users apart.
