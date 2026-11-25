@@ -1,6 +1,6 @@
 ---
 title: Modern Imaging Format Support
-description: Learn how Fileglancer detects and previews OME-Zarr and N5 datasets, what metadata is required for preview panels and Neuroglancer data links, and how to use integrated data tools.
+description: Learn how Fileglancer detects and previews OME-Zarr, N5, and Neuroglancer precomputed datasets, what metadata is required for preview panels and Neuroglancer data links, and how to use integrated data tools.
 ---
 
 import { Steps } from "@astrojs/starlight/components";
@@ -19,7 +19,7 @@ import mascot from "@assets/mascot/fg-microscope.png";
   style="width: 150px; float: right; margin: 0 0 1rem 1rem;"
 />
 
-Fileglancer automatically detects modern imaging formats (OME-Zarr and N5) when you navigate into a compatible directory.
+Fileglancer automatically detects modern imaging formats (OME-Zarr, N5, and Neuroglancer precomputed) when you navigate into a compatible directory.
 ## Zarr / OME-Zarr Support
 
 ### Zarr preview panel
@@ -113,6 +113,20 @@ The N5 metadata table highlights missing fields that affect how viewers interpre
 ### N5 data links for Neuroglancer
 
 Like Zarr, N5 datasets require a [data link](/workflows/data-links) for the directory that shows an N5 preview panel. Neuroglancer is the only integrated viewer for N5 datasets, but data links can be used with other viewers that support loading data via a HTTP URL.
+
+## Neuroglancer Precomputed Support
+
+Fileglancer shows the precomputed preview panel when the current directory has an `info` file that holds valid [Neuroglancer precomputed](https://github.com/google/neuroglancer/tree/master/src/datasource/precomputed) metadata. It recognizes every kind of precomputed data: volumes, annotations, meshes, skeletons, and segment properties. A file named `info` that holds anything else is ignored.
+
+The panel shows a metadata table read from the `info` file, and buttons to open the dataset in Neuroglancer, copy its data URL, and add it to the Layer Cart. The table depends on the kind of data:
+
+- **Volumes**: data type, channels, size, resolution, encoding, and multiscale levels
+- **Annotations**: annotation type, dimensions, bounds, properties, and relationships
+- **Skeletons** and **segment properties**: the attributes or properties they define
+
+In a [View](/workflows/views), a volume loads as an image or segmentation layer, annotations load as an annotation layer, and the other kinds load as a segmentation layer.
+
+Legacy meshes that have no `info` file aren't detected.
 
 ## Integrated Data Tools
 
