@@ -37,6 +37,7 @@ For most services you don't need to write any port-discovery or URL-writing code
 - `FG_SERVICE_PORT` — a free TCP port picked on the compute node at job start.
 - `FG_HOSTNAME` — the compute node's hostname.
 - `FG_SERVICE_TOKEN` — a URL-safe random secret you can use for auth.
+- `FG_SERVICE_PROXY_ADDRESS` — set only when the server's HTTPS proxy is used for your job and its address is configured: the address the proxy connects from. See [Restricting a service to the proxy](#restricting-a-service-to-the-proxy).
 
 Bind your service to `$FG_SERVICE_PORT` and set `auto_url: true`. Fileglancer then **waits until that port is accepting connections** and only then writes `http://$FG_HOSTNAME:$FG_SERVICE_PORT` to `SERVICE_URL_PATH` — so the **Open Service** link never appears before your service (or a still-pulling container image) is ready. While a first-launch container image is still downloading, the job page shows a **"Downloading container image…"** message so the wait is explained rather than mysterious.
 
@@ -114,12 +115,34 @@ Your service publishes a plain `http://host:port` URL, but that is not always wh
 https://job-42-k7m2qhxr.services.example.org/lab?token=abc123
 ```
 
-The path, query, and fragment of the URL you published are carried across unchanged, so a `service_url_suffix` that splices in `${FG_SERVICE_TOKEN}` keeps working exactly as written. Nothing in your manifest needs to change, and your job cannot tell whether the server does this — always publish the direct URL and let Fileglancer rewrite it.
+The path, query, and fragment of the URL you published are carried across unchanged, so a `service_url_suffix` that splices in `${FG_SERVICE_TOKEN}` keeps working exactly as written. Nothing in your manifest needs to change, and the URL you publish is always the direct one — let Fileglancer rewrite it. Your job can learn that the proxy is in use only through `FG_SERVICE_PROXY_ADDRESS`, described below.
 
 Two things are worth knowing when you test an app on a server with the proxy enabled:
 
 - **Your service sees the proxy subdomain in the `Host` header**, not the compute node's name. Servers that check the request origin on WebSocket connections generally accept this, because the proxy passes `Host` and `Origin` through as the same value. If yours rejects it, look for an allowed-origin or base-URL option rather than turning the check off.
 - **A service that pins an absolute URL** — an OAuth callback registered against one fixed host and port, say — may not work at a rewritten address at all.
+
+### Restricting a service to the proxy
+
+When the proxy is in use and the server administrator has configured the proxy's address, Fileglancer also exports `FG_SERVICE_PROXY_ADDRESS` into the job: the address the proxy connects from, as your compute node sees it. It is an IP address, a CIDR network, or a comma-separated list of them. A service can use it to accept connections from the proxy only, so nothing else on the cluster network can reach it directly.
+
+The variable is **unset** when the server has no proxy, when the administrator has not configured an address, and when your runnable sets `service_proxy: false`. Test for it and keep your normal behavior otherwise, because the service is then reached directly:
+
+```yaml title="runnables.yaml"
+runnables:
+  - id: serve
+    name: Server
+    type: service
+    auto_url: true
+    command: |
+      if [ -n "$FG_SERVICE_PROXY_ADDRESS" ]; then
+        exec my-server --port "$FG_SERVICE_PORT" --allow-from "$FG_SERVICE_PROXY_ADDRESS"
+      else
+        exec my-server --port "$FG_SERVICE_PORT"
+      fi
+```
+
+`--allow-from` stands in for whatever your server offers, such as an allow-list option or a firewall rule. This narrows who can connect; it does not replace the token in `FG_SERVICE_TOKEN`.
 
 ### Opting out of the proxy
 
