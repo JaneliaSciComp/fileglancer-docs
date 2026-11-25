@@ -41,6 +41,10 @@ export default defineConfig({
             },
             { label: "Quick Start Guide", slug: "getting-started/quick-start" },
             {
+              label: "Running a Personal Server",
+              slug: "getting-started/personal-server",
+            },
+            {
               label: "Using Fileglancer at Janelia",
               slug: "getting-started/janelia",
             },
